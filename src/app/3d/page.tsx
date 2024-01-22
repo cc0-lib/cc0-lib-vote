@@ -8,6 +8,10 @@ import {
   Box,
   ContactShadows,
   Environment,
+  Stage,
+  Backdrop,
+  SpotLight,
+  Reflector,
 } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import Link from "next/link";
@@ -52,14 +56,13 @@ const submissions = [
 ];
 
 const Three = (props: Props) => {
-  if (typeof window === "undefined") return null;
-
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
 
   const [voted, setVoted] = useState(false);
 
   const boxRef = useRef(null);
+  let bookMaterial;
 
   // useControls({
   //   coverData: {
@@ -102,12 +105,14 @@ const Three = (props: Props) => {
   //   },
   // });
 
-  let bookMaterial = new MeshStandardMaterial({
-    map: new TextureLoader().load(coverImage),
-    metalness: 0.5, // matMetalness,
-    roughnessMap: new TextureLoader().load(coverImage),
-    roughness: 0.6, // matRoughness,
-  });
+  if (typeof window !== "undefined") {
+    bookMaterial = new MeshStandardMaterial({
+      map: new TextureLoader().load(coverImage),
+      metalness: 0.5, // matMetalness,
+      roughnessMap: new TextureLoader().load(coverImage),
+      roughness: 0.6, // matRoughness,
+    });
+  }
 
   useEffect(() => {
     setCoverImage(coverData.image);
@@ -121,15 +126,18 @@ const Three = (props: Props) => {
             {coverData && (
               <>
                 <h1 className="font-chakra text-2xl font-bold uppercase">
-                  <SplitLetters text={coverData.title} />
+                  {/* <SplitLetters text={coverData.title} /> */}
+                  {coverData.title}
                 </h1>
-                <p className="h-full min-h-12 w-full max-w-sm text-xs font-normal normal-case">
-                  <SplitLetters text={coverData.tldr} />
-                </p>
+                <div className="h-full min-h-12 w-full max-w-sm text-xs font-normal normal-case">
+                  {/* <SplitLetters text={coverData.tldr} /> */}
+                  {coverData.tldr}
+                </div>
                 <div className="flex-0 mt-4 flex w-full flex-row items-center justify-between">
-                  <span className="w-full text-sm font-semibold uppercase">
-                    <SplitLetters text={coverData.artist} />
-                  </span>
+                  <div className="w-full text-sm font-semibold uppercase">
+                    {/* <SplitLetters text={coverData.artist} /> */}
+                    {coverData.artist}
+                  </div>
                   <div className="flex w-full flex-row items-center justify-around text-sm">
                     <Link
                       href={coverData.url}
@@ -251,7 +259,7 @@ const CameraCursor = () => {
   return useFrame((state) => {
     state.camera.position.lerp(
       vec.set(state.mouse.x * 2, 0 + state.mouse.y * 2, 7),
-      0.05,
+      0.025,
     );
     state.camera.lookAt(0, 0, 0);
   });
