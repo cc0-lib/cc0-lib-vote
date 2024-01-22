@@ -8,9 +8,6 @@ import {
   Box,
   ContactShadows,
   Environment,
-  Stage,
-  Backdrop,
-  SpotLight,
 } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import Link from "next/link";
@@ -21,32 +18,46 @@ import { MeshStandardMaterial, TextureLoader, Vector3 } from "three";
 
 type Props = {};
 
-const data = [
+const submissions = [
   {
+    id: 1,
     title: "back to the nouns",
     artist: "boo.cc0-gang.eth",
     image: "/asset/img/cc0-lib-cover-1.png",
     tldr: "Back to building nouns",
+    url: "https://prop.house/0x65d91de4ab3dac3bd2de9ffb8fee60a26e065423/1",
+    round: 2,
+    votes: 0,
   },
   {
+    id: 2,
     title: "nounsdipity",
     artist: "mrseaks.eth",
     image: "/asset/img/cc0-lib-cover-2.png",
     tldr: "This piece captures the vibrant explosion of creativity, diversity and catalyst for serendipity that is Nouns to me.",
+    url: "https://prop.house/0x65d91de4ab3dac3bd2de9ffb8fee60a26e065423/1",
+    round: 2,
+    votes: 0,
   },
   {
+    id: 3,
     title: "everybody's metropolis",
     artist: "yxji.eth",
     image: "/asset/img/everybodys-metropolis-cv.jpeg",
     tldr: "All Backgrounds, One Vision.",
+    url: "https://prop.house/0x65d91de4ab3dac3bd2de9ffb8fee60a26e065423/1",
+    round: 2,
+    votes: 0,
   },
 ];
 
 const Three = (props: Props) => {
   if (typeof window === "undefined") return null;
 
-  const [coverImage, setCoverImage] = useState(data[0].image);
-  const [coverData, setCoverData] = useState(data[0]);
+  const [coverImage, setCoverImage] = useState(submissions[0].image);
+  const [coverData, setCoverData] = useState(submissions[0]);
+
+  const [voted, setVoted] = useState(false);
 
   const boxRef = useRef(null);
 
@@ -120,17 +131,34 @@ const Three = (props: Props) => {
                     <SplitLetters text={coverData.artist} />
                   </span>
                   <div className="flex w-full flex-row items-center justify-around text-sm">
-                    <Link href="https://google.com">
+                    <Link
+                      href={coverData.url}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                    >
                       <Link2 className="h-4 w-4" />
                     </Link>
-                    <>
-                      <span className="bg-prim rounded-md px-8 py-2 text-zinc-800 ring-1 ring-zinc-400">
-                        VOTE
-                      </span>
-                      {/* <span className="rounded-md px-8 py-2 text-red-500 ring-1 ring-red-500">
+                    {voted ? (
+                      <button
+                        onClick={() => {
+                          // handle unvote
+                          setVoted(false);
+                        }}
+                        className="w-28 rounded-md px-8 py-2 text-red-500 ring-1 ring-red-500"
+                      >
                         UNVOTE
-                      </span> */}
-                    </>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          // handle vote
+                          setVoted(true);
+                        }}
+                        className="bg-prim w-28 rounded-md px-8 py-2 text-zinc-800 ring-1 ring-zinc-400"
+                      >
+                        VOTE
+                      </button>
+                    )}
                   </div>
                 </div>
               </>
@@ -141,14 +169,14 @@ const Three = (props: Props) => {
       <div className="pointer-events-none fixed z-10 flex h-full w-full items-center justify-between px-32">
         <button
           onClick={() => {
-            const currentIndex = data.findIndex(
+            const currentIndex = submissions.findIndex(
               (d) => d.title === coverData.title,
             );
             if (currentIndex === 0) {
-              setCoverData(data[data.length - 1]);
+              setCoverData(submissions[submissions.length - 1]);
               return;
             }
-            setCoverData(data[currentIndex - 1]);
+            setCoverData(submissions[currentIndex - 1]);
           }}
           className="pointer-events-auto rounded-md bg-zinc-100 px-8 py-2 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
         >
@@ -156,14 +184,14 @@ const Three = (props: Props) => {
         </button>
         <button
           onClick={() => {
-            const currentIndex = data.findIndex(
+            const currentIndex = submissions.findIndex(
               (d) => d.title === coverData.title,
             );
-            if (currentIndex === data.length - 1) {
-              setCoverData(data[0]);
+            if (currentIndex === submissions.length - 1) {
+              setCoverData(submissions[0]);
               return;
             }
-            setCoverData(data[currentIndex + 1]);
+            setCoverData(submissions[currentIndex + 1]);
           }}
           className="pointer-events-auto rounded-md bg-zinc-100 px-8 py-2 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
         >
