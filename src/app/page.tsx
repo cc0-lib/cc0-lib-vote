@@ -2,8 +2,15 @@ import SplitLetters from "@/components/anim/split-letters";
 import Container from "@/components/container";
 import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
+import { getUserData } from "./user/action";
 
-export default function Home() {
+export default async function Home() {
+  const { data, error } = await getUserData();
+  
+  console.log({
+    data,
+  });
+
   return (
     <Container>
       <Header />
