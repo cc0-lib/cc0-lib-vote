@@ -1,13 +1,25 @@
 "use client";
 
-import { ContactShadows, Environment, Box } from "@react-three/drei";
+import { previewMode } from "@/lib/prefs";
+import { cn } from "@/lib/utils";
+import {
+  ContactShadows,
+  Environment,
+  Box,
+  CameraControls,
+} from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { Material, MathUtils, Mesh, Vector3 } from "three";
 
 const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
   return (
-    <div className="relative flex h-[100vh] w-full -translate-y-[10vh] items-center justify-center">
+    <div
+      className={cn(
+        "relative flex h-[100vh] w-full  items-center justify-center",
+        !previewMode && "-translate-y-[10vh]",
+      )}
+    >
       <Canvas className="fixed h-full w-full">
         <Scene bookMaterial={bookMaterial} />
       </Canvas>
@@ -22,23 +34,23 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
   const [clicked, setClicked] = useState(false);
 
   useFrame(({ clock }) => {
-    boxRef.current!.rotation.y = MathUtils.lerp(
-      boxRef.current!.rotation.y,
-      clicked ? Math.sin(clock.getElapsedTime() * 1.5) * 0.45 : 0, // animate between -15 to 15 degrees sin wave
-      0.02,
-    );
-
-    boxRef.current!.position.y = MathUtils.lerp(
-      boxRef.current!.position.y,
-      clicked ? 1 : 0,
-      0.02,
-    );
-
-    boxRef.current!.position.z = MathUtils.lerp(
-      boxRef.current!.position.z,
-      clicked ? 5 : 0,
-      0.02,
-    );
+    if (!previewMode) {
+      boxRef.current!.rotation.y = MathUtils.lerp(
+        boxRef.current!.rotation.y,
+        clicked ? Math.sin(clock.getElapsedTime() * 1.5) * 0.45 : 0, // animate between -15 to 15 degrees sin wave
+        0.02,
+      );
+      boxRef.current!.position.y = MathUtils.lerp(
+        boxRef.current!.position.y,
+        clicked ? 1 : 0,
+        0.02,
+      );
+      boxRef.current!.position.z = MathUtils.lerp(
+        boxRef.current!.position.z,
+        clicked ? 5 : 0,
+        0.02,
+      );
+    }
   });
 
   return (
@@ -66,11 +78,9 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
         far={4.5}
       />
 
-      {!clicked && (
-        <>
-          <CameraCursor />
-        </>
-      )}
+      {previewMode && <CameraControls />}
+
+      {!clicked && !previewMode && <CameraCursor />}
     </>
   );
 };

@@ -1,16 +1,13 @@
 "use client";
 
 import Container from "@/components/container";
-import { Box, ContactShadows, Environment } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import Link from "next/link";
-import { Link2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Material, MeshStandardMaterial, TextureLoader, Vector3 } from "three";
+import { MeshStandardMaterial, TextureLoader } from "three";
 import SubmissionContainer from "@/components/submission/submission-container";
 import BookCover from "@/components/submission/book-cover";
 import SubmissionNavigation from "@/components/submission/submission-navigation";
 import Submission from "@/components/submission/submission";
+import { previewMode } from "@/lib/prefs";
 
 /**
  * @description sample submission data
@@ -75,17 +72,25 @@ const Three = (props: Props) => {
 
   return (
     <Container variant="center" className="p-0">
-      <SubmissionContainer>
-        {coverData && (
-          <Submission coverData={coverData} voted={voted} setVoted={setVoted} />
-        )}
-      </SubmissionContainer>
+      {!previewMode && (
+        <>
+          <SubmissionContainer>
+            {coverData && (
+              <Submission
+                coverData={coverData}
+                voted={voted}
+                setVoted={setVoted}
+              />
+            )}
+          </SubmissionContainer>
 
-      <SubmissionNavigation
-        submissions={submissions}
-        coverData={coverData}
-        setCoverData={setCoverData}
-      />
+          <SubmissionNavigation
+            submissions={submissions}
+            coverData={coverData}
+            setCoverData={setCoverData}
+          />
+        </>
+      )}
 
       <BookCover bookMaterial={bookMaterial!} />
     </Container>
