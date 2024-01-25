@@ -43,7 +43,7 @@ const Submission = ({
                 // handle vote
                 setVoted(true);
               }}
-              className="bg-prim w-28 rounded-md px-8 py-2 text-zinc-800 ring-1 ring-zinc-400"
+              className="w-28 rounded-md bg-prim px-8 py-2 text-zinc-800 ring-1 ring-zinc-400"
             >
               VOTE
             </button>

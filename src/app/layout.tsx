@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter_Tight, JetBrains_Mono, Chakra_Petch } from "next/font/google";
 import "./globals.css";
+import AuthProvider from "./auth-provider";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -34,7 +35,7 @@ export default function RootLayout({
       <body
         className={`${interTight.variable} ${jetBrainsMono.variable} ${chakraPetch.variable}`}
       >
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
