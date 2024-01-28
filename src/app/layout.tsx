@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter_Tight, JetBrains_Mono, Chakra_Petch } from "next/font/google";
 import "./globals.css";
-import AuthProvider from "./auth-provider";
+import {
+  DynamicContextProvider,
+  EthereumWalletConnectors,
+} from "../lib/dynamic";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -35,7 +38,14 @@ export default function RootLayout({
       <body
         className={`${interTight.variable} ${jetBrainsMono.variable} ${chakraPetch.variable}`}
       >
-        <AuthProvider>{children}</AuthProvider>
+        <DynamicContextProvider
+          settings={{
+            environmentId: process.env.DYNAMIC_XYZ_ENVIRONMENT_ID!,
+            walletConnectors: [EthereumWalletConnectors],
+          }}
+        >
+          {children}
+        </DynamicContextProvider>
       </body>
     </html>
   );

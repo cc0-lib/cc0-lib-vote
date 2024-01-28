@@ -8,11 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --check ./src --ignore-path .gitignore .",
-    "format:fix": "prettier --write --ignore-path .gitignore ."
+    "format:fix": "prettier --write ./src --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@dynamic-labs/ethereum": "^1.0.7",
-    "@dynamic-labs/sdk-react-core": "^1.0.7",
+    "@dynamic-labs/ethereum": "^1.0.8",
+    "@dynamic-labs/sdk-react-core": "^1.0.8",
+    "@dynamic-labs/wagmi-connector": "^1.0.8",
     "@react-three/drei": "^9.96.1",
     "@react-three/fiber": "^8.15.14",
     "@supabase/ssr": "^0.0.10",
@@ -28,7 +29,8 @@
     "react-dom": "^18",
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
-    "three": "^0.160.0"
+    "three": "^0.160.0",
+    "viem": "^2.5.0"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -38,7 +40,6 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "eslint-config-prettier": "^9.1.0",
-    "pino-pretty": "^10.3.1",
     "postcss": "^8",
     "prettier": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",

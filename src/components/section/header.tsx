@@ -18,6 +18,10 @@ const menu = [
     name: "faq",
     href: "/faq",
   },
+  {
+    name: "login",
+    href: "/login",
+  },
 ];
 
 const Header = () => (

@@ -1,14 +1,15 @@
 import Container from "@/components/container";
 import React from "react";
-import { getCurrentVote, getSubmission } from "./action";
+import { getCurrentVote } from "./action";
 import RealtimeVotes from "./realtime-vote";
 
 export default async function Vote() {
   const data = await getCurrentVote(1);
 
   return (
-    <Container>
-      <RealtimeVotes serverVotes={data?.data.length || 0} />
-    </Container>
+    <div className="rounded-md border-2 p-4 shadow-lg">
+      <h1>Vote count</h1>
+      <RealtimeVotes serverVotes={data?.data || 0} />
+    </div>
   );
 }

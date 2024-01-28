@@ -1,13 +1,11 @@
 "use client";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-export default function RealtimeVotes({
-  serverVotes,
-}: {
-  serverVotes: number;
-}) {
+export default function RealtimeVotes({ serverVotes }: { serverVotes: any }) {
   const supabase = createClient();
+  const router = useRouter();
 
   useEffect(() => {
     const votes = supabase
@@ -19,8 +17,9 @@ export default function RealtimeVotes({
           schema: "cc0vote",
           table: "vote",
         },
-        (payload) => {
-          console.log(payload);
+        (response) => {
+          console.log("Realtime response", response);
+          router.refresh();
         },
       )
       .subscribe();
