@@ -1,18 +1,38 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
-import { cookies } from "next/headers";
 
-export async function getUserData() {
-  const supabase = createClient();
-  const { data, error } = await supabase.from("user").select("*");
-  return { data, error };
+export async function getUserData(email: string) {
+  try {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from("user")
+      .select("*")
+      .eq("email", email)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return {
+      data,
+      error: null,
+    };
+  } catch (error) {
+    console.log(error);
+    throw new Error("Error getting user data");
+  }
 }
 
-export async function getSubmission() {
+export async function getSubmission(submissionId: string) {
   const supabase = createClient();
 
   try {
-    const { data, error } = await supabase.from("submission").select("*");
+    const { data, error } = await supabase
+      .from("submission")
+      .select("*")
+      .eq("id", submissionId)
+      .single();
 
     if (data) {
       return {
@@ -54,7 +74,7 @@ export async function getCurrentVote(submissionId: number) {
   }
 }
 
-async function getRealtimeVote(submissionId: number) {
+export async function getRealtimeVote(submissionId: number) {
   const supabase = createClient();
 
   supabase.channel("vote");

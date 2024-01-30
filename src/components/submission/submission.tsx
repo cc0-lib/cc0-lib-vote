@@ -1,8 +1,9 @@
 import type { SubmissionType } from "@/app/3d/page";
+import { createClient } from "@/lib/supabase/server";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 
-const Submission = ({
+const Submission = async ({
   coverData,
   voted,
   setVoted,
@@ -11,6 +12,20 @@ const Submission = ({
   voted: boolean;
   setVoted: (v: boolean) => void;
 }) => {
+  async function handleVote() {
+    const supabase = createClient();
+
+    const { data: user, error: fetchUserError } = await supabase
+      .from("user")
+      .select("*")
+      .eq("email", "abbas.cc0-lib.wtf")
+      .single();
+
+    const { data, error } = await supabase
+      .from("vote")
+      .insert({ round: 2, user: user?.id });
+  }
+
   return (
     <>
       <h1 className="font-chakra text-2xl font-bold uppercase">
@@ -39,8 +54,8 @@ const Submission = ({
             </button>
           ) : (
             <button
-              onClick={() => {
-                // handle vote
+              onClick={async () => {
+                await handleVote();
                 setVoted(true);
               }}
               className="w-28 rounded-md bg-prim px-8 py-2 text-zinc-800 ring-1 ring-zinc-400"

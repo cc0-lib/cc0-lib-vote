@@ -8,6 +8,9 @@ import BookCover from "@/components/submission/book-cover";
 import SubmissionNavigation from "@/components/submission/submission-navigation";
 import Submission from "@/components/submission/submission";
 import { previewMode } from "@/lib/prefs";
+import Header from "@/components/section/header";
+import Footer from "@/components/section/footer";
+import { createClient } from "@/lib/supabase/client";
 
 /**
  * @description sample submission data
@@ -72,6 +75,7 @@ const Three = (props: Props) => {
 
   return (
     <Container variant="center" className="p-0">
+      <Header />
       {!previewMode && (
         <>
           <SubmissionContainer>
@@ -80,6 +84,7 @@ const Three = (props: Props) => {
                 coverData={coverData}
                 voted={voted}
                 setVoted={setVoted}
+                handleVote={handleVote}
               />
             )}
           </SubmissionContainer>
@@ -93,6 +98,8 @@ const Three = (props: Props) => {
       )}
 
       <BookCover bookMaterial={bookMaterial!} />
+
+      <Footer />
     </Container>
   );
 };

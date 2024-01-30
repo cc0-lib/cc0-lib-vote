@@ -9,7 +9,13 @@ export default async function Vote() {
   return (
     <div className="rounded-md border-2 p-4 shadow-lg">
       <h1>Vote count</h1>
-      <RealtimeVotes serverVotes={data?.data || 0} />
+      <RealtimeVotes
+        serverVotes={
+          data?.data || {
+            data: "test",
+          }
+        }
+      />
     </div>
   );
 }
