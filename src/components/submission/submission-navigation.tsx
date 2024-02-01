@@ -14,7 +14,7 @@ const SubmissionNavigation = ({
       <button
         onClick={() => {
           const currentIndex = submissions.findIndex(
-            (d) => d.id === coverData.id,
+            (d) => d.title === coverData.title,
           );
           if (currentIndex === 0) {
             setCoverData(submissions[submissions.length - 1]);
@@ -29,7 +29,7 @@ const SubmissionNavigation = ({
       <button
         onClick={() => {
           const currentIndex = submissions.findIndex(
-            (d) => d.id === coverData.id,
+            (d) => d.title === coverData.title,
           );
           if (currentIndex === submissions.length - 1) {
             setCoverData(submissions[0]);

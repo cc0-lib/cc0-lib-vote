@@ -8,7 +8,7 @@ const menu = [
   },
   {
     name: "vote",
-    href: "/vote",
+    href: "/3d",
   },
   {
     name: "leaderboard",

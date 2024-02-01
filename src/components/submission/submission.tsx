@@ -1,31 +1,19 @@
+import { castVote } from "@/app/3d/action";
 import type { SubmissionType } from "@/app/3d/page";
-import { createClient } from "@/lib/supabase/server";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 
-const Submission = async ({
+const Submission = ({
   coverData,
   voted,
   setVoted,
+  handleVote,
 }: {
   coverData: SubmissionType;
   voted: boolean;
   setVoted: (v: boolean) => void;
+  handleVote: (action: "vote" | "unvote") => void;
 }) => {
-  async function handleVote() {
-    const supabase = createClient();
-
-    const { data: user, error: fetchUserError } = await supabase
-      .from("user")
-      .select("*")
-      .eq("email", "abbas.cc0-lib.wtf")
-      .single();
-
-    const { data, error } = await supabase
-      .from("vote")
-      .insert({ round: 2, user: user?.id });
-  }
-
   return (
     <>
       <h1 className="font-chakra text-2xl font-bold uppercase">
@@ -45,7 +33,7 @@ const Submission = async ({
           {voted ? (
             <button
               onClick={() => {
-                // handle unvote
+                handleVote("unvote");
                 setVoted(false);
               }}
               className="w-28 rounded-md px-8 py-2 text-red-500 ring-1 ring-red-500"
@@ -54,8 +42,8 @@ const Submission = async ({
             </button>
           ) : (
             <button
-              onClick={async () => {
-                await handleVote();
+              onClick={() => {
+                handleVote("vote");
                 setVoted(true);
               }}
               className="w-28 rounded-md bg-prim px-8 py-2 text-zinc-800 ring-1 ring-zinc-400"
