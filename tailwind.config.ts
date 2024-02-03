@@ -24,6 +24,7 @@ const config = {
         chakra: ["var(--font-chakra)"],
       },
       colors: {
+        prim: "#E9FF5F",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
