@@ -8,7 +8,7 @@ const menu = [
   },
   {
     name: "vote",
-    href: "/3d",
+    href: "/vote",
   },
   {
     name: "leaderboard",
@@ -26,7 +26,7 @@ const menu = [
 
 const Header = () => (
   <div className="grid w-full grid-cols-3 items-center">
-    <div>CC0-LIB ZINE - Special Edition 2</div>
+    <Link href="/">CC0-LIB ZINE - Special Edition 2</Link>
     <div className="text-center">
       <CountDown date="Jan 28, 2024 00:00:00" />
     </div>

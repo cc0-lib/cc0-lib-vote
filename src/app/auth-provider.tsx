@@ -1,14 +1,7 @@
 import React from "react";
-import {
-  DynamicContextProvider,
-  EthereumWalletConnectors,
-} from "../lib/dynamic";
+import { DynamicContextProvider, EthereumWalletConnectors } from "../lib/dynamic";
 
-export default function AuthProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <DynamicContextProvider
       settings={{

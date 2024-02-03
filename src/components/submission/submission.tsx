@@ -16,16 +16,10 @@ const Submission = ({
 }) => {
   return (
     <>
-      <h1 className="font-chakra text-2xl font-bold uppercase">
-        {coverData.title}
-      </h1>
-      <div className="h-full min-h-12 w-full max-w-sm text-xs font-normal normal-case">
-        {coverData.tldr}
-      </div>
+      <h1 className="font-chakra text-2xl font-bold uppercase">{coverData.title}</h1>
+      <div className="h-full min-h-12 w-full max-w-sm text-xs font-normal normal-case">{coverData.tldr}</div>
       <div className="flex-0 mt-4 flex w-full flex-row items-center justify-between">
-        <div className="w-full text-sm font-semibold uppercase">
-          {coverData.artist}
-        </div>
+        <div className="w-full text-sm font-semibold uppercase">{coverData.artist}</div>
         <div className="flex w-full flex-row items-center justify-around text-sm">
           <Link href={coverData.url} target="_blank" rel="noreferrer noopener">
             <Link2 className="h-4 w-4" />

@@ -37,6 +37,9 @@
     --ring: 240 10% 3.9%;
 
     --radius: 0.5rem;
+
+    --linear-gradient-top: 0, 0%, 28%;
+    --linear-gradient-bottom: 0, 0%, 44%;
   }
 
   .dark {

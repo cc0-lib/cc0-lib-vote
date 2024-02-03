@@ -2,15 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 
-export async function insertUser({
-  name,
-  email,
-  address,
-}: {
-  name: string;
-  email: string;
-  address: string;
-}) {
+export async function insertUser({ name, email, address }: { name: string; email: string; address: string }) {
   const supabase = createClient();
 
   try {
