@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CountDown from "../ui/countdown";
+import LoginNav from "./login-nav";
 
 const menu = [
   {
@@ -18,10 +19,6 @@ const menu = [
     name: "faq",
     href: "/faq",
   },
-  {
-    name: "login",
-    href: "/login",
-  },
 ];
 
 const Header = () => (
@@ -36,6 +33,9 @@ const Header = () => (
           <Link href={href}>{name}</Link>
         </li>
       ))}
+      <li>
+        <LoginNav />
+      </li>
     </ul>
   </div>
 );

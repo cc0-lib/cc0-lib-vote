@@ -1,5 +1,4 @@
-import { castVote } from "@/app/3d/action";
-import type { SubmissionType } from "@/app/3d/page";
+import type { SubmissionType } from "@/app/vote/page";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 

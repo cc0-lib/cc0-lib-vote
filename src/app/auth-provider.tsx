@@ -1,14 +1,24 @@
+"use client";
 import React from "react";
 import { DynamicContextProvider, EthereumWalletConnectors } from "../lib/dynamic";
 
-export default function AuthProvider({ children }: { children: React.ReactNode }) {
+export default function AuthProvider({
+  children,
+  environmentId,
+}: {
+  children: React.ReactNode;
+  environmentId: string;
+}) {
   return (
     <DynamicContextProvider
       settings={{
-        environmentId: process.env.DYNAMIC_XYZ_ENVIRONMENT_ID!,
+        environmentId,
         walletConnectors: [EthereumWalletConnectors],
-        appName: "cc0-lib vote",
-        debugError: true,
+        eventsCallbacks: {
+          onEmailVerificationSuccess: () => {
+            console.log("onEmailVerificationSuccess was called");
+          },
+        },
       }}
     >
       {children}

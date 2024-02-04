@@ -95,7 +95,7 @@ const Three = (props: Props) => {
   useEffect(() => {
     setCoverImage(coverData.image);
     console.log(coverImage);
-  }, [coverData]);
+  }, [coverData, coverImage]);
 
   return (
     <Container variant="center" className="p-0">

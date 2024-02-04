@@ -7,22 +7,36 @@ export interface Database {
         Row: {
           created_at: string;
           id: number;
+          status: string | null;
           title: string | null;
           url: string | null;
+          winner_id: number | null;
         };
         Insert: {
           created_at?: string;
           id?: number;
+          status?: string | null;
           title?: string | null;
           url?: string | null;
+          winner_id?: number | null;
         };
         Update: {
           created_at?: string;
           id?: number;
+          status?: string | null;
           title?: string | null;
           url?: string | null;
+          winner_id?: number | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "round_winner_id_fkey";
+            columns: ["winner_id"];
+            isOneToOne: false;
+            referencedRelation: "submission";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       submission: {
         Row: {
@@ -30,6 +44,8 @@ export interface Database {
           created_at: string;
           id: number;
           image: string | null;
+          is_winner: boolean;
+          prop_id: number | null;
           round: number | null;
           title: string | null;
           tldr: string | null;
@@ -41,6 +57,8 @@ export interface Database {
           created_at?: string;
           id?: number;
           image?: string | null;
+          is_winner?: boolean;
+          prop_id?: number | null;
           round?: number | null;
           title?: string | null;
           tldr?: string | null;
@@ -52,6 +70,8 @@ export interface Database {
           created_at?: string;
           id?: number;
           image?: string | null;
+          is_winner?: boolean;
+          prop_id?: number | null;
           round?: number | null;
           title?: string | null;
           tldr?: string | null;
@@ -159,7 +179,7 @@ export interface Database {
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["cc0vote"]["Tables"] & Database["cc0vote"]["Views"])
+    | keyof (Database["cc0Vote"]["Tables"] & Database["cc0Vote"]["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
@@ -172,8 +192,8 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database["cc0vote"]["Tables"] & Database["cc0vote"]["Views"])
-    ? (Database["cc0vote"]["Tables"] & Database["cc0vote"]["Views"])[PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof (Database["cc0Vote"]["Tables"] & Database["cc0Vote"]["Views"])
+    ? (Database["cc0Vote"]["Tables"] & Database["cc0Vote"]["Views"])[PublicTableNameOrOptions] extends {
         Row: infer R;
       }
       ? R
@@ -181,7 +201,7 @@ export type Tables<
     : never;
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends keyof Database["cc0vote"]["Tables"] | { schema: keyof Database },
+  PublicTableNameOrOptions extends keyof Database["cc0Vote"]["Tables"] | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never,
@@ -191,8 +211,8 @@ export type TablesInsert<
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database["cc0vote"]["Tables"]
-    ? Database["cc0vote"]["Tables"][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof Database["cc0Vote"]["Tables"]
+    ? Database["cc0Vote"]["Tables"][PublicTableNameOrOptions] extends {
         Insert: infer I;
       }
       ? I
@@ -200,7 +220,7 @@ export type TablesInsert<
     : never;
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends keyof Database["cc0vote"]["Tables"] | { schema: keyof Database },
+  PublicTableNameOrOptions extends keyof Database["cc0Vote"]["Tables"] | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never,
@@ -210,8 +230,8 @@ export type TablesUpdate<
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database["cc0vote"]["Tables"]
-    ? Database["cc0vote"]["Tables"][PublicTableNameOrOptions] extends {
+  : PublicTableNameOrOptions extends keyof Database["cc0Vote"]["Tables"]
+    ? Database["cc0Vote"]["Tables"][PublicTableNameOrOptions] extends {
         Update: infer U;
       }
       ? U
@@ -219,12 +239,12 @@ export type TablesUpdate<
     : never;
 
 export type Enums<
-  PublicEnumNameOrOptions extends keyof Database["cc0vote"]["Enums"] | { schema: keyof Database },
+  PublicEnumNameOrOptions extends keyof Database["cc0Vote"]["Enums"] | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["cc0vote"]["Enums"]
-    ? Database["cc0vote"]["Enums"][PublicEnumNameOrOptions]
+  : PublicEnumNameOrOptions extends keyof Database["cc0Vote"]["Enums"]
+    ? Database["cc0Vote"]["Enums"][PublicEnumNameOrOptions]
     : never;
