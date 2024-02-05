@@ -5,7 +5,7 @@ export async function getAllRoundWinner() {
 
   const { data, error } = await supabase
     .from("round")
-    .select(`*, submission!round_winner_id_fkey(id, image)`)
+    .select(`*, submission!round_winner_id_fkey(id, image, url)`)
     .order("title", {
       ascending: true,
     });

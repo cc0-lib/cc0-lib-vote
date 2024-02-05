@@ -1,15 +1,31 @@
 "use client";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import React from "react";
+import { truncateAddress } from "@/lib/utils";
+import { DynamicUserProfile, useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import React, { useEffect, useState } from "react";
 
 export default function LoginNav() {
-  const { setShowAuthFlow, handleLogOut, getNameService, isAuthenticated } = useDynamicContext();
+  const { setShowAuthFlow, getNameService, setShowDynamicUserProfile, isAuthenticated, authToken, primaryWallet } =
+    useDynamicContext();
+  const [ens, setEns] = useState("");
 
-  const ens = getNameService();
+  useEffect(() => {
+    (async () => {
+      const ens = await getNameService();
+
+      setEns(ens?.name || "");
+    })();
+  });
+
   return (
     <>
-      {isAuthenticated ? (
-        <button onClick={() => handleLogOut()}>LOGOUT</button>
+      {authToken ? (
+        <>
+          <button onClick={() => setShowDynamicUserProfile(true)}>
+            {ens !== "" ? ens : truncateAddress(primaryWallet?.address || "")}
+          </button>
+          <DynamicUserProfile />
+          {/* <button onClick={() => createEmbeddedWallet()}>CREATE</button> */}
+        </>
       ) : (
         <button onClick={() => setShowAuthFlow(true)}>CONNECT</button>
       )}

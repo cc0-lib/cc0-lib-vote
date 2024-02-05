@@ -4,6 +4,7 @@ import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import Image from "next/image";
 import React from "react";
+import { getVotes } from "./action";
 
 const leaderboard = [
   {
@@ -38,16 +39,21 @@ const leaderboard = [
   },
 ].sort((a, b) => b.votes - a.votes);
 
-export default function Leaderboard() {
+export default async function Leaderboard() {
+  const { data: votes, error } = await getVotes();
+
+  console.log(JSON.stringify(votes));
+
   return (
     <Container>
       <Header />
 
+      <div>{JSON.stringify(votes)}</div>
       <div className="w-full ">
         <span className="font-chakra text-6xl font-bold">
           <SplitLetters text="leaderboard" />
         </span>
-        <div className="text-lg font-semibold">Total votes: 66</div>
+        <div className="text-lg font-semibold">Total votes: {votes?.length}</div>
       </div>
 
       <div className="grid grid-cols-2 gap-5">
