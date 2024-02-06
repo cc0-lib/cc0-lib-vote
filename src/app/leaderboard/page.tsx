@@ -4,7 +4,7 @@ import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import Image from "next/image";
 import React from "react";
-import { getVotes } from "./action";
+import { getLeaderboards } from "./action";
 
 const leaderboard = [
   {
@@ -40,20 +40,23 @@ const leaderboard = [
 ].sort((a, b) => b.votes - a.votes);
 
 export default async function Leaderboard() {
-  const { data: votes, error } = await getVotes();
+  const { data: leaderboards, error: leaderboardError } = await getLeaderboards();
 
-  console.log(JSON.stringify(votes));
+  console.log(JSON.stringify(leaderboards));
+
+  if (leaderboardError) {
+    alert(leaderboardError.message);
+  }
 
   return (
     <Container>
       <Header />
 
-      <div>{JSON.stringify(votes)}</div>
       <div className="w-full ">
         <span className="font-chakra text-6xl font-bold">
           <SplitLetters text="leaderboard" />
         </span>
-        <div className="text-lg font-semibold">Total votes: {votes?.length}</div>
+        <div className="text-lg font-semibold">Total votes: {leaderboards?.length}</div>
       </div>
 
       <div className="grid grid-cols-2 gap-5">
@@ -70,16 +73,18 @@ export default async function Leaderboard() {
               />
             </div>
             {/* Info */}
-            <div className="ml-5">
-              <div className="grid grid-cols-2">
-                <h3 className="font-chakra text-5xl font-semibold">34.8%</h3>
+            <div className="ml-5 font-chakra">
+              <div className="flex items-center">
                 <div>
-                  <div className="w-10 text-start text-2xl">23</div>
-                  <h4>Votes</h4>
+                  <h3 className="text-center text-6xl">34.8%</h3>
+                </div>
+                <div className="ml-3">
+                  <div className="text-start text-3xl">23</div>
+                  <h4 className="w-full font-mono text-xs tracking-tighter">Votes</h4>
                 </div>
               </div>
-              <h4>Back to the nouns</h4>
-              <h5>0xA6....D756</h5>
+              <h4 className="font-bold leading-6 tracking-tight">Back to the nouns</h4>
+              <h5 className="font-mono tracking-tight">0xA6....D756</h5>
             </div>
           </div>
         </div>
@@ -136,15 +141,23 @@ export default async function Leaderboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
-        <div>
-          <div>23 Votes</div>
-          <div></div>
-        </div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
+      <>test</>
+
+      <div className="grid grid-cols-2 gap-10">
+        {Array.from([1, 2, 3, 4], (_, index) => (
+          <div key={index} className="flex gap-5">
+            <div className="flex flex-col items-end">
+              <h5 className="font-semibold">23</h5>
+              <h6 className="text-sm font-semibold">Votes</h6>
+            </div>
+            <div>
+              <h6 className="text-lg">NOUNS WITH ATTITUDE</h6>
+              <h6 className="text-xs">0x557...6EbB</h6>
+            </div>
+          </div>
+        ))}
       </div>
+
       <Footer />
     </Container>
   );

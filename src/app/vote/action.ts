@@ -8,31 +8,34 @@ const voteSchema = z.object({
   submissionId: z.number(),
 });
 
-export async function castVote(submissionId: any) {
+export async function castVote(submissionId: number, userAddress: string) {
+  console.log(userAddress);
   const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from("vote")
-    .insert({
-      user: 1,
-      submission_id: submissionId,
-      round: 1,
-    })
-    .select()
+  const { data: userResponse, error: userError } = await supabase
+    .from("user")
+    .select("id")
+    .eq("address", userAddress)
     .single();
 
-  if (error) {
-    console.log(error);
+  if (userError) {
+    return userError;
   }
 
-  // insert data to submission
-  if (data?.submission_id) {
-    await supabase
-      .from("submission")
-      .update({
-        total_vote: +1,
+  if (userResponse) {
+    const { data, error } = await supabase
+      .from("vote")
+      .insert({
+        user: userResponse.id,
+        submission_id: submissionId,
+        round: 1,
       })
-      .eq("id", data.submission_id);
+      .select()
+      .single();
+
+    if (error) {
+      console.log(error);
+    }
   }
 
   revalidatePath("/");
@@ -51,7 +54,7 @@ export async function getUserVote(userId = 1) {
     .select(
       `
       id,
-      submission(id, total_vote)
+      submission(id)
       `,
     )
     .eq("user", userId);

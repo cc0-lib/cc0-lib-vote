@@ -1,7 +1,6 @@
 import Link from "next/link";
 import CountDown from "../ui/countdown";
 import LoginNav from "./login-nav";
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 
 const menu = [
   {

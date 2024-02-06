@@ -27,7 +27,7 @@ export default function RealtimeVotes({ serverVotes }: { serverVotes: any }) {
     return () => {
       supabase.removeChannel(votes);
     };
-  }, [supabase, router]);
+  }, [supabase]);
 
   return <pre>{JSON.stringify(serverVotes, null, 2)}</pre>;
 }

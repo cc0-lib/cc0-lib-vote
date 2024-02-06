@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   children: React.ReactNode;
-  variant?: "center" | "between";
+  variant?: "center" | "between" | "start";
   className?: string;
 };
 
@@ -13,6 +13,7 @@ const Container = ({ children, variant = "between", className }: Props) => {
         "flex min-h-screen w-full flex-col items-center bg-zinc-100 px-10 py-8 font-mono font-medium uppercase",
         variant === "between" && "justify-between",
         variant === "center" && "justify-center",
+        variant === "start" && "justify-start",
         className,
       )}
     >

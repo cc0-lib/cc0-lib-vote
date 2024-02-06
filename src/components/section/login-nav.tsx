@@ -4,8 +4,7 @@ import { DynamicUserProfile, useDynamicContext } from "@dynamic-labs/sdk-react-c
 import React, { useEffect, useState } from "react";
 
 export default function LoginNav() {
-  const { setShowAuthFlow, getNameService, setShowDynamicUserProfile, isAuthenticated, authToken, primaryWallet } =
-    useDynamicContext();
+  const { setShowAuthFlow, getNameService, setShowDynamicUserProfile, isAuthenticated, primaryWallet } = useDynamicContext();
   const [ens, setEns] = useState("");
 
   useEffect(() => {
@@ -18,13 +17,12 @@ export default function LoginNav() {
 
   return (
     <>
-      {authToken ? (
+      {isAuthenticated ? (
         <>
           <button onClick={() => setShowDynamicUserProfile(true)}>
             {ens !== "" ? ens : truncateAddress(primaryWallet?.address || "")}
           </button>
           <DynamicUserProfile />
-          {/* <button onClick={() => createEmbeddedWallet()}>CREATE</button> */}
         </>
       ) : (
         <button onClick={() => setShowAuthFlow(true)}>CONNECT</button>

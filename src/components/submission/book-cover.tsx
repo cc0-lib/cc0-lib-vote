@@ -10,12 +10,10 @@ import { Material, MathUtils, Mesh, Vector3 } from "three";
 const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
   return (
     <div
-      className={cn(
-        "relative flex h-[100vh] w-full  items-center justify-center",
-        !previewMode && "-translate-y-[10vh]",
-      )}
+      className={cn("flex h-[80vh] w-full flex-col items-center justify-center", !previewMode && "-translate-y-[10vh]")}
     >
-      <Canvas className="fixed h-full w-full">
+      {/* TODO: this canvas is hiding the navbar button */}
+      <Canvas className="size-full border">
         <Scene bookMaterial={bookMaterial} />
       </Canvas>
     </div>

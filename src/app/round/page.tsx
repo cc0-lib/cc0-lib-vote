@@ -31,14 +31,14 @@ export default async function Round() {
                   href={round.submission.url || ""}
                   target="_blank"
                   rel="norefer"
-                  className="col-span-3 flex h-[260px] w-[260px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1"
+                  className="col-span-3 flex size-[260px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1"
                 >
                   <Image
                     height={500}
                     width={500}
                     src={round?.submission.image || ""}
                     alt=""
-                    className="h-full w-full rounded-md object-cover"
+                    className="size-full rounded-md object-cover"
                   />
                 </Link>
               ) : (
@@ -70,14 +70,14 @@ export default async function Round() {
                   href={round.submission.url || ""}
                   target="_blank"
                   rel="norefer"
-                  className="col-span-3 flex h-[260px] w-[260px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1"
+                  className="col-span-3 flex size-[260px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1"
                 >
                   <Image
                     height={500}
                     width={500}
                     src={round?.submission.image || ""}
                     alt=""
-                    className="h-full w-full rounded-md object-cover"
+                    className="size-full rounded-md object-cover"
                   />
                 </Link>
               ) : (

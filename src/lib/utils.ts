@@ -18,7 +18,13 @@ export async function ensResolver(walletAddress: string): Promise<EnsResolverRes
     method: "GET",
   });
 
-  return response.json();
+  const data = (await response.json()) as EnsResolverResult;
+
+  if (!data.ens) {
+    data.ens = truncateAddress(data.address);
+  }
+
+  return data;
 }
 
 export function truncateAddress(hexString: string) {
