@@ -1,4 +1,4 @@
-import type { SubmissionType } from "@/app/3d/page";
+import type { SubmissionType } from "@/app/vote/three";
 
 const SubmissionNavigation = ({
   coverData,
@@ -10,12 +10,10 @@ const SubmissionNavigation = ({
   setCoverData: (v: SubmissionType) => void;
 }) => {
   return (
-    <div className="pointer-events-none fixed z-10 flex h-full w-full items-center justify-between px-32">
+    <div className="pointer-events-none fixed z-10 flex size-full items-center justify-between px-32">
       <button
         onClick={() => {
-          const currentIndex = submissions.findIndex(
-            (d) => d.title === coverData.title,
-          );
+          const currentIndex = submissions.findIndex((d) => d.title === coverData.title);
           if (currentIndex === 0) {
             setCoverData(submissions[submissions.length - 1]);
             return;
@@ -28,9 +26,7 @@ const SubmissionNavigation = ({
       </button>
       <button
         onClick={() => {
-          const currentIndex = submissions.findIndex(
-            (d) => d.title === coverData.title,
-          );
+          const currentIndex = submissions.findIndex((d) => d.title === coverData.title);
           if (currentIndex === submissions.length - 1) {
             setCoverData(submissions[0]);
             return;

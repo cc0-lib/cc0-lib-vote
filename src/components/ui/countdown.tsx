@@ -27,9 +27,7 @@ const CountDown = ({ date }: CountDownProps) => {
       const distance = countDownDate - now;
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-      );
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
@@ -37,12 +35,15 @@ const CountDown = ({ date }: CountDownProps) => {
     }, 1000);
     return () => clearInterval(timer);
   }, [date, countDownDate]);
+
   return (
     <Suspense fallback={<div>D:H:M:S</div>}>
       <div>
-        <SplitLetters
-          text={`${countDown.days}D:${countDown.hours}H:${countDown.minutes}M:${countDown.seconds}S`}
-        />
+        {countDown && countDown.seconds >= 0 ? (
+          <SplitLetters text={`${countDown.days}D:${countDown.hours}H:${countDown.minutes}M:${countDown.seconds}S`} />
+        ) : (
+          <div>Round submission started</div>
+        )}
       </div>
     </Suspense>
   );

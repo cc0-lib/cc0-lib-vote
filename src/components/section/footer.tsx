@@ -1,8 +1,37 @@
-const Footer = () => (
-  <div className="flex w-full flex-row items-center justify-between">
-    <div>cover art round 2 community voting</div>
-    <div>total voted: 5/10</div>
-  </div>
-);
+"use client";
+import { createClient } from "@/lib/supabase/client";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { useEffect, useState } from "react";
 
+const Footer = () => {
+  const { isAuthenticated, authToken } = useDynamicContext();
+  const [userVotes, setUserVotes] = useState<any>();
+  const [totalSubmissions, setTotalSubmissions] = useState(0);
+
+  const fetchVotes = async () => {
+    const supabase = createClient();
+    const { count: voteCount } = await supabase.from("vote").select().eq("user", 5).eq("round", 1);
+
+    const { data: totalSubmission } = await supabase.from("submission").select("*", { count: "exact" }).eq("round", 1);
+
+    if (voteCount) {
+      setUserVotes(voteCount);
+    }
+
+    if (totalSubmission) {
+      setTotalSubmissions(totalSubmission.length);
+    }
+  };
+
+  useEffect(() => {
+    fetchVotes();
+  }, []);
+  return (
+    <div className="flex w-full flex-row items-center justify-between">
+      <div>cover art round 2 community voting</div>
+      <div>{userVotes?.length}</div>
+      {isAuthenticated && authToken ? <div>{`total voted: 5/${totalSubmissions}`}</div> : <></>}
+    </div>
+  );
+};
 export default Footer;

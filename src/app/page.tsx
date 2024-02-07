@@ -3,7 +3,7 @@ import Container from "@/components/container";
 import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 
-export default function Home() {
+export default async function Home() {
   return (
     <Container>
       <Header />
