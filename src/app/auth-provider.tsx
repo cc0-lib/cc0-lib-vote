@@ -10,25 +10,45 @@ export default function AuthProvider({
   children: React.ReactNode;
   environmentId: string;
 }) {
-  const supabase = createClient();
-
-  const addNewUser = async (userData: UserProfile, wallet: Wallet) => {
-    if (!userData.email) {
+  const addUser = async (user: UserProfile, wallet: Wallet | null, isAuthenticated: boolean) => {
+    if (!isAuthenticated) {
       return;
     }
 
-    const existed = (await supabase.from("user").select("id, email")).count;
+    const supabase = createClient();
 
-    if (existed === 1) {
+    if (!user.email) {
       return;
     }
 
-    await supabase.from("user").insert({
-      address: wallet.address,
-      name: userData.username || "",
-      email: userData.email || "",
-      vote_count: 10,
-    });
+    const { count, data } = await supabase
+      .from("user")
+      .select("id, email", {
+        count: "exact",
+      })
+      .eq("email", user.email);
+
+    if (count && count === 1) {
+      if (data) {
+        localStorage.setItem("user", JSON.stringify(data[0]));
+      }
+      return;
+    }
+
+    const response = await supabase
+      .from("user")
+      .insert({
+        address: wallet ? wallet.address : "",
+        name: user.username || "",
+        email: user.email || "",
+        vote_count: 10,
+      })
+      .select()
+      .single();
+
+    if (response.data) {
+      localStorage.setItem("user", JSON.stringify(response.data));
+    }
   };
 
   return (
@@ -37,9 +57,10 @@ export default function AuthProvider({
         environmentId,
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
-          onAuthSuccess: (args) => {
-            addNewUser(args.user, args.primaryWallet!);
+          onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) => {
+            addUser(user, primaryWallet, isAuthenticated);
           },
+          onLogout: () => localStorage.clear(),
         },
       }}
     >

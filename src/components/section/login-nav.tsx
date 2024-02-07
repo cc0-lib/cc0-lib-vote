@@ -4,7 +4,8 @@ import { DynamicUserProfile, useDynamicContext } from "@dynamic-labs/sdk-react-c
 import React, { useEffect, useState } from "react";
 
 export default function LoginNav() {
-  const { setShowAuthFlow, getNameService, setShowDynamicUserProfile, isAuthenticated, primaryWallet } = useDynamicContext();
+  const { setShowAuthFlow, getNameService, setShowDynamicUserProfile, isAuthenticated, primaryWallet } =
+    useDynamicContext();
   const [ens, setEns] = useState("");
 
   useEffect(() => {

@@ -1,23 +1,12 @@
 "use server";
-
 import { createClient } from "@/lib/supabase/server";
 
-export async function insertUser({ name, email, address }: { name: string; email: string; address: string }) {
+export async function getUserData(email: string) {
   const supabase = createClient();
+  const { data } = await supabase.from("user").select("*").eq("email", email).single();
 
-  try {
-    const { data, error } = await supabase.from("user").insert({
-      address: address,
-      name: name,
-      created_at: new Date().toString(),
-      email: email,
-    });
-
-    if (error) {
-      throw error;
-    }
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error creating user");
-  }
+  return {
+    data,
+    error: null,
+  };
 }

@@ -4,159 +4,99 @@ import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import Image from "next/image";
 import React from "react";
-import { getLeaderboards } from "./action";
-
-const leaderboard = [
-  {
-    id: 1,
-    title: "back to the nouns",
-    artist: {
-      name: "",
-      address: "0x81Dfea2c6a8a566fE4ed34587A45BF4e4c06f21C",
-    },
-    image: "/asset/img/cc0-lib-cover-1.png",
-    votes: 40,
-  },
-  {
-    id: 1,
-    title: "back to the nouns",
-    artist: {
-      name: "",
-      address: "0x81Dfea2c6a8a566fE4ed34587A45BF4e4c06f21C",
-    },
-    image: "/asset/img/cc0-lib-cover-2.png",
-    votes: 10,
-  },
-  {
-    id: 1,
-    title: "back to the nouns",
-    artist: {
-      name: "",
-      address: "0x81Dfea2c6a8a566fE4ed34587A45BF4e4c06f21C",
-    },
-    image: "/asset/img/everybodys-metropolis-cv.jpeg",
-    votes: 20,
-  },
-].sort((a, b) => b.votes - a.votes);
+import { getLeaderboards, getVotes } from "./action";
 
 export default async function Leaderboard() {
-  const { data: leaderboards, error: leaderboardError } = await getLeaderboards();
-
-  console.log(JSON.stringify(leaderboards));
-
-  if (leaderboardError) {
-    alert(leaderboardError.message);
-  }
+  const { data: leaderboards } = await getLeaderboards(1);
+  const roundTotalVotes = await getVotes(1);
 
   return (
     <Container>
       <Header />
 
-      <div className="w-full ">
+      <div className="top-0 w-full">
         <span className="font-chakra text-6xl font-bold">
           <SplitLetters text="leaderboard" />
         </span>
-        <div className="text-lg font-semibold">Total votes: {leaderboards?.length}</div>
+        <div className="text-lg font-semibold">Total votes: {roundTotalVotes}</div>
       </div>
 
-      <div className="grid grid-cols-2 gap-5">
-        <div className="col-span-2 w-[1000px]">
-          <div className="flex items-center justify-center">
-            {/* Image */}
-            <div className="size-40 rounded-md shadow-md">
+      {leaderboards && (
+        <>
+          <div>
+            <div className="flex items-center justify-center">
+              {/* Image */}
               <Image
-                className="rounded-md"
-                src="/asset/img/cc0-lib-cover-1.png"
+                className="size-48 rounded-md shadow-md"
+                src={leaderboards[0].image}
                 width={500}
                 height={500}
                 alt="winner"
               />
-            </div>
-            {/* Info */}
-            <div className="ml-5 font-chakra">
-              <div className="flex items-center">
-                <div>
-                  <h3 className="text-center text-6xl">34.8%</h3>
+              {/* First place */}
+              <div className="ml-5 font-chakra">
+                <div className="flex items-center">
+                  <div>
+                    <h3 className="text-center text-6xl">
+                      {((leaderboards[0].totalVotes / roundTotalVotes!) * 100).toFixed()}%
+                    </h3>
+                  </div>
+                  <div className="ml-3">
+                    <div className="text-start text-3xl">{leaderboards[0].totalVotes}</div>
+                    <h4 className="w-full font-mono text-xs tracking-tighter">
+                      {leaderboards[0].totalVotes > 1 ? "Votes" : "Vote"}
+                    </h4>
+                  </div>
                 </div>
-                <div className="ml-3">
-                  <div className="text-start text-3xl">23</div>
-                  <h4 className="w-full font-mono text-xs tracking-tighter">Votes</h4>
+                <h4 className="font-bold leading-6 tracking-tight">{leaderboards[0].title}</h4>
+                <h5 className="font-mono tracking-tight">{leaderboards[0].resolvedEns}</h5>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex w-1/2 items-center justify-center gap-5">
+            {leaderboards.slice(1, 3).map(({ id, totalVotes, image, resolvedEns, title }) => (
+              <div className="flex w-[400px] items-center font-chakra" key={id}>
+                <div className="flex size-36 items-center">
+                  <Image className="rounded-md shadow-md" src={image} width={800} height={800} alt="winner" />
+                </div>
+                {/* Info */}
+                <div className="ml-5 w-1/2">
+                  <div className="flex">
+                    <h3 className="text-5xl font-medium">{((totalVotes / roundTotalVotes!) * 100).toFixed()}%</h3>
+                    <div className="ml-3">
+                      <h3 className="text-start text-xl">{totalVotes}</h3>
+                      <h4 className="w-full font-mono text-xs tracking-tighter">{totalVotes > 1 ? "Votes" : "Vote"}</h4>
+                    </div>
+                  </div>
+                  <h4 className="truncate text-lg font-bold leading-6 tracking-tight">{title}</h4>
+                  <h5 className="font-mono tracking-tight">{resolvedEns}</h5>
                 </div>
               </div>
-              <h4 className="font-bold leading-6 tracking-tight">Back to the nouns</h4>
-              <h5 className="font-mono tracking-tight">0xA6....D756</h5>
-            </div>
+            ))}
           </div>
-        </div>
 
-        {/* 3rd place */}
-        <div className="col-span-1 flex w-[500px] items-center">
-          {/* Image */}
-          <div className="size-32">
-            <Image
-              className="rounded-md shadow-md"
-              src="/asset/img/cc0-lib-cover-2.png"
-              width={500}
-              height={500}
-              alt="winner"
-            />
+          <div className="block w-[500px] items-center py-5">
+            <div className="flex-grow border-t border-black"></div>
+            <div className="flex-grow border-t border-black"></div>
           </div>
-          {/* Info */}
-          <div className="ml-5">
-            <div className="flex">
-              <h3 className="font-chakra text-5xl font-semibold">34.8%</h3>
-              <div>
-                <h3>23</h3>
-                <h4>Votes</h4>
+
+          <div className="grid grid-cols-2 gap-2">
+            {leaderboards.slice(3, 6).map(({ id, resolvedEns, title, totalVotes }) => (
+              <div className="flex h-10 w-80 gap-4" key={id}>
+                <div className="flex flex-col items-end justify-end">
+                  <h6 className="font-semibold">{totalVotes}</h6>
+                  <h6 className="text-sm font-semibold">{totalVotes > 1 ? "Votes" : "Vote"}</h6>
+                </div>
+                <div className="flex flex-col justify-between">
+                  <h6 className="truncate font-chakra text-base font-bold tracking-tight">{title}</h6>
+                  <h6 className="text-[10px]">{resolvedEns}</h6>
+                </div>
               </div>
-            </div>
-            <h4>Back to the nouns</h4>
-            <h5>0xA6....D756</h5>
+            ))}
           </div>
-        </div>
-        {/* 3rd place */}
-        <div className="col-span-1 flex w-[500px] items-center">
-          {/* Image */}
-          <div className="size-32">
-            <Image
-              className="rounded-md shadow-md"
-              src="/asset/img/cc0-lib-cover-3.png"
-              width={500}
-              height={500}
-              alt="winner"
-            />
-          </div>
-          {/* Info */}
-          <div className="ml-5">
-            <div className="flex">
-              <h3 className="font-chakra text-5xl font-semibold">34.8%</h3>
-              <div>
-                <h3>23</h3>
-                <h4>Votes</h4>
-              </div>
-            </div>
-            <h4>Back to the nouns</h4>
-            <h5>0xA6....D756</h5>
-          </div>
-        </div>
-      </div>
-
-      <>test</>
-
-      <div className="grid grid-cols-2 gap-10">
-        {Array.from([1, 2, 3, 4], (_, index) => (
-          <div key={index} className="flex gap-5">
-            <div className="flex flex-col items-end">
-              <h5 className="font-semibold">23</h5>
-              <h6 className="text-sm font-semibold">Votes</h6>
-            </div>
-            <div>
-              <h6 className="text-lg">NOUNS WITH ATTITUDE</h6>
-              <h6 className="text-xs">0x557...6EbB</h6>
-            </div>
-          </div>
-        ))}
-      </div>
+        </>
+      )}
 
       <Footer />
     </Container>

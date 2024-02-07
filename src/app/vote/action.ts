@@ -1,15 +1,8 @@
 "use server";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-import * as z from "zod";
-
-const voteSchema = z.object({
-  user: z.number(),
-  submissionId: z.number(),
-});
 
 export async function castVote(submissionId: number, userAddress: string) {
-  console.log(userAddress);
   const supabase = createClient();
 
   const { data: userResponse, error: userError } = await supabase
@@ -19,11 +12,14 @@ export async function castVote(submissionId: number, userAddress: string) {
     .single();
 
   if (userError) {
-    return userError;
+    return {
+      data: null,
+      error: userError,
+    };
   }
 
   if (userResponse) {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("vote")
       .insert({
         user: userResponse.id,
@@ -39,15 +35,20 @@ export async function castVote(submissionId: number, userAddress: string) {
   }
 
   revalidatePath("/");
-  return;
+
+  return {
+    data: "success",
+  };
 }
 
 export async function revertVote(voteId: any, userId: number) {
   const supabase = createClient();
-  await supabase.from("vote").delete().eq("id", voteId).eq("user", userId);
+  const { error } = await supabase.from("vote").delete().eq("submission_id", voteId).eq("user", userId);
+
+  return;
 }
 
-export async function getUserVote(userId = 1) {
+export async function getUserVote(userId: number) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("vote")
@@ -63,75 +64,5 @@ export async function getUserVote(userId = 1) {
     console.error(error);
   }
 
-  console.log(data);
-
   return data;
-}
-
-export async function getUserData(email: string) {
-  try {
-    const supabase = createClient();
-    const { data, error } = await supabase.from("user").select("*").eq("email", email).single();
-
-    if (error) {
-      throw error;
-    }
-
-    return {
-      data,
-      error: null,
-    };
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error getting user data");
-  }
-}
-
-export async function getSubmission(submissionId: string) {
-  const supabase = createClient();
-
-  try {
-    const { data, error } = await supabase.from("submission").select("*").eq("id", submissionId).single();
-
-    if (data) {
-      return {
-        data,
-        error: null,
-      };
-    }
-
-    if (error) {
-      throw error;
-    }
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error getting submission data");
-  }
-}
-
-export async function getCurrentVote(submissionId: number) {
-  const supabase = createClient();
-  try {
-    const { data, error } = await supabase.from("vote").select("*").eq("submission_id", submissionId);
-
-    if (data) {
-      return {
-        data,
-        error: null,
-      };
-    }
-
-    if (error) {
-      throw error;
-    }
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error getting vote count");
-  }
-}
-
-export async function getRealtimeVote(submissionId: number) {
-  const supabase = createClient();
-
-  supabase.channel("vote");
 }

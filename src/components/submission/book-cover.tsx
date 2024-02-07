@@ -13,7 +13,7 @@ const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
       className={cn("flex h-[80vh] w-full flex-col items-center justify-center", !previewMode && "-translate-y-[10vh]")}
     >
       {/* TODO: this canvas is hiding the navbar button */}
-      <Canvas className="size-full border">
+      <Canvas className="size-full">
         <Scene bookMaterial={bookMaterial} />
       </Canvas>
     </div>

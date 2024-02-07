@@ -1,5 +1,4 @@
 import type { SubmissionType } from "@/app/vote/three";
-import { ensResolver } from "@/lib/utils";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 
@@ -8,12 +7,15 @@ const Submission = ({
   voted,
   setVoted,
   handleVote,
+  userVotes,
 }: {
   coverData: SubmissionType;
   voted: boolean;
   setVoted: (v: boolean) => void;
   handleVote: (action: "vote" | "unvote") => void;
+  userVotes: any[];
 }) => {
+  const isVoted = userVotes?.some((item) => item.submission.id === coverData.id);
   return (
     <>
       <h1 className="font-chakra text-2xl font-bold uppercase">{coverData.title}</h1>
@@ -26,7 +28,7 @@ const Submission = ({
           <Link href={coverData.url} target="_blank" rel="noreferrer noopener">
             <Link2 className="size-4" />
           </Link>
-          {voted ? (
+          {isVoted ? (
             <button
               onClick={() => {
                 handleVote("unvote");

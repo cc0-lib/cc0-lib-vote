@@ -1,6 +1,5 @@
 "use client";
 
-import Container from "@/components/container";
 import { useEffect, useState } from "react";
 import { MeshStandardMaterial, TextureLoader } from "three";
 import SubmissionContainer from "@/components/submission/submission-container";
@@ -32,25 +31,24 @@ const Three = ({ submissions }: Props) => {
 
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
+  const [userVotes, setUserVotes] = useState([]);
 
   const userAddress = primaryWallet?.address ?? "";
 
   const [voted, setVoted] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => await getUserVote();
-    fetchData();
-  }, []);
-
   const handleVote = async (action: "vote" | "unvote") => {
+    const userId = JSON.parse(localStorage.getItem("user") || "{}")?.id;
     if (action === "vote") {
       if (!userAddress) {
         alert("Please connect wallet or login to vote");
       }
 
       await castVote(coverData.id, userAddress);
+      fetchVote();
     } else {
-      revertVote(coverData.id, 1).then(() => {});
+      await revertVote(coverData.id, userId);
+      fetchVote();
     }
   };
 
@@ -65,10 +63,20 @@ const Three = ({ submissions }: Props) => {
     });
   }
 
+  const userId = JSON.parse(localStorage.getItem("user") || "{}")?.id;
+  const fetchVote = async () => {
+    const userVoteData = (await getUserVote(userId)) as any;
+    setUserVotes(userVoteData);
+  };
+
   useEffect(() => {
     setCoverImage(coverData.image);
     console.log(coverImage);
   }, [coverData, coverImage]);
+
+  useEffect(() => {
+    fetchVote();
+  }, []);
 
   return (
     <>
@@ -76,7 +84,13 @@ const Three = ({ submissions }: Props) => {
         <>
           <SubmissionContainer>
             {coverData && (
-              <Submission coverData={coverData} voted={voted} setVoted={setVoted} handleVote={handleVote} />
+              <Submission
+                coverData={coverData}
+                userVotes={userVotes}
+                voted={voted}
+                setVoted={setVoted}
+                handleVote={handleVote}
+              />
             )}
           </SubmissionContainer>
 
