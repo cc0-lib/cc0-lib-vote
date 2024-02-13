@@ -42,7 +42,7 @@ const CountDown = ({ date }: CountDownProps) => {
         {countDown && countDown.seconds >= 0 ? (
           <SplitLetters text={`${countDown.days}D:${countDown.hours}H:${countDown.minutes}M:${countDown.seconds}S`} />
         ) : (
-          <div>Round submission started</div>
+          <div>Round voting ends</div>
         )}
       </div>
     </Suspense>

@@ -7,8 +7,11 @@ import BookCover from "@/components/submission/book-cover";
 import SubmissionNavigation from "@/components/submission/submission-navigation";
 import Submission from "@/components/submission/submission";
 import { previewMode } from "@/lib/prefs";
-import { castVote, getUserVote, revertVote } from "./action";
+import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import useLocalStorage from "@/hooks/use-local-storage";
+import { MAX_VOTE_PER_USER } from "@/lib/config";
+import { revalidatePath } from "next/cache";
 
 export type SubmissionType = {
   id: number;
@@ -33,19 +36,24 @@ const Three = ({ submissions }: Props) => {
   const [coverData, setCoverData] = useState(submissions[0]);
   const [userVotes, setUserVotes] = useState([]);
 
+  const [user, _] = useLocalStorage("user", "");
+
   const userAddress = primaryWallet?.address ?? "";
 
   const [voted, setVoted] = useState(false);
 
   const handleVote = async (action: "vote" | "unvote") => {
-    const userId = JSON.parse(localStorage.getItem("user") || "{}")?.id;
+    const userId = user?.id;
     if (action === "vote") {
       if (!userAddress) {
         alert("Please connect wallet or login to vote");
       }
-
-      await castVote(coverData.id, userAddress);
-      fetchVote();
+      if (userVotes.length < MAX_VOTE_PER_USER) {
+        await castVote(coverData.id, userAddress);
+        fetchVote();
+      } else {
+        alert("You have already voted the maximum number of times");
+      }
     } else {
       await revertVote(coverData.id, userId);
       fetchVote();
@@ -63,15 +71,14 @@ const Three = ({ submissions }: Props) => {
     });
   }
 
-  const userId = JSON.parse(localStorage.getItem("user") || "{}")?.id;
+  const userId = user?.id;
   const fetchVote = async () => {
-    const userVoteData = (await getUserVote(userId)) as any;
+    const userVoteData = (await getUserVotes(userId)) as any;
     setUserVotes(userVoteData);
   };
 
   useEffect(() => {
     setCoverImage(coverData.image);
-    console.log(coverImage);
   }, [coverData, coverImage]);
 
   useEffect(() => {

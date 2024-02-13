@@ -2,6 +2,7 @@
 import React from "react";
 import { DynamicContextProvider, EthereumWalletConnectors, UserProfile, Wallet } from "../lib/dynamic";
 import { createClient } from "@/lib/supabase/client";
+import useLocalStorage from "@/hooks/use-local-storage";
 
 export default function AuthProvider({
   children,
@@ -10,6 +11,8 @@ export default function AuthProvider({
   children: React.ReactNode;
   environmentId: string;
 }) {
+  const [, setUser] = useLocalStorage("user", "");
+
   const addUser = async (user: UserProfile, wallet: Wallet | null, isAuthenticated: boolean) => {
     if (!isAuthenticated) {
       return;
@@ -30,7 +33,7 @@ export default function AuthProvider({
 
     if (count && count === 1) {
       if (data) {
-        localStorage.setItem("user", JSON.stringify(data[0]));
+        setUser(data[0]);
       }
       return;
     }
@@ -47,7 +50,7 @@ export default function AuthProvider({
       .single();
 
     if (response.data) {
-      localStorage.setItem("user", JSON.stringify(response.data));
+      setUser(response.data);
     }
   };
 

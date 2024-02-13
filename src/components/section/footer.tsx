@@ -1,36 +1,37 @@
 "use client";
-import { createClient } from "@/lib/supabase/client";
+import { getUserVotes } from "@/app/vote/action";
+import useLocalStorage from "@/hooks/use-local-storage";
+import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useEffect, useState } from "react";
 
 const Footer = () => {
   const { isAuthenticated, authToken } = useDynamicContext();
-  const [userVotes, setUserVotes] = useState<any>();
-  const [totalSubmissions, setTotalSubmissions] = useState(0);
+  const [userVotes, setUserVotes] = useState(0);
+
+  const [user] = useLocalStorage("user", "");
+  const id = user?.id;
 
   const fetchVotes = async () => {
-    const supabase = createClient();
-    const { count: voteCount } = await supabase.from("vote").select().eq("user", 5).eq("round", 1);
+    const res = await getUserVotes(id);
 
-    const { data: totalSubmission } = await supabase.from("submission").select("*", { count: "exact" }).eq("round", 1);
-
-    if (voteCount) {
-      setUserVotes(voteCount);
-    }
-
-    if (totalSubmission) {
-      setTotalSubmissions(totalSubmission.length);
+    if (res) {
+      setUserVotes(res.length);
     }
   };
 
   useEffect(() => {
     fetchVotes();
   }, []);
+
   return (
     <div className="flex w-full flex-row items-center justify-between">
       <div>cover art round 2 community voting</div>
-      <div>{userVotes?.length}</div>
-      {isAuthenticated && authToken ? <div>{`total voted: 5/${totalSubmissions}`}</div> : <></>}
+      {isAuthenticated && authToken && userVotes ? (
+        <div>{`total voted: ${userVotes}/${MAX_VOTE_PER_USER}`}</div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
