@@ -23,10 +23,10 @@ const menu = [
 
 const Header = () => {
   return (
-    <div className="grid w-full grid-cols-3 items-center">
+    <div className="z-[50] grid w-full grid-cols-3 items-center">
       <Link href="/">CC0-LIB ZINE - Special Edition 2</Link>
       <div className="text-center">
-        <CountDown date="Jan 28, 2024 00:00:00" />
+        <CountDown date="Feb 19, 2024 00:00:00" />
       </div>
       <ul className="flex flex-row items-center justify-between">
         {menu.map(({ name, href }) => (

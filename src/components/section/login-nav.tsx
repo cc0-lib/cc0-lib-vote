@@ -20,7 +20,7 @@ export default function LoginNav() {
     <>
       {isAuthenticated ? (
         <>
-          <button onClick={() => setShowDynamicUserProfile(true)}>
+          <button className="uppercase" onClick={() => setShowDynamicUserProfile(true)}>
             {ens !== "" ? ens : truncateAddress(primaryWallet?.address || "")}
           </button>
           <DynamicUserProfile />
