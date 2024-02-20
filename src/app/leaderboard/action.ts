@@ -1,6 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
+import { supabase } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
-import { cookies } from "next/headers";
 
 interface Leaderboard {
   artist: string;
@@ -18,7 +17,6 @@ interface Leaderboard {
 }
 
 export async function getLeaderboards(currentRound: number) {
-  const supabase = createClient();
   const { data, error } = await supabase
     .from("submission")
     .select("*, vote(count)")
@@ -54,8 +52,6 @@ export async function getLeaderboards(currentRound: number) {
 }
 
 export async function getVotes(currentRound: number) {
-  const supabase = createClient();
-
   const { data: votes, error } = await supabase.from("vote").select().eq("round", currentRound);
 
   return votes?.length;

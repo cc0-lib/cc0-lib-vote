@@ -1,10 +1,8 @@
 "use server";
-import { createClient } from "@/lib/supabase/server";
+import { supabase } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function castVote(submissionId: number, userAddress: string) {
-  const supabase = createClient();
-
   const { data: userResponse, error: userError } = await supabase
     .from("user")
     .select("id")
@@ -42,14 +40,12 @@ export async function castVote(submissionId: number, userAddress: string) {
 }
 
 export async function revertVote(voteId: any, userId: number) {
-  const supabase = createClient();
   const { error } = await supabase.from("vote").delete().eq("submission_id", voteId).eq("user", userId);
 
   return;
 }
 
 export async function getUserVotes(userId: number) {
-  const supabase = createClient();
   const { data, error } = await supabase
     .from("vote")
     .select(

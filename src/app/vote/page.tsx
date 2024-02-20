@@ -3,11 +3,10 @@ import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import React from "react";
 import Three from "./three";
-import { createClient } from "@/lib/supabase/server";
+import { supabase } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
 
 export default async function Vote() {
-  const supabase = createClient();
   const response = await supabase.from("submission").select().eq("round", 1);
 
   if (response.error) {

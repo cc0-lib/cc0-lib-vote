@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { DynamicContextProvider, EthereumWalletConnectors, UserProfile, Wallet } from "../lib/dynamic";
-import { createClient } from "@/lib/supabase/client";
 import useLocalStorage from "@/hooks/use-local-storage";
+import { addUserAction } from "./action";
 
 export default function AuthProvider({
   children,
@@ -13,45 +13,17 @@ export default function AuthProvider({
 }) {
   const [, setUser] = useLocalStorage("user", "");
 
-  const addUser = async (user: UserProfile, wallet: Wallet | null, isAuthenticated: boolean) => {
-    if (!isAuthenticated) {
+  const addUser = async (user: UserProfile, primaryWallet: Wallet | null, isAuthenticated: boolean) => {
+    if (!isAuthenticated || !user) {
       return;
     }
 
-    const supabase = createClient();
-
-    if (!user.email) {
-      return;
-    }
-
-    const { count, data } = await supabase
-      .from("user")
-      .select("id, email", {
-        count: "exact",
-      })
-      .eq("email", user.email);
-
-    if (count && count === 1) {
-      if (data) {
-        setUser(data[0]);
-      }
-      return;
-    }
-
-    const response = await supabase
-      .from("user")
-      .insert({
-        address: wallet ? wallet.address : "",
-        name: user.username || "",
-        email: user.email || "",
-        vote_count: 10,
-      })
-      .select()
-      .single();
-
-    if (response.data) {
-      setUser(response.data);
-    }
+    // structuredClone failed beacause there is function on wallet object
+    const userResponse = await addUserAction(
+      { email: user.email, username: user.username },
+      { address: primaryWallet ? primaryWallet?.address : "" },
+    );
+    setUser(userResponse);
   };
 
   return (
@@ -60,10 +32,8 @@ export default function AuthProvider({
         environmentId,
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
-          onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) => {
-            addUser(user, primaryWallet, isAuthenticated);
-          },
-          onLogout: () => localStorage.clear(),
+          onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) => addUser(user, primaryWallet, isAuthenticated),
+          onLogout: () => setUser(null),
         },
       }}
     >
