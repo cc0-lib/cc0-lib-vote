@@ -11,7 +11,7 @@ import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import useLocalStorage from "@/hooks/use-local-storage";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
-import { revalidatePath } from "next/cache";
+import { useOptimistic } from "react";
 
 export type SubmissionType = {
   id: number;
@@ -29,12 +29,21 @@ type Props = {
   submissions: SubmissionType[];
 };
 
+type UserVotes = {
+  submission: SubmissionType;
+  user: { id: number };
+};
+
 const Three = ({ submissions }: Props) => {
   const { primaryWallet } = useDynamicContext();
 
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
   const [userVotes, setUserVotes] = useState([]);
+  const [optimisticMessages, addOptimisticMessage] = useOptimistic<UserVotes[]>(
+    userVotes,
+    (state: any, newState: any) => [...state],
+  );
 
   const [user, _] = useLocalStorage("user", "");
 

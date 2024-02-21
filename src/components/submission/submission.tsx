@@ -1,10 +1,9 @@
-import type { SubmissionType } from "@/app/vote/three";
+import type { SubmissionType } from "@/app/three";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 
 const Submission = ({
   coverData,
-  voted,
   setVoted,
   handleVote,
   userVotes,

@@ -20,7 +20,7 @@ export default function AuthProvider({
 
     // structuredClone failed beacause there is function on wallet object
     const userResponse = await addUserAction(
-      { email: user.email, username: user.username },
+      { email: user.email, username: user.username, userId: user.userId },
       { address: primaryWallet ? primaryWallet?.address : "" },
     );
     setUser(userResponse);
@@ -33,6 +33,7 @@ export default function AuthProvider({
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
           onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) => addUser(user, primaryWallet, isAuthenticated),
+          onEmailVerificationSuccess: (email) => {},
           onLogout: () => setUser(null),
         },
       }}

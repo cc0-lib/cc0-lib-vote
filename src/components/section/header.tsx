@@ -8,10 +8,6 @@ const menu = [
     href: "/round",
   },
   {
-    name: "vote",
-    href: "/vote",
-  },
-  {
     name: "leaderboard",
     href: "/leaderboard",
   },

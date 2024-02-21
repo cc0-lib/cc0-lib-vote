@@ -1,5 +1,5 @@
 "use client";
-import { getUserVotes } from "@/app/vote/action";
+import { getUserVotes } from "@/app/action";
 import useLocalStorage from "@/hooks/use-local-storage";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";

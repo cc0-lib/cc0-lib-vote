@@ -1,15 +1,32 @@
-import SplitLetters from "@/components/anim/split-letters";
 import Container from "@/components/container";
 import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
+import { supabase } from "@/lib/supabase/server";
+import { ensResolver } from "@/lib/utils";
+import Three from "./three";
 
 export default async function Home() {
+  const response = await supabase.from("submission").select().eq("round", 1);
+
+  if (response.error) {
+    console.log("Error fetching submissions");
+  }
+
+  if (response.data) {
+    await Promise.all(
+      response.data.map(async (data) => {
+        if (data.artist) {
+          const ens = await ensResolver(data.artist);
+          data.ens = ens.ens;
+        }
+      }),
+    );
+  }
+
   return (
     <Container>
       <Header />
-      <span className="font-chakra text-8xl font-bold uppercase">
-        <SplitLetters text="VOTE" delay={0.25} />
-      </span>
+      <Three submissions={response.data as any} />
       <Footer />
     </Container>
   );
