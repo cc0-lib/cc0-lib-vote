@@ -3,34 +3,47 @@ import Container from "@/components/container";
 import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import React from "react";
-import { loginWithEmail } from "./action";
+import { getStats } from "./action";
 
 export default async function Stats() {
-  const data = await loginWithEmail("abbaspuzi.dev@gmail.com");
+  const { data, error } = await getStats();
   return (
     <Container>
       <Header />
 
-      <div className="h-[80vh] w-full">
+      <div className="flex h-[80vh] w-full flex-col justify-start">
         <div className="w-full font-chakra text-6xl font-bold">
           <SplitLetters text="Stats" />
         </div>
 
-        <h1>Round 3</h1>
+        <h3>Round 3</h3>
 
-        <div className="flex w-full flex-col items-center border border-blue-600">
-          <table className="w-1/2">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Id</th>
-                <th>Votes</th>
-                <th>Percent</th>
-                <th>Prorated</th>
-                <th>Status</th>
+        <div className="mt-32 flex w-full flex-col items-center">
+          <table className="w-2/3">
+            <thead className="w-full">
+              <tr className="grid h-10 grid-cols-7">
+                <th className="col-span-2 flex">Title</th>
+                <th className="flex justify-end">Id</th>
+                <th className="flex justify-end">Votes</th>
+                <th className="flex justify-end">Percent</th>
+                <th className="flex justify-end">Prorated</th>
+                <th className="flex justify-end">Status</th>
               </tr>
             </thead>
-            <tbody>{}</tbody>
+            <tbody className="w-full">
+              {data.map((item, index) => {
+                return (
+                  <tr key={index} className="grid h-10 grid-cols-7 font-semibold">
+                    <td className="col-span-2 truncate pr-5">{item.title}</td>
+                    <td className="flex justify-end">{item.id}</td>
+                    <td className="flex justify-end">{item.votes}</td>
+                    <td className="flex justify-end">{item.percent}</td>
+                    <td className="flex justify-end">{item.prorated}</td>
+                    <td className="flex justify-end">{item.status}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </table>
         </div>
       </div>

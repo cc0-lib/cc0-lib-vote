@@ -10,14 +10,17 @@ const Footer = () => {
   const [userVotes, setUserVotes] = useState(0);
 
   const [user] = useLocalStorage("user", "");
+
   const id = user?.id;
 
   const fetchVotes = async () => {
     const res = await getUserVotes(id);
 
-    if (res) {
-      setUserVotes(res.length);
+    if (res?.length === 0) {
+      return;
     }
+
+    setUserVotes(res?.length || userVotes);
   };
 
   useEffect(() => {

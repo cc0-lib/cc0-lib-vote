@@ -9,4 +9,4 @@ const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, proce
 });
 
 // Access auth admin api
-export const adminAuthClient = supabase.auth.admin;
+export const adminClient = supabase.schema("cc0vote");

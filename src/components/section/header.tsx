@@ -12,6 +12,10 @@ const menu = [
     href: "/leaderboard",
   },
   {
+    name: "stats",
+    href: "/stats",
+  },
+  {
     name: "faq",
     href: "/faq",
   },
@@ -19,12 +23,12 @@ const menu = [
 
 const Header = () => {
   return (
-    <div className="z-[50] grid w-full grid-cols-3 items-center">
+    <nav className="z-[50] grid w-full grid-cols-3 items-center justify-between">
       <Link href="/">CC0-LIB ZINE - Special Edition 2</Link>
       <div className="text-center">
         <CountDown date="Feb 19, 2024 00:00:00" />
       </div>
-      <ul className="flex flex-row items-center justify-between">
+      <ul className="ml-32 flex items-center justify-between">
         {menu.map(({ name, href }) => (
           <li key={name}>
             <Link href={href}>{name}</Link>
@@ -34,7 +38,7 @@ const Header = () => {
           <LoginNav />
         </li>
       </ul>
-    </div>
+    </nav>
   );
 };
 export default Header;

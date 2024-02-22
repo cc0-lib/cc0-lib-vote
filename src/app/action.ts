@@ -1,11 +1,8 @@
 "use server";
-import { adminAuthClient } from "@/lib/supabase/admin";
+import { adminClient } from "@/lib/supabase/admin";
 import { supabase } from "@/lib/supabase/server";
-import { UserProfile } from "@dynamic-labs/sdk-react-core";
 import { revalidatePath } from "next/cache";
-import pino from "pino";
 
-const logger = pino();
 interface User {
   email: string | undefined;
   username: string | undefined | null;
@@ -33,33 +30,17 @@ export async function addUserAction(user: User, wallet: WalletCB) {
       return null;
     }
 
-    await supabase.auth.signInWithPassword({
-      email: user.email,
-      password: wallet.address,
-    });
-
     revalidatePath("/");
-    return data;
+    return data[0];
   }
 
-  const authData = await adminAuthClient.createUser({
-    user_metadata: {
-      walletAddress: wallet.address,
-      dynamicUserId: user.userId,
-    },
-    email: user.email,
-    password: wallet.address,
-    email_confirm: true,
-  });
-
-  const newUser = await supabase
+  const newUser = await adminClient
     .from("user")
     .insert({
       address: wallet ? wallet.address : "",
       name: user.username || "",
       email: user.email || "",
       vote_count: 10,
-      auth_id: authData.data.user?.id,
     })
     .select()
     .single();
@@ -96,7 +77,7 @@ export async function castVote(submissionId: number, userAddress: string) {
       .single();
 
     if (error) {
-      console.log(error);
+      console.log("castVote", error);
     }
   }
 
@@ -125,7 +106,7 @@ export async function getUserVotes(userId: number) {
     .eq("user", userId);
 
   if (error) {
-    console.error(error);
+    console.error("getUserVotes", error);
   }
 
   return data;

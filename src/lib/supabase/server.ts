@@ -17,18 +17,18 @@ const createClient = () => {
           return cookieStore.get(name)?.value;
         },
         set(name: string, value: string, options: CookieOptions) {
-          console.log(name);
+          console.log("cookieSet", name);
           try {
             cookieStore.set({ name, value, ...options });
           } catch (error) {
-            console.log(error);
+            console.log("cookieSetError", error);
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: "", ...options });
           } catch (error) {
-            console.log(error);
+            console.log("cookieRemoveError", error);
           }
         },
       },

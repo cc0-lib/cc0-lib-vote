@@ -8,6 +8,7 @@ import { getLeaderboards, getVotes } from "./action";
 
 export default async function Leaderboard() {
   const { data: leaderboards } = await getLeaderboards(1);
+
   const roundTotalVotes = await getVotes(1);
 
   return (
@@ -37,9 +38,7 @@ export default async function Leaderboard() {
               <div className="ml-5 font-chakra">
                 <div className="flex items-center">
                   <div>
-                    <h3 className="text-center text-6xl">
-                      {((leaderboards[0].totalVotes / roundTotalVotes!) * 100).toFixed()}%
-                    </h3>
+                    <h3 className="text-center text-6xl">{leaderboards[0].percentage}%</h3>
                   </div>
                   <div className="ml-3">
                     <div className="text-start text-3xl">{leaderboards[0].totalVotes}</div>
@@ -55,7 +54,7 @@ export default async function Leaderboard() {
           </div>
 
           <div className="flex w-1/2 items-center justify-center gap-5">
-            {leaderboards.slice(1, 3).map(({ id, totalVotes, image, resolvedEns, title }) => (
+            {leaderboards.slice(1, 3).map(({ id, percentage, image, resolvedEns, title, totalVotes }) => (
               <div className="flex w-[400px] items-center font-chakra" key={id}>
                 <div className="flex size-36 items-center">
                   <Image className="rounded-md shadow-md" src={image} width={800} height={800} alt="winner" />
@@ -63,7 +62,7 @@ export default async function Leaderboard() {
                 {/* Info */}
                 <div className="ml-5 w-1/2">
                   <div className="flex">
-                    <h3 className="text-5xl font-medium">{((totalVotes / roundTotalVotes!) * 100).toFixed()}%</h3>
+                    <h3 className="text-5xl font-medium">{percentage}%</h3>
                     <div className="ml-3">
                       <h3 className="text-start text-xl">{totalVotes}</h3>
                       <h4 className="w-full font-mono text-xs tracking-tighter">{totalVotes > 1 ? "Votes" : "Vote"}</h4>

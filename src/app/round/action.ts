@@ -9,7 +9,7 @@ export async function getAllRoundWinner() {
     });
 
   if (error) {
-    console.log(error);
+    console.log("getAllRoundWinner", error);
     throw new Error("Could not retrieve data");
   }
 

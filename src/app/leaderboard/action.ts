@@ -14,6 +14,7 @@ interface Leaderboard {
   url: string;
   resolvedEns: string;
   totalVotes: number;
+  percentage: number;
 }
 
 export async function getLeaderboards(currentRound: number) {
@@ -25,6 +26,8 @@ export async function getLeaderboards(currentRound: number) {
       ascending: true,
     });
 
+  const roundTotalVotes = await getVotes(1);
+
   if (error) {
     return {
       data: null,
@@ -35,10 +38,13 @@ export async function getLeaderboards(currentRound: number) {
   const leaderboardsPromises: Promise<Leaderboard>[] = data.map(async (item: any) => {
     const { vote, artist } = item;
     const totalVotes = vote ? vote[0]?.count : 0;
+
+    console.log(roundTotalVotes, totalVotes);
     const { ens } = await ensResolver(artist);
     return {
       ...item,
       totalVotes,
+      percentage: totalVotes !== 0 ? (totalVotes / roundTotalVotes) * 100 : 0,
       resolvedEns: ens,
     };
   });
@@ -52,7 +58,15 @@ export async function getLeaderboards(currentRound: number) {
 }
 
 export async function getVotes(currentRound: number) {
-  const { data: votes, error } = await supabase.from("vote").select().eq("round", currentRound);
+  const { count, error } = await supabase.from("vote").select().eq("round", currentRound);
 
-  return votes?.length;
+  if (error) {
+    console.log("Get votes error: ", error);
+  }
+
+  if (!count) {
+    return 0;
+  }
+
+  return count;
 }
