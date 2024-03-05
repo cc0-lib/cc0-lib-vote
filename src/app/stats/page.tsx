@@ -31,7 +31,7 @@ export default async function Stats() {
               </tr>
             </thead>
             <tbody className="w-full">
-              {data.map((item, index) => {
+              {data?.map((item, index) => {
                 return (
                   <tr key={index} className="grid h-10 grid-cols-7 font-semibold">
                     <td className="col-span-2 truncate pr-5">{item.title}</td>
