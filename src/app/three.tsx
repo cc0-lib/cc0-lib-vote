@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useOptimistic } from "react";
 import { MeshStandardMaterial, TextureLoader } from "three";
 import SubmissionContainer from "@/components/submission/submission-container";
 import BookCover from "@/components/submission/book-cover";
@@ -11,7 +11,6 @@ import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import useLocalStorage from "@/hooks/use-local-storage";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
-import { useOptimistic } from "react";
 
 export type SubmissionType = {
   id: number;
@@ -29,8 +28,8 @@ type Props = {
   submissions: SubmissionType[];
 };
 
-type UserVotes = {
-  submission: SubmissionType;
+export type UserVotes = {
+  submission: SubmissionType[];
   user: { id: number };
 };
 
@@ -39,11 +38,27 @@ const Three = ({ submissions }: Props) => {
 
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
-  const [userVotes, setUserVotes] = useState([]);
-  const [optimisticMessages, addOptimisticMessage] = useOptimistic<UserVotes[]>(
-    userVotes,
-    (state: any, newState: any) => [...state],
-  );
+  const [userVotes, setUserVotes] = useState<UserVotes[]>([]);
+
+  const [optimisticVote, castOptimisticVote] = useOptimistic(userVotes, (state, newSubmission: SubmissionType) => [
+    ...state,
+    {
+      submission: [
+        {
+          ...newSubmission,
+        },
+      ],
+      user: { id: 1 },
+    },
+  ]);
+
+  const testOptimisticVote = () => {
+    castOptimisticVote(coverData);
+  };
+
+  useEffect(() => {
+    console.log("optimisticVote", optimisticVote);
+  });
 
   const [user, _] = useLocalStorage("user", "");
 
@@ -58,6 +73,8 @@ const Three = ({ submissions }: Props) => {
         alert("Please connect wallet or login to vote");
       }
       if (userVotes.length < MAX_VOTE_PER_USER) {
+        // cast optimistic vote
+        castOptimisticVote(coverData);
         await castVote(coverData.id, userAddress);
         fetchVote();
       } else {
