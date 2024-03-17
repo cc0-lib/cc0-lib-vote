@@ -37,3 +37,12 @@ export async function getStats() {
     error: null,
   };
 }
+
+export async function getCurrentRound() {
+  const { data, error } = await supabase.from("round").select("*").eq("is_current", true).single();
+
+  return {
+    data,
+    error,
+  };
+}

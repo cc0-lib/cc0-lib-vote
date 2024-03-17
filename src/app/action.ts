@@ -52,7 +52,7 @@ export async function addUserAction(user: User, wallet: WalletCB) {
 }
 
 export async function castVote(submissionId: number, userAddress: string) {
-  const { data: userResponse, error: userError } = await supabase
+  const { data: userResponse, error: userError } = await adminClient
     .from("user")
     .select("id")
     .eq("address", userAddress)
@@ -66,7 +66,7 @@ export async function castVote(submissionId: number, userAddress: string) {
   }
 
   if (userResponse) {
-    const { error } = await supabase
+    const { error } = await adminClient
       .from("vote")
       .insert({
         user: userResponse.id,
@@ -89,7 +89,7 @@ export async function castVote(submissionId: number, userAddress: string) {
 }
 
 export async function revertVote(voteId: any, userId: number) {
-  const { error } = await supabase.from("vote").delete().eq("submission_id", voteId).eq("user", userId);
+  const { error } = await adminClient.from("vote").delete().eq("submission_id", voteId).eq("user", userId);
 
   return;
 }
@@ -109,5 +109,8 @@ export async function getUserVotes(userId: number) {
     console.error("getUserVotes", error);
   }
 
-  return data;
+  return {
+    data,
+    error: null,
+  };
 }

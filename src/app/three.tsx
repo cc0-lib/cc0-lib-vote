@@ -29,36 +29,28 @@ type Props = {
 };
 
 export type UserVotes = {
-  submission: SubmissionType[];
-  user: { id: number };
+  id: number;
+  submission: {
+    id: number;
+  };
 };
 
 const Three = ({ submissions }: Props) => {
-  const { primaryWallet } = useDynamicContext();
+  const { primaryWallet, isAuthenticated, authToken } = useDynamicContext();
 
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
   const [userVotes, setUserVotes] = useState<UserVotes[]>([]);
-
-  const [optimisticVote, castOptimisticVote] = useOptimistic(userVotes, (state, newSubmission: SubmissionType) => [
+  const [currentId, setCurrentId] = useState(0);
+  const [optimisticVote, castOptimisticVote] = useOptimistic(userVotes, (state, { id, newSubmission }) => [
     ...state,
     {
-      submission: [
-        {
-          ...newSubmission,
-        },
-      ],
-      user: { id: 1 },
+      id: id,
+      submission: {
+        id: newSubmission,
+      },
     },
   ]);
-
-  const testOptimisticVote = () => {
-    castOptimisticVote(coverData);
-  };
-
-  useEffect(() => {
-    console.log("optimisticVote", optimisticVote);
-  });
 
   const [user, _] = useLocalStorage("user", "");
 
@@ -71,10 +63,15 @@ const Three = ({ submissions }: Props) => {
     if (action === "vote") {
       if (!userAddress) {
         alert("Please connect wallet or login to vote");
+        return;
       }
       if (userVotes.length < MAX_VOTE_PER_USER) {
         // cast optimistic vote
-        castOptimisticVote(coverData);
+        castOptimisticVote({
+          id: currentId + 1,
+          newSubmission: coverData.id,
+        });
+
         await castVote(coverData.id, userAddress);
         fetchVote();
       } else {
@@ -99,8 +96,18 @@ const Three = ({ submissions }: Props) => {
 
   const userId = user?.id;
   const fetchVote = async () => {
-    const userVoteData = (await getUserVotes(userId)) as any;
-    setUserVotes(userVoteData);
+    if (!userId) return;
+    const { data, error } = (await getUserVotes(userId)) as any;
+
+    if (error) {
+      return;
+    }
+
+    if (data && data?.length > 0) {
+      setCurrentId(data[data.length - 1].id);
+      setUserVotes(data);
+      setVoted(data.some((vote: UserVotes) => vote.submission.id === coverData.id));
+    }
   };
 
   useEffect(() => {
@@ -109,7 +116,11 @@ const Three = ({ submissions }: Props) => {
 
   useEffect(() => {
     fetchVote();
-  }, []);
+  }, [userId]);
+
+  useEffect(() => {
+    fetchVote();
+  }, [isAuthenticated, authToken]);
 
   return (
     <>
@@ -119,7 +130,7 @@ const Three = ({ submissions }: Props) => {
             {coverData && (
               <Submission
                 coverData={coverData}
-                userVotes={userVotes}
+                userVotes={optimisticVote}
                 voted={voted}
                 setVoted={setVoted}
                 handleVote={handleVote}
