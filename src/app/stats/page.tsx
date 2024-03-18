@@ -6,12 +6,8 @@ import React from "react";
 import { getCurrentRound, getStats } from "./action";
 
 export default async function Stats() {
-  const { data, error } = await getStats();
-  const { data: currentRound, error: currentRoundError } = await getCurrentRound();
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  const { data } = await getStats();
+  const { data: currentRound } = await getCurrentRound();
 
   return (
     <Container>

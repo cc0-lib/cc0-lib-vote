@@ -76,8 +76,8 @@ export default async function Leaderboard() {
           </div>
 
           <div className="block w-[500px] items-center py-5">
-            <div className="flex-grow border-t border-black"></div>
-            <div className="flex-grow border-t border-black"></div>
+            <div className="grow border-t border-black"></div>
+            <div className="grow border-t border-black"></div>
           </div>
 
           <div className="grid grid-cols-2 gap-2">

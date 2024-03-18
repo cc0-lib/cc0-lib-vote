@@ -3,7 +3,7 @@ import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import { supabase } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
-import Three, { SubmissionType } from "./three";
+import Three from "./three";
 
 export default async function Home() {
   const { data: currentRound } = await supabase.from("round").select().eq("is_current", true).single();

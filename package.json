@@ -34,8 +34,10 @@
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.160.0",
+    "usehooks-ts": "^3.0.1",
     "viem": "^2.5.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",

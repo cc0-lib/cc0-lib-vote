@@ -9,8 +9,9 @@ import Submission from "@/components/submission/submission";
 import { previewMode } from "@/lib/prefs";
 import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import useLocalStorage from "@/hooks/use-local-storage";
+import { useLocalStorage } from "usehooks-ts";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
+import { useUserDataStore } from "@/lib/store";
 
 export type SubmissionType = {
   id: number;
@@ -24,15 +25,20 @@ export type SubmissionType = {
   ens?: string;
 };
 
-type Props = {
-  submissions: SubmissionType[];
-};
-
 export type UserVotes = {
   id: number;
   submission: {
     id: number;
   };
+};
+
+export type User = {
+  id: number;
+  email: string;
+} | null;
+
+type Props = {
+  submissions: SubmissionType[];
 };
 
 const Three = ({ submissions }: Props) => {
@@ -52,19 +58,25 @@ const Three = ({ submissions }: Props) => {
     },
   ]);
 
-  const [user, _] = useLocalStorage("user", "");
+  const userStore = useUserDataStore((state) => state);
+
+  useEffect(() => {
+    console.log("userStore", userStore);
+    console.log("userStore", { id: userStore.loginData?.id, email: userStore.loginData?.email });
+  }, []);
 
   const userAddress = primaryWallet?.address ?? "";
 
   const [voted, setVoted] = useState(false);
 
   const handleVote = async (action: "vote" | "unvote") => {
-    const userId = user?.id;
+    const userId = userStore?.loginData?.id;
+    if (!userAddress || !userId) {
+      alert("Please connect wallet or login to vote");
+      return;
+    }
+
     if (action === "vote") {
-      if (!userAddress) {
-        alert("Please connect wallet or login to vote");
-        return;
-      }
       if (userVotes.length < MAX_VOTE_PER_USER) {
         // cast optimistic vote
         castOptimisticVote({
@@ -72,14 +84,27 @@ const Three = ({ submissions }: Props) => {
           newSubmission: coverData.id,
         });
 
-        await castVote(coverData.id, userAddress);
-        fetchVote();
+        try {
+          await castVote(coverData.id, userAddress);
+          fetchVote();
+        } catch (error) {
+          console.error("Failed to cast vote:", error);
+          // Revert optimistic vote
+          castOptimisticVote({
+            id: currentId + 1,
+            newSubmission: coverData.id,
+          });
+        }
       } else {
         alert("You have already voted the maximum number of times");
       }
     } else {
-      await revertVote(coverData.id, userId);
-      fetchVote();
+      try {
+        await revertVote(coverData.id, userId);
+        fetchVote();
+      } catch (error) {
+        console.error("Failed to revert vote:", error);
+      }
     }
   };
 
@@ -94,7 +119,7 @@ const Three = ({ submissions }: Props) => {
     });
   }
 
-  const userId = user?.id;
+  const userId = userStore?.loginData?.id;
   const fetchVote = async () => {
     if (!userId) return;
     const { data, error } = (await getUserVotes(userId)) as any;
@@ -115,10 +140,12 @@ const Three = ({ submissions }: Props) => {
   }, [coverData, coverImage]);
 
   useEffect(() => {
+    console.log("userId", userId);
     fetchVote();
   }, [userId]);
 
   useEffect(() => {
+    console.log("isAuthenticated", isAuthenticated);
     fetchVote();
   }, [isAuthenticated, authToken]);
 

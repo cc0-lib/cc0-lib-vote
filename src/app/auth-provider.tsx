@@ -1,8 +1,8 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { DynamicContextProvider, EthereumWalletConnectors, UserProfile, Wallet } from "../lib/dynamic";
-import useLocalStorage from "@/hooks/use-local-storage";
 import { addUserAction } from "./action";
+import { useUserDataStore } from "@/lib/store";
 
 export default function AuthProvider({
   children,
@@ -11,7 +11,7 @@ export default function AuthProvider({
   children: React.ReactNode;
   environmentId: string;
 }) {
-  const [, setUser] = useLocalStorage("user", "");
+  const userStore = useUserDataStore((state) => state);
 
   const addUser = async (user: UserProfile, primaryWallet: Wallet | null, isAuthenticated: boolean) => {
     if (!isAuthenticated || !user) {
@@ -25,18 +25,12 @@ export default function AuthProvider({
     );
 
     if (userResponse) {
-      setUser(userResponse);
+      userStore.storeUserData({
+        id: userResponse.id,
+        email: userResponse.email,
+      });
     }
   };
-
-  useEffect(() => {
-    // This effect will run when the 'user' data in localStorage changes
-    // and update the 'user' state accordingly.
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   return (
     <DynamicContextProvider
@@ -45,7 +39,11 @@ export default function AuthProvider({
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
           onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) => addUser(user, primaryWallet, isAuthenticated),
-          onLogout: () => setUser(null),
+          onLogout: () => {
+            userStore.clearUserData();
+            userStore.clearUserVotes();
+            userStore.clearVotesCount();
+          },
         },
       }}
     >
