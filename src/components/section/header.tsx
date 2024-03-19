@@ -28,7 +28,7 @@ const Header = () => {
       <div className="text-center">
         <CountDown date="Feb 19, 2024 00:00:00" />
       </div>
-      <ul className="ml-32 flex items-center justify-between">
+      <ul className="flex items-center justify-between">
         {menu.map(({ name, href }) => (
           <li key={name}>
             <Link href={href}>{name}</Link>
@@ -41,4 +41,5 @@ const Header = () => {
     </nav>
   );
 };
+
 export default Header;

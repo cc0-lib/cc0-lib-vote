@@ -28,6 +28,10 @@ export async function ensResolver(walletAddress: string): Promise<EnsResolverRes
 }
 
 export function truncateAddress(hexString: string) {
+  if (!hexString) {
+    return "Invalid input";
+  }
+
   if (hexString.length < 8) {
     return "Invalid input";
   }

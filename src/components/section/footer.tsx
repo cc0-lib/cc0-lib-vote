@@ -1,39 +1,36 @@
 "use client";
 import { getUserVotes } from "@/app/action";
-import useLocalStorage from "@/hooks/use-local-storage";
+import { useUserDataStore } from "@/app/store-provider";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Footer = () => {
   const { isAuthenticated, authToken } = useDynamicContext();
-  const [userVotes, setUserVotes] = useState(0);
+  const userDataStore = useUserDataStore((state) => state);
 
-  const [user] = useLocalStorage("user", "");
-
-  const id = user?.id;
+  const id = userDataStore?.loginData?.id;
 
   const fetchVotes = async () => {
-    const res = await getUserVotes(id);
-
-    if (res?.length === 0) {
+    if (!isAuthenticated || !id) {
       return;
     }
+    const res = await getUserVotes(id);
 
-    setUserVotes(res?.length || userVotes);
+    if (res && res.data !== null) {
+      userDataStore.storeVotesCount(res.data.length);
+    }
   };
 
   useEffect(() => {
     fetchVotes();
-  }, []);
+  }, [id]);
 
   return (
     <div className="flex w-full flex-row items-center justify-between">
       <div>cover art round 2 community voting</div>
-      {isAuthenticated && authToken && userVotes ? (
-        <div>{`total voted: ${userVotes}/${MAX_VOTE_PER_USER}`}</div>
-      ) : (
-        <></>
+      {isAuthenticated && authToken && (
+        <div>{`total voted: ${userDataStore.voteCountData.votes}/${MAX_VOTE_PER_USER}`}</div>
       )}
     </div>
   );

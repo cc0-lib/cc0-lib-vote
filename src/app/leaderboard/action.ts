@@ -1,3 +1,5 @@
+"use server";
+
 import { supabase } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
 
@@ -39,7 +41,6 @@ export async function getLeaderboards(currentRound: number) {
     const { vote, artist } = item;
     const totalVotes = vote ? vote[0]?.count : 0;
 
-    console.log(roundTotalVotes, totalVotes);
     const { ens } = await ensResolver(artist);
     return {
       ...item,

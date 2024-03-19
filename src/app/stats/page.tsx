@@ -3,10 +3,12 @@ import Container from "@/components/container";
 import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import React from "react";
-import { getStats } from "./action";
+import { getCurrentRound, getStats } from "./action";
 
 export default async function Stats() {
-  const { data, error } = await getStats();
+  const { data } = await getStats();
+  const { data: currentRound } = await getCurrentRound();
+
   return (
     <Container>
       <Header />
@@ -16,10 +18,18 @@ export default async function Stats() {
           <SplitLetters text="Stats" />
         </div>
 
-        <h3>Round 3</h3>
+        <h3>{currentRound?.title}</h3>
 
         <div className="mt-32 flex w-full flex-col items-center">
-          <table className="w-2/3">
+          <div className="flex w-2/3 justify-end gap-10">
+            <h3>
+              Total Votes: <b>500</b>
+            </h3>
+            <h3>
+              Votes For Round: <b>200</b>
+            </h3>
+          </div>
+          <table className="mt-4 w-2/3">
             <thead className="w-full">
               <tr className="grid h-10 grid-cols-7">
                 <th className="col-span-2 flex">Title</th>
@@ -37,7 +47,7 @@ export default async function Stats() {
                     <td className="col-span-2 truncate pr-5">{item.title}</td>
                     <td className="flex justify-end">{item.id}</td>
                     <td className="flex justify-end">{item.votes}</td>
-                    <td className="flex justify-end">{item.percent}</td>
+                    <td className="flex justify-end">{item.percent.toFixed()}</td>
                     <td className="flex justify-end">{item.prorated}</td>
                     <td className="flex justify-end">{item.status}</td>
                   </tr>
