@@ -81,7 +81,7 @@ export async function castVote(submissionId: number, userAddress: string) {
     }
   }
 
-  revalidatePath("/");
+  // revalidatePath("/");
 
   return {
     data: "success",

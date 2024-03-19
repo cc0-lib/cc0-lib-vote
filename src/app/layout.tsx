@@ -3,6 +3,7 @@ import { Inter_Tight, JetBrains_Mono, Chakra_Petch } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./auth-provider";
 import { env } from "@/env";
+import { UserStoreProvider } from "./store-provider";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -34,7 +35,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${interTight.variable} ${jetBrainsMono.variable} ${chakraPetch.variable}`}>
-        <AuthProvider environmentId={env.DYNAMIC_XYZ_ENVIRONMENT_ID}>{children}</AuthProvider>
+        <UserStoreProvider>
+          <AuthProvider environmentId={env.DYNAMIC_XYZ_ENVIRONMENT_ID}>{children}</AuthProvider>
+        </UserStoreProvider>
       </body>
     </html>
   );

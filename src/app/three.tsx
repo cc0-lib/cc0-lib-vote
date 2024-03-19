@@ -9,9 +9,8 @@ import Submission from "@/components/submission/submission";
 import { previewMode } from "@/lib/prefs";
 import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { useLocalStorage } from "usehooks-ts";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
-import { useUserDataStore } from "@/lib/store";
+import { useUserDataStore } from "./store-provider";
 
 export type SubmissionType = {
   id: number;
@@ -43,12 +42,13 @@ type Props = {
 
 const Three = ({ submissions }: Props) => {
   const { primaryWallet, isAuthenticated, authToken } = useDynamicContext();
+  const userStore = useUserDataStore((state) => state);
 
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
   const [userVotes, setUserVotes] = useState<UserVotes[]>([]);
   const [currentId, setCurrentId] = useState(0);
-  const [optimisticVote, castOptimisticVote] = useOptimistic(userVotes, (state, { id, newSubmission }) => [
+  const [optimisticVote, castOptimisticVote] = useOptimistic(userStore.votesData, (state, { id, newSubmission }) => [
     ...state,
     {
       id: id,
@@ -57,13 +57,6 @@ const Three = ({ submissions }: Props) => {
       },
     },
   ]);
-
-  const userStore = useUserDataStore((state) => state);
-
-  useEffect(() => {
-    console.log("userStore", userStore);
-    console.log("userStore", { id: userStore.loginData?.id, email: userStore.loginData?.email });
-  }, []);
 
   const userAddress = primaryWallet?.address ?? "";
 
@@ -131,6 +124,8 @@ const Three = ({ submissions }: Props) => {
     if (data && data?.length > 0) {
       setCurrentId(data[data.length - 1].id);
       setUserVotes(data);
+      userStore.storeUserVotes(data);
+      userStore.storeVotesCount(data.length);
       setVoted(data.some((vote: UserVotes) => vote.submission.id === coverData.id));
     }
   };
@@ -140,14 +135,16 @@ const Three = ({ submissions }: Props) => {
   }, [coverData, coverImage]);
 
   useEffect(() => {
-    console.log("userId", userId);
     fetchVote();
   }, [userId]);
 
   useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated);
     fetchVote();
   }, [isAuthenticated, authToken]);
+
+  useEffect(() => {
+    console.log("userStore", userStore);
+  }, []);
 
   return (
     <>

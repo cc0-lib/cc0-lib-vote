@@ -1,7 +1,7 @@
 "use client";
 import { getUserVotes } from "@/app/action";
+import { useUserDataStore } from "@/app/store-provider";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
-import { useUserDataStore } from "@/lib/store";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useEffect } from "react";
 

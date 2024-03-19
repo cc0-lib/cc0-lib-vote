@@ -1,12 +1,13 @@
 import { User, UserVotes } from "@/app/three";
-import { create } from "zustand";
+import { createStore, create } from "zustand";
+import { persist } from "zustand/middleware";
 
-interface UserData {
-  loginData: User;
+export interface UserDataStore {
+  loginData: User | null;
   storeUserData: (data: User) => void;
   clearUserData: () => void;
   votesData: UserVotes[];
-  storeUserVotes: (data: UserVotes) => void;
+  storeUserVotes: (data: UserVotes[]) => void;
   clearUserVotes: () => void;
   voteCountData: {
     votes: number;
@@ -15,32 +16,27 @@ interface UserData {
   clearVotesCount: () => void;
 }
 
-export const useUserDataStore = create<UserData>((set) => ({
-  loginData: null,
-  storeUserData: (data: User) => set({ loginData: data }),
-  clearUserData: () => set({ loginData: null }),
-  votesData: [
-    {
-      id: 0,
-      submission: {
-        id: 0,
-      },
-    },
-  ],
-  storeUserVotes: (data: UserVotes) =>
-    set((prev) => ({
-      votesData: [
-        ...prev.votesData,
-        {
-          id: data.id,
-          submission: data.submission,
+export const createUserDataStore = () => {
+  return createStore<UserDataStore>()(
+    persist(
+      (set, get) => ({
+        loginData: null,
+        storeUserData: (data: User) => set({ loginData: data }),
+        clearUserData: () => set({ loginData: null }),
+        votesData: [],
+        storeUserVotes: (data: UserVotes[]) =>
+          set(() => ({
+            votesData: data,
+          })),
+        clearUserVotes: () => set(() => ({ votesData: [] })),
+        voteCountData: {
+          votes: 0,
         },
-      ],
-    })),
-  clearUserVotes: () => set(() => ({})),
-  voteCountData: {
-    votes: 0,
-  },
-  storeVotesCount: (votes: number) => set({ voteCountData: { votes } }),
-  clearVotesCount: () => set({ voteCountData: { votes: 0 } }),
-}));
+        storeVotesCount: (votes: number) => set({ voteCountData: { votes } }),
+        updateVotesCount: () => set({ voteCountData: { votes: get().voteCountData.votes + 1 } }),
+        clearVotesCount: () => set({ voteCountData: { votes: 0 } }),
+      }),
+      { name: "test-store" },
+    ),
+  );
+};

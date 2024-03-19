@@ -2,7 +2,7 @@
 import React from "react";
 import { DynamicContextProvider, EthereumWalletConnectors, UserProfile, Wallet } from "../lib/dynamic";
 import { addUserAction } from "./action";
-import { useUserDataStore } from "@/lib/store";
+import { useUserDataStore } from "./store-provider";
 
 export default function AuthProvider({
   children,
@@ -32,6 +32,12 @@ export default function AuthProvider({
     }
   };
 
+  const clearPersistence = () => {
+    userStore.clearUserData();
+    userStore.clearUserVotes();
+    userStore.clearVotesCount();
+  };
+
   return (
     <DynamicContextProvider
       settings={{
@@ -39,11 +45,7 @@ export default function AuthProvider({
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
           onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) => addUser(user, primaryWallet, isAuthenticated),
-          onLogout: () => {
-            userStore.clearUserData();
-            userStore.clearUserVotes();
-            userStore.clearVotesCount();
-          },
+          onLogout: () => clearPersistence(),
         },
       }}
     >
