@@ -1,5 +1,5 @@
 import { User, UserVotes } from "@/app/three";
-import { createStore, create } from "zustand";
+import { createStore } from "zustand";
 import { persist } from "zustand/middleware";
 
 export interface UserDataStore {
@@ -36,7 +36,7 @@ export const createUserDataStore = () => {
         updateVotesCount: () => set({ voteCountData: { votes: get().voteCountData.votes + 1 } }),
         clearVotesCount: () => set({ voteCountData: { votes: 0 } }),
       }),
-      { name: "test-store" },
+      { name: "userData" },
     ),
   );
 };

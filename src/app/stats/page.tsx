@@ -4,10 +4,12 @@ import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import React from "react";
 import { getCurrentRound, getStats } from "./action";
+import { getVotes } from "../leaderboard/action";
 
 export default async function Stats() {
   const { data } = await getStats();
   const { data: currentRound } = await getCurrentRound();
+  const totalVotes = await getVotes(currentRound?.id || 1);
 
   return (
     <Container>
@@ -23,7 +25,7 @@ export default async function Stats() {
         <div className="mt-32 flex w-full flex-col items-center">
           <div className="flex w-2/3 justify-end gap-10">
             <h3>
-              Total Votes: <b>500</b>
+              Total Votes: <span className="font-bold">{totalVotes}</span>
             </h3>
             <h3>
               Votes For Round: <b>200</b>

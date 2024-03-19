@@ -2,6 +2,7 @@
 import { adminClient } from "@/lib/supabase/admin";
 import { supabase } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { getCurrentRound } from "./stats/action";
 
 interface User {
   email: string | undefined;
@@ -52,6 +53,7 @@ export async function addUserAction(user: User, wallet: WalletCB) {
 }
 
 export async function castVote(submissionId: number, userAddress: string) {
+  const { data: currentRound } = await getCurrentRound();
   const { data: userResponse, error: userError } = await adminClient
     .from("user")
     .select("id")
@@ -71,24 +73,30 @@ export async function castVote(submissionId: number, userAddress: string) {
       .insert({
         user: userResponse.id,
         submission_id: submissionId,
-        round: 1,
+        round: currentRound?.id,
       })
       .select()
       .single();
 
+    revalidatePath("/");
+    revalidatePath("/leaderboard");
+
     if (error) {
-      console.log("castVote", error);
+      console.error("castVote", error);
+      return {
+        data: null,
+        error,
+      };
     }
   }
 
-  // revalidatePath("/");
-
   return {
     data: "success",
+    error: null,
   };
 }
 
-export async function revertVote(voteId: any, userId: number) {
+export async function revertVote(voteId: number, userId: number) {
   const { error } = await adminClient.from("vote").delete().eq("submission_id", voteId).eq("user", userId);
 
   if (error) {

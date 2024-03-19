@@ -46,8 +46,6 @@ const Three = ({ submissions }: Props) => {
 
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
-  const [userVotes, setUserVotes] = useState<UserVotes[]>([]);
-  const [currentId, setCurrentId] = useState(0);
   const [optimisticVote, castOptimisticVote] = useOptimistic(userStore.votesData, (state, { id, newSubmission }) => [
     ...state,
     {
@@ -70,34 +68,19 @@ const Three = ({ submissions }: Props) => {
     }
 
     if (action === "vote") {
-      if (userVotes.length < MAX_VOTE_PER_USER) {
-        // cast optimistic vote
+      if (userStore.voteCountData.votes < MAX_VOTE_PER_USER) {
         castOptimisticVote({
-          id: currentId + 1,
+          id: 1,
           newSubmission: coverData.id,
         });
-
-        try {
-          await castVote(coverData.id, userAddress);
-          fetchVote();
-        } catch (error) {
-          console.error("Failed to cast vote:", error);
-          // Revert optimistic vote
-          castOptimisticVote({
-            id: currentId + 1,
-            newSubmission: coverData.id,
-          });
-        }
+        await castVote(coverData.id, userAddress);
+        fetchVote();
       } else {
         alert("You have already voted the maximum number of times");
       }
     } else {
-      try {
-        await revertVote(coverData.id, userId);
-        fetchVote();
-      } catch (error) {
-        console.error("Failed to revert vote:", error);
-      }
+      await revertVote(coverData.id, userId);
+      fetchVote();
     }
   };
 
@@ -115,18 +98,15 @@ const Three = ({ submissions }: Props) => {
   const userId = userStore?.loginData?.id;
   const fetchVote = async () => {
     if (!userId) return;
-    const { data, error } = (await getUserVotes(userId)) as any;
+    const { data, error } = (await getUserVotes(userId)) as { data: UserVotes[]; error: null };
 
     if (error) {
       return;
     }
 
     if (data && data?.length > 0) {
-      setCurrentId(data[data.length - 1].id);
-      setUserVotes(data);
       userStore.storeUserVotes(data);
       userStore.storeVotesCount(data.length);
-      setVoted(data.some((vote: UserVotes) => vote.submission.id === coverData.id));
     }
   };
 
@@ -136,15 +116,11 @@ const Three = ({ submissions }: Props) => {
 
   useEffect(() => {
     fetchVote();
-  }, [userId]);
-
-  useEffect(() => {
-    fetchVote();
   }, [isAuthenticated, authToken]);
 
   useEffect(() => {
-    console.log("userStore", userStore);
-  }, []);
+    fetchVote();
+  }, [userId]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import type { SubmissionType } from "@/app/three";
+import type { SubmissionType, UserVotes } from "@/app/three";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 
@@ -12,7 +12,7 @@ const Submission = ({
   voted: boolean;
   setVoted: (v: boolean) => void;
   handleVote: (action: "vote" | "unvote") => void;
-  userVotes: any[];
+  userVotes: UserVotes[];
 }) => {
   const isVoted = userVotes?.some((item) => item.submission.id === coverData.id);
   return (

@@ -28,7 +28,7 @@ export async function getLeaderboards(currentRound: number) {
       ascending: true,
     });
 
-  const roundTotalVotes = await getVotes(1);
+  const roundTotalVotes = await getVotes(currentRound);
 
   if (error) {
     return {
@@ -45,7 +45,7 @@ export async function getLeaderboards(currentRound: number) {
     return {
       ...item,
       totalVotes,
-      percentage: totalVotes !== 0 ? (totalVotes / roundTotalVotes) * 100 : 0,
+      percentage: totalVotes !== 0 ? ((totalVotes / roundTotalVotes) * 100).toFixed() : 0,
       resolvedEns: ens,
     };
   });
@@ -59,7 +59,10 @@ export async function getLeaderboards(currentRound: number) {
 }
 
 export async function getVotes(currentRound: number) {
-  const { count, error } = await supabase.from("vote").select().eq("round", currentRound);
+  const { count, error } = await supabase
+    .from("vote")
+    .select("*", { count: "exact", head: true })
+    .eq("round", currentRound);
 
   if (error) {
     console.log("Get votes error: ", error);
