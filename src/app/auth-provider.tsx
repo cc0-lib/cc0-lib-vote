@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
 import { DynamicContextProvider, EthereumWalletConnectors, UserProfile, Wallet } from "../lib/dynamic";
-import { createClient } from "@/lib/supabase/client";
+import { addUserAction } from "./action";
+import { useUserDataStore } from "./store-provider";
 
 export default function AuthProvider({
   children,
@@ -10,45 +11,31 @@ export default function AuthProvider({
   children: React.ReactNode;
   environmentId: string;
 }) {
-  const addUser = async (user: UserProfile, wallet: Wallet | null, isAuthenticated: boolean) => {
-    if (!isAuthenticated) {
+  const userStore = useUserDataStore((state) => state);
+
+  const addUser = async (user: UserProfile, primaryWallet: Wallet | null, isAuthenticated: boolean) => {
+    if (!isAuthenticated || !user) {
       return;
     }
 
-    const supabase = createClient();
+    // structuredClone failed because there is function on wallet object
+    const userResponse = await addUserAction(
+      { email: user.email, username: user.username, userId: user.userId },
+      { address: primaryWallet ? primaryWallet?.address : "" },
+    );
 
-    if (!user.email) {
-      return;
+    if (userResponse) {
+      userStore.storeUserData({
+        id: userResponse.id,
+        email: userResponse.email,
+      });
     }
+  };
 
-    const { count, data } = await supabase
-      .from("user")
-      .select("id, email", {
-        count: "exact",
-      })
-      .eq("email", user.email);
-
-    if (count && count === 1) {
-      if (data) {
-        localStorage.setItem("user", JSON.stringify(data[0]));
-      }
-      return;
-    }
-
-    const response = await supabase
-      .from("user")
-      .insert({
-        address: wallet ? wallet.address : "",
-        name: user.username || "",
-        email: user.email || "",
-        vote_count: 10,
-      })
-      .select()
-      .single();
-
-    if (response.data) {
-      localStorage.setItem("user", JSON.stringify(response.data));
-    }
+  const clearPersistence = () => {
+    userStore.clearUserData();
+    userStore.clearUserVotes();
+    userStore.clearVotesCount();
   };
 
   return (
@@ -57,10 +44,8 @@ export default function AuthProvider({
         environmentId,
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
-          onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) => {
-            addUser(user, primaryWallet, isAuthenticated);
-          },
-          onLogout: () => localStorage.clear(),
+          onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) => addUser(user, primaryWallet, isAuthenticated),
+          onLogout: () => clearPersistence(),
         },
       }}
     >

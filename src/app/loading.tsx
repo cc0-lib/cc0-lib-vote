@@ -1,9 +1,7 @@
 import SplitLetters from "@/components/anim/split-letters";
 import Container from "@/components/container";
 
-type Props = {};
-
-const Loading = (props: Props) => {
+const Loading = () => {
   return (
     <Container variant="center">
       <div>

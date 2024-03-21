@@ -14,13 +14,13 @@ export default function LoginNav() {
 
       setEns(ens?.name || "");
     })();
-  });
+  }, [ens]);
 
   return (
     <>
       {isAuthenticated ? (
         <>
-          <button onClick={() => setShowDynamicUserProfile(true)}>
+          <button className="uppercase" onClick={() => setShowDynamicUserProfile(true)}>
             {ens !== "" ? ens : truncateAddress(primaryWallet?.address || "")}
           </button>
           <DynamicUserProfile />

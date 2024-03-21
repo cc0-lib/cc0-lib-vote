@@ -1,36 +1,37 @@
 "use client";
-import { createClient } from "@/lib/supabase/client";
+import { getUserVotes } from "@/app/action";
+import { useUserDataStore } from "@/app/store-provider";
+import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const Footer = () => {
   const { isAuthenticated, authToken } = useDynamicContext();
-  const [userVotes, setUserVotes] = useState<any>();
-  const [totalSubmissions, setTotalSubmissions] = useState(0);
+  const userDataStore = useUserDataStore((state) => state);
+
+  const id = userDataStore?.loginData?.id;
 
   const fetchVotes = async () => {
-    const supabase = createClient();
-    const { count: voteCount } = await supabase.from("vote").select().eq("user", 5).eq("round", 1);
-
-    const { data: totalSubmission } = await supabase.from("submission").select("*", { count: "exact" }).eq("round", 1);
-
-    if (voteCount) {
-      setUserVotes(voteCount);
+    if (!isAuthenticated || !id) {
+      return;
     }
+    const res = await getUserVotes(id);
 
-    if (totalSubmission) {
-      setTotalSubmissions(totalSubmission.length);
+    if (res && res.data !== null) {
+      userDataStore.storeVotesCount(res.data.length);
     }
   };
 
   useEffect(() => {
     fetchVotes();
-  }, []);
+  }, [id]);
+
   return (
     <div className="flex w-full flex-row items-center justify-between">
       <div>cover art round 2 community voting</div>
-      <div>{userVotes?.length}</div>
-      {isAuthenticated && authToken ? <div>{`total voted: 5/${totalSubmissions}`}</div> : <></>}
+      {isAuthenticated && authToken && (
+        <div>{`total voted: ${userDataStore.voteCountData.votes}/${MAX_VOTE_PER_USER}`}</div>
+      )}
     </div>
   );
 };

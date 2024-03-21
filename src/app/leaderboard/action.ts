@@ -1,6 +1,7 @@
-import { createClient } from "@/lib/supabase/server";
+"use server";
+
+import { supabase } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
-import { cookies } from "next/headers";
 
 interface Leaderboard {
   artist: string;
@@ -15,10 +16,10 @@ interface Leaderboard {
   url: string;
   resolvedEns: string;
   totalVotes: number;
+  percentage: number;
 }
 
 export async function getLeaderboards(currentRound: number) {
-  const supabase = createClient();
   const { data, error } = await supabase
     .from("submission")
     .select("*, vote(count)")
@@ -26,6 +27,8 @@ export async function getLeaderboards(currentRound: number) {
     .order("created_at", {
       ascending: true,
     });
+
+  const roundTotalVotes = await getVotes(currentRound);
 
   if (error) {
     return {
@@ -37,10 +40,12 @@ export async function getLeaderboards(currentRound: number) {
   const leaderboardsPromises: Promise<Leaderboard>[] = data.map(async (item: any) => {
     const { vote, artist } = item;
     const totalVotes = vote ? vote[0]?.count : 0;
+
     const { ens } = await ensResolver(artist);
     return {
       ...item,
       totalVotes,
+      percentage: totalVotes !== 0 ? ((totalVotes / roundTotalVotes) * 100).toFixed() : 0,
       resolvedEns: ens,
     };
   });
@@ -54,9 +59,18 @@ export async function getLeaderboards(currentRound: number) {
 }
 
 export async function getVotes(currentRound: number) {
-  const supabase = createClient();
+  const { count, error } = await supabase
+    .from("vote")
+    .select("*", { count: "exact", head: true })
+    .eq("round", currentRound);
 
-  const { data: votes, error } = await supabase.from("vote").select().eq("round", currentRound);
+  if (error) {
+    console.log("Get votes error: ", error);
+  }
 
-  return votes?.length;
+  if (!count) {
+    return 0;
+  }
+
+  return count;
 }

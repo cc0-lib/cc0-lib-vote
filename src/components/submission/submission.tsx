@@ -1,10 +1,9 @@
-import type { SubmissionType } from "@/app/vote/three";
+import type { SubmissionType, UserVotes } from "@/app/three";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 
 const Submission = ({
   coverData,
-  voted,
   setVoted,
   handleVote,
   userVotes,
@@ -13,7 +12,7 @@ const Submission = ({
   voted: boolean;
   setVoted: (v: boolean) => void;
   handleVote: (action: "vote" | "unvote") => void;
-  userVotes: any[];
+  userVotes: UserVotes[];
 }) => {
   const isVoted = userVotes?.some((item) => item.submission.id === coverData.id);
   return (
@@ -34,7 +33,7 @@ const Submission = ({
                 handleVote("unvote");
                 setVoted(false);
               }}
-              className="w-28 rounded-md px-8 py-2 text-red-500 ring-1 ring-red-500"
+              className="w-28 rounded-md px-8 py-2 text-red-500 ring-1 ring-red-500 hover:bg-red-500 hover:text-zinc-100 hover:ring-red-700"
             >
               UNVOTE
             </button>
@@ -44,7 +43,7 @@ const Submission = ({
                 handleVote("vote");
                 setVoted(true);
               }}
-              className="w-28 rounded-md bg-prim px-8 py-2 text-zinc-800 ring-1 ring-zinc-400"
+              className="w-28 rounded-md bg-prim px-8 py-2 text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-prim hover:ring-zinc-700"
             >
               VOTE
             </button>

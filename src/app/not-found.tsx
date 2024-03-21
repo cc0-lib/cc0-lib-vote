@@ -1,8 +1,6 @@
 import Container from "@/components/container";
 
-type Props = {};
-
-const NotFound = (props: Props) => {
+const NotFound = () => {
   return <Container variant="center">NOT FOUND</Container>;
 };
 

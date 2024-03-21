@@ -30,7 +30,7 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: "round_winner_id_fkey";
+            foreignKeyName: "cc0vote_round_winner_id_fkey";
             columns: ["winner_id"];
             isOneToOne: false;
             referencedRelation: "submission";
@@ -91,6 +91,7 @@ export type Database = {
       user: {
         Row: {
           address: string;
+          auth_id: string | null;
           created_at: string;
           email: string | null;
           id: number;
@@ -99,6 +100,7 @@ export type Database = {
         };
         Insert: {
           address: string;
+          auth_id?: string | null;
           created_at?: string;
           email?: string | null;
           id?: number;
@@ -107,13 +109,22 @@ export type Database = {
         };
         Update: {
           address?: string;
+          auth_id?: string | null;
           created_at?: string;
           email?: string | null;
           id?: number;
           name?: string;
           vote_count?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "cc0vote_user_auth_id_fkey";
+            columns: ["auth_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       vote: {
         Row: {

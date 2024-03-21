@@ -1,17 +1,16 @@
-import { createClient } from "@/lib/supabase/server";
+"use server";
+import { supabase } from "@/lib/supabase/server";
 
 export async function getAllRoundWinner() {
-  const supabase = createClient();
-
   const { data, error } = await supabase
     .from("round")
-    .select(`*, submission!round_winner_id_fkey(id, image, url)`)
+    .select(`*, submission!cc0vote_round_winner_id_fkey(id, image, url)`)
     .order("title", {
       ascending: true,
     });
 
   if (error) {
-    console.log(error);
+    console.log("getAllRoundWinner", error);
     throw new Error("Could not retrieve data");
   }
 

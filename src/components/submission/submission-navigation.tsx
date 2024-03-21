@@ -1,4 +1,4 @@
-import type { SubmissionType } from "@/app/vote/three";
+import type { SubmissionType } from "@/app/three";
 
 const SubmissionNavigation = ({
   coverData,
