@@ -14,7 +14,7 @@ export default function LoginNav() {
 
       setEns(ens?.name || "");
     })();
-  }, [ens]);
+  }, [ens, isAuthenticated]);
 
   return (
     <>

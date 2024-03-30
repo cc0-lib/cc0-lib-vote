@@ -1,5 +1,6 @@
 "use client";
 import { getUserVotes } from "@/app/action";
+import { getCurrentRound } from "@/app/stats/action";
 import { useUserDataStore } from "@/app/store-provider";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
@@ -16,9 +17,14 @@ const Footer = () => {
       return;
     }
     const res = await getUserVotes(id);
+    const currentRound = await getCurrentRound();
 
     if (res && res.data !== null) {
       userDataStore.storeVotesCount(res.data.length);
+    }
+
+    if (currentRound && currentRound.data) {
+      userDataStore.setCurrenRound(currentRound.data.title || "");
     }
   };
 
@@ -28,7 +34,7 @@ const Footer = () => {
 
   return (
     <div className="flex w-full flex-row items-center justify-between">
-      <div>cover art round 2 community voting</div>
+      <div>cover art {userDataStore.currentRound} community voting</div>
       {isAuthenticated && authToken && (
         <div>{`total voted: ${userDataStore.voteCountData.votes}/${MAX_VOTE_PER_USER}`}</div>
       )}

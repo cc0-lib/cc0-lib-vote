@@ -17,17 +17,17 @@ export default async function Leaderboard() {
     <Container>
       <Header />
 
-      <div className="flex h-[80vh] w-full flex-col justify-start">
+      <div className="mt-5 flex w-full flex-1 flex-col justify-start">
         <span className="font-chakra text-6xl font-bold">
           <SplitLetters text="leaderboard" />
         </span>
 
         <div className="text-lg font-semibold">Total votes: {roundTotalVotes}</div>
 
-        <div className="mt-10 flex flex-col items-center">
+        <div className="mt-10 flex flex-1 flex-col items-center justify-center">
           {leaderboards && (
             <>
-              <div>
+              <div className="mb-10">
                 <div className="flex items-center justify-center">
                   {/* Image */}
                   <Image
@@ -38,7 +38,7 @@ export default async function Leaderboard() {
                     alt="winner"
                   />
                   {/* First place */}
-                  <div className="ml-5 font-chakra">
+                  <div className="ml-10 font-chakra">
                     <div className="flex items-center">
                       <div>
                         <h3 className="text-center text-6xl">{leaderboards[0].percentage}%</h3>
@@ -63,7 +63,7 @@ export default async function Leaderboard() {
                       <Image className="rounded-md shadow-md" src={image} width={800} height={800} alt="winner" />
                     </div>
                     {/* Info */}
-                    <div className="ml-5 w-1/2">
+                    <div className="ml-10 w-1/2">
                       <div className="flex">
                         <h3 className="text-5xl font-medium">{percentage}%</h3>
                         <div className="ml-3">

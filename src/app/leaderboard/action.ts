@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
 
 interface Leaderboard {
@@ -20,6 +20,7 @@ interface Leaderboard {
 }
 
 export async function getLeaderboards(currentRound: number) {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from("submission")
     .select("*, vote(count)")
@@ -59,6 +60,7 @@ export async function getLeaderboards(currentRound: number) {
 }
 
 export async function getVotes(currentRound: number) {
+  const supabase = createClient();
   const { count, error } = await supabase
     .from("vote")
     .select("*", { count: "exact", head: true })

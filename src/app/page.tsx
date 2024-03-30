@@ -1,11 +1,12 @@
 import Container from "@/components/container";
 import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
-import { supabase } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
 import Three from "./three";
 
 export default async function Home() {
+  const supabase = createClient();
   const { data: currentRound } = await supabase.from("round").select().eq("is_current", true).single();
 
   const { data, error } = await supabase

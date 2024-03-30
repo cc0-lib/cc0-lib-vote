@@ -1,7 +1,6 @@
 import { fileURLToPath } from "node:url";
 import createJiti from "jiti";
 const jiti = createJiti(fileURLToPath(import.meta.url));
-import million from "million/compiler";
 
 jiti("./src/env");
 
@@ -22,12 +21,4 @@ const nextConfig = {
   },
 };
 
-const millionConfig = {
-  auto: {
-    threshold: 0.05,
-    skip: ["useBadHook", /badVariable/g], // default []
-    rsc: true,
-  },
-};
-
-export default million.next(nextConfig, millionConfig);
+export default nextConfig;

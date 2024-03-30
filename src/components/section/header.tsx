@@ -1,8 +1,14 @@
+"use client";
+
 import Link from "next/link";
 import CountDown from "../ui/countdown";
 import LoginNav from "./login-nav";
 
 const menu = [
+  {
+    name: "vote",
+    href: "/",
+  },
   {
     name: "round",
     href: "/round",

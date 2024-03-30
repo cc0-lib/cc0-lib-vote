@@ -1,6 +1,6 @@
 "use server";
 import { adminClient } from "@/lib/supabase/admin";
-import { supabase } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { getCurrentRound } from "./stats/action";
 
@@ -15,6 +15,7 @@ interface WalletCB {
 }
 
 export async function addUserAction(user: User, wallet: WalletCB) {
+  const supabase = createClient();
   if (!user.email) {
     return;
   }
@@ -107,6 +108,7 @@ export async function revertVote(voteId: number, userId: number) {
 }
 
 export async function getUserVotes(userId: number) {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from("vote")
     .select(
