@@ -3,6 +3,7 @@
 import Link from "next/link";
 import CountDown from "../ui/countdown";
 import LoginNav from "./login-nav";
+import { IsBrowser } from "@dynamic-labs/sdk-react-core";
 
 const menu = [
   {
@@ -21,10 +22,10 @@ const menu = [
     name: "stats",
     href: "/stats",
   },
-  {
-    name: "faq",
-    href: "/faq",
-  },
+  // {
+  //   name: "faq",
+  //   href: "/faq",
+  // },
 ];
 
 const Header = () => {
@@ -41,7 +42,9 @@ const Header = () => {
           </li>
         ))}
         <li>
-          <LoginNav />
+          <IsBrowser>
+            <LoginNav />
+          </IsBrowser>
         </li>
       </ul>
     </nav>

@@ -6,6 +6,7 @@ import Image from "next/image";
 import React from "react";
 import { getLeaderboards, getVotes } from "./action";
 import { getCurrentRound } from "../stats/action";
+import RealtimeVotes from "./realtime-votes";
 
 export default async function Leaderboard() {
   const { data: currentRound } = await getCurrentRound();
@@ -22,9 +23,12 @@ export default async function Leaderboard() {
           <SplitLetters text="leaderboard" />
         </span>
 
-        <div className="text-lg font-semibold">Total votes: {roundTotalVotes}</div>
+        <div className="text-lg font-semibold">
+          Total votes:
+          <RealtimeVotes totalVotes={roundTotalVotes} />
+        </div>
 
-        <div className="debug flex flex-1 flex-col items-center justify-center">
+        <div className="flex flex-1 flex-col items-center justify-center">
           {leaderboards && (
             <>
               <div className="mb-10">

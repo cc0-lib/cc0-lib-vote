@@ -3,8 +3,6 @@ import SplitLetters from "@/components/anim/split-letters";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { getStats } from "./action";
-import { PostgrestError } from "@supabase/supabase-js";
 
 export default function RealtimeStats({
   totalVotes,
@@ -67,23 +65,21 @@ export default function RealtimeStats({
       <h3>{currentRound?.title}</h3>
 
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <div className="flex w-2/3 justify-end gap-10">
+        <div className="flex w-3/4 justify-end gap-10">
           <h3>
             Total Votes: <span className="font-bold">{totalVotes}</span>
           </h3>
           <h3>
-            Votes For Round: <b>200</b>
+            Votes For Round: <b>{currentRound?.assigned_vote}</b>
           </h3>
         </div>
-        <table className="mt-4 w-2/3">
+        <table className="mt-4 w-3/4">
           <thead className="w-full">
-            <tr className="grid h-10 grid-cols-7">
+            <tr className="grid h-10 grid-cols-5 font-extrabold">
               <th className="col-span-2 flex">Title</th>
-              <th className="flex justify-end">Id</th>
               <th className="flex justify-end">Votes</th>
               <th className="flex justify-end">Percent</th>
               <th className="flex justify-end">Prorated</th>
-              <th className="flex justify-end">Status</th>
             </tr>
           </thead>
           <tbody className="w-full">
@@ -91,13 +87,11 @@ export default function RealtimeStats({
               ?.sort((a, b) => b.votes - a.votes)
               .map((item, index) => {
                 return (
-                  <tr key={index} className="grid h-10 grid-cols-7 font-semibold">
+                  <tr key={index} className="grid h-10 grid-cols-5 font-semibold">
                     <td className="col-span-2 truncate pr-5">{item.title}</td>
-                    <td className="flex justify-end">{item.id}</td>
                     <td className="flex justify-end">{item.votes}</td>
                     <td className="flex justify-end">{item.percent ? item.percent.toFixed() : 0}</td>
-                    <td className="flex justify-end">{item.prorated}</td>
-                    <td className="flex justify-end">{item.status}</td>
+                    <td className="flex justify-end">{(item.percent / 100) * currentRound?.assigned_vote}</td>
                   </tr>
                 );
               })}
