@@ -87,11 +87,21 @@ export default function RealtimeStats({
               ?.sort((a, b) => b.votes - a.votes)
               .map((item, index) => {
                 return (
-                  <tr key={index} className="grid h-10 grid-cols-5 font-semibold">
+                  <tr
+                    key={index}
+                    className="grid h-10 grid-cols-5 font-semibold"
+                  >
                     <td className="col-span-2 truncate pr-5">{item.title}</td>
                     <td className="flex justify-end">{item.votes}</td>
-                    <td className="flex justify-end">{item.percent ? item.percent.toFixed() : 0}</td>
-                    <td className="flex justify-end">{(item.percent / 100) * currentRound?.assigned_vote}</td>
+                    <td className="flex justify-end">
+                      {item.percent ? item.percent.toFixed() : 0}
+                    </td>
+                    <td className="flex justify-end">
+                      {(
+                        (item.percent / 100) *
+                        currentRound?.assigned_vote
+                      ).toFixed()}
+                    </td>
                   </tr>
                 );
               })}
