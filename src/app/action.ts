@@ -32,7 +32,6 @@ export async function addUserAction(user: User, wallet: WalletCB) {
       return null;
     }
 
-    revalidatePath("/");
     return data[0];
   }
 
@@ -48,7 +47,6 @@ export async function addUserAction(user: User, wallet: WalletCB) {
     .single();
 
   if (newUser.data) {
-    revalidatePath("/");
     return newUser.data;
   }
 }
@@ -78,9 +76,6 @@ export async function castVote(submissionId: number, userAddress: string) {
       })
       .select()
       .single();
-
-    revalidatePath("/");
-    revalidatePath("/leaderboard");
 
     if (error) {
       console.error("castVote", error);

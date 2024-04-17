@@ -2,7 +2,7 @@
 import React from "react";
 import { DynamicContextProvider, EthereumWalletConnectors, UserProfile, Wallet } from "../lib/dynamic";
 import { addUserAction } from "./action";
-import { useUserDataStore } from "./store-provider";
+import { useUserDataStore } from "../store/store-provider";
 
 export default function AuthProvider({
   children,

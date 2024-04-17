@@ -1,4 +1,4 @@
-import type { SubmissionType, UserVotes } from "@/app/three";
+import type { SubmissionType, UserVotes } from "@/app/vote";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 

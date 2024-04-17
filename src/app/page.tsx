@@ -3,7 +3,7 @@ import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import { createClient } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
-import Three from "./three";
+import Three from "./vote";
 
 export default async function Home() {
   const supabase = createClient();

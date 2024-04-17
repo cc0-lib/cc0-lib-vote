@@ -26,7 +26,7 @@ export default function LoginNav() {
           <DynamicUserProfile />
         </>
       ) : (
-        <button onClick={() => setShowAuthFlow(true)}>CONNECT</button>
+        <button onClick={() => setShowAuthFlow(true)}>LOGIN</button>
       )}
     </>
   );

@@ -1,4 +1,4 @@
-import { User, UserVotes } from "@/app/three";
+import { User, UserVotes } from "@/app/vote";
 import { createStore } from "zustand";
 import { persist } from "zustand/middleware";
 

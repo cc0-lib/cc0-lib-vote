@@ -24,7 +24,7 @@ export default async function Leaderboard() {
 
         <div className="text-lg font-semibold">Total votes: {roundTotalVotes}</div>
 
-        <div className="mt-10 flex flex-1 flex-col items-center justify-center">
+        <div className="debug flex flex-1 flex-col items-center justify-center">
           {leaderboards && (
             <>
               <div className="mb-10">
