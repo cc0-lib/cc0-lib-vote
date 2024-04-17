@@ -44,17 +44,22 @@ const Vote = ({ submissions }: Props) => {
   const { primaryWallet, isAuthenticated, authToken } = useDynamicContext();
   const userStore = useUserDataStore((state) => state);
 
+  // userStore.storeSubmissionsData(submissions);
+
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
-  const [optimisticVote, castOptimisticVote] = useOptimistic(userStore.votesData, (state, { id, newSubmission }) => [
-    ...state,
-    {
-      id: id,
-      submission: {
-        id: newSubmission,
+  const [optimisticVote, castOptimisticVote] = useOptimistic(
+    userStore.votesData,
+    (state, { id, newSubmission }) => [
+      ...state,
+      {
+        id: id,
+        submission: {
+          id: newSubmission,
+        },
       },
-    },
-  ]);
+    ],
+  );
 
   const userAddress = primaryWallet?.address ?? "";
 
@@ -98,7 +103,10 @@ const Vote = ({ submissions }: Props) => {
   const userId = userStore?.loginData?.id;
   const fetchVote = async () => {
     if (!userId) return;
-    const { data, error } = (await getUserVotes(userId)) as { data: UserVotes[]; error: null };
+    const { data, error } = (await getUserVotes(userId)) as {
+      data: UserVotes[];
+      error: null;
+    };
 
     if (error) {
       return;
@@ -112,6 +120,10 @@ const Vote = ({ submissions }: Props) => {
 
   useEffect(() => {
     setCoverImage(coverData.image);
+    const isVoted = userStore.votesData.some(
+      (item) => item.submission.id === coverData.id,
+    );
+    setVoted(isVoted);
   }, [coverData, coverImage]);
 
   useEffect(() => {
@@ -138,7 +150,11 @@ const Vote = ({ submissions }: Props) => {
             )}
           </SubmissionContainer>
 
-          <SubmissionNavigation submissions={submissions} coverData={coverData} setCoverData={setCoverData} />
+          <SubmissionNavigation
+            submissions={submissions}
+            coverData={coverData}
+            setCoverData={setCoverData}
+          />
         </>
       )}
 

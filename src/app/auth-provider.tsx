@@ -1,6 +1,11 @@
 "use client";
 import React from "react";
-import { DynamicContextProvider, EthereumWalletConnectors, UserProfile, Wallet } from "../lib/dynamic";
+import {
+  DynamicContextProvider,
+  EthereumWalletConnectors,
+  UserProfile,
+  Wallet,
+} from "../lib/dynamic";
 import { addUserAction } from "./action";
 import { useUserDataStore } from "../store/store-provider";
 
@@ -13,7 +18,11 @@ export default function AuthProvider({
 }) {
   const userStore = useUserDataStore((state) => state);
 
-  const addUser = async (user: UserProfile, primaryWallet: Wallet | null, isAuthenticated: boolean) => {
+  const addUser = async (
+    user: UserProfile,
+    primaryWallet: Wallet | null,
+    isAuthenticated: boolean,
+  ) => {
     if (!isAuthenticated || !user) {
       return;
     }
@@ -44,7 +53,8 @@ export default function AuthProvider({
         environmentId,
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
-          onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) => addUser(user, primaryWallet, isAuthenticated),
+          onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) =>
+            addUser(user, primaryWallet, isAuthenticated),
           onLogout: () => clearPersistence(),
         },
       }}

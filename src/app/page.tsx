@@ -7,9 +7,14 @@ import Three from "./vote";
 
 export default async function Home() {
   const supabase = createClient();
-  const { data: currentRound } = await supabase.from("round").select().eq("is_current", true).single();
 
-  const { data, error } = await supabase
+  const { data: currentRound } = await supabase
+    .from("round")
+    .select()
+    .eq("is_current", true)
+    .single();
+
+  const { data: submissions, error } = await supabase
     .from("submission")
     .select()
     .eq("round", currentRound?.id || 1);
@@ -18,12 +23,12 @@ export default async function Home() {
     console.log("Error fetching submissions");
   }
 
-  if (data) {
+  if (submissions) {
     await Promise.all(
-      data.map(async (data) => {
-        if (data.artist) {
-          const ens = await ensResolver(data.artist);
-          data.ens = ens.ens;
+      submissions.map(async (submission) => {
+        if (submission.artist) {
+          const ens = await ensResolver(submission.artist);
+          submission.ens = ens.ens;
         }
       }),
     );
@@ -32,7 +37,7 @@ export default async function Home() {
   return (
     <Container>
       <Header />
-      <Three submissions={data as any} />
+      <Three submissions={submissions as any} />
       <Footer />
     </Container>
   );

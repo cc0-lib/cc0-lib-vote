@@ -1,4 +1,4 @@
-import { User, UserVotes } from "@/app/vote";
+import { SubmissionType, User, UserVotes } from "@/app/vote";
 import { createStore } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -35,7 +35,8 @@ export const createUserDataStore = () => {
           votes: 0,
         },
         storeVotesCount: (votes: number) => set({ voteCountData: { votes } }),
-        updateVotesCount: () => set({ voteCountData: { votes: get().voteCountData.votes + 1 } }),
+        updateVotesCount: () =>
+          set({ voteCountData: { votes: get().voteCountData.votes + 1 } }),
         clearVotesCount: () => set({ voteCountData: { votes: 0 } }),
         currentRound: "Round 1",
         setCurrenRound: (current) => set({ currentRound: current }),
