@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-export default function RealtimeVotes({ serverVotes }: { serverVotes: any }) {
+export default function RealtimeVotes({ totalVotes }: { totalVotes: number }) {
   const supabase = createClient();
   const router = useRouter();
 
@@ -29,5 +29,5 @@ export default function RealtimeVotes({ serverVotes }: { serverVotes: any }) {
     };
   }, [supabase]);
 
-  return <pre>{JSON.stringify(serverVotes, null, 2)}</pre>;
+  return <>{totalVotes}</>;
 }

@@ -18,12 +18,12 @@ export default async function Round() {
     <Container>
       <Header />
 
-      <div className="flex h-[80vh] w-full flex-col justify-start">
+      <div className="mt-5 flex w-full flex-1 flex-col justify-start">
         <div className="w-full font-chakra text-6xl font-bold">
           <SplitLetters text="All Round" />
         </div>
 
-        <div className="mt-10 space-y-4">
+        <div className="flex flex-1 flex-col items-center justify-center space-y-4">
           <div className="flex justify-center space-x-4">
             {topSection.map((round) => (
               <Fragment key={round.id}>
@@ -44,7 +44,7 @@ export default async function Round() {
                   </Link>
                 ) : (
                   <Link
-                    href={round.status === "ongoing" ? "/vote" : ""}
+                    href={round.status === "ongoing" ? "/" : ""}
                     className={cn(
                       "col-span-3 flex h-[260px] w-[260px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1",
                       round.status === "pending" && "from-[hsl(0, 0%, 81%)] to-[hsl(0, 0%, 96%)]",
@@ -83,7 +83,7 @@ export default async function Round() {
                   </Link>
                 ) : (
                   <Link
-                    href={round.status === "ongoing" ? "/vote" : ""}
+                    href={round.status === "ongoing" ? "/" : ""}
                     className={cn(
                       "col-span-3 flex h-[260px] w-[260px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1",
                       round.status === "pending" && "from-[hsl(0,0%,81%)] to-[hsl(0,0%,96%)]",

@@ -1,8 +1,9 @@
 "use server";
 
-import { supabase } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 export async function getStats() {
+  const supabase = createClient();
   const { data: votes, error: votesError } = await supabase.from("vote").select();
   const { data: submission, error: submissionError } = await supabase.from("submission").select();
 
@@ -39,6 +40,7 @@ export async function getStats() {
 }
 
 export async function getCurrentRound() {
+  const supabase = createClient();
   const { data, error } = await supabase.from("round").select("*").eq("is_current", true).single();
 
   return {

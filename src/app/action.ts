@@ -1,6 +1,6 @@
 "use server";
 import { adminClient } from "@/lib/supabase/admin";
-import { supabase } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { getCurrentRound } from "./stats/action";
 
@@ -15,6 +15,7 @@ interface WalletCB {
 }
 
 export async function addUserAction(user: User, wallet: WalletCB) {
+  const supabase = createClient();
   if (!user.email) {
     return;
   }
@@ -31,7 +32,6 @@ export async function addUserAction(user: User, wallet: WalletCB) {
       return null;
     }
 
-    revalidatePath("/");
     return data[0];
   }
 
@@ -47,7 +47,6 @@ export async function addUserAction(user: User, wallet: WalletCB) {
     .single();
 
   if (newUser.data) {
-    revalidatePath("/");
     return newUser.data;
   }
 }
@@ -78,9 +77,6 @@ export async function castVote(submissionId: number, userAddress: string) {
       .select()
       .single();
 
-    revalidatePath("/");
-    revalidatePath("/leaderboard");
-
     if (error) {
       console.error("castVote", error);
       return {
@@ -107,6 +103,7 @@ export async function revertVote(voteId: number, userId: number) {
 }
 
 export async function getUserVotes(userId: number) {
+  const supabase = createClient();
   const { data, error } = await supabase
     .from("vote")
     .select(

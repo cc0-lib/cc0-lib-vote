@@ -1,11 +1,14 @@
-import { createBrowserClient } from "@supabase/ssr";
+import { CookieOptions, createBrowserClient } from "@supabase/ssr";
 import { Database } from "./supabase";
 import { env } from "@/env";
+import { cookies } from "next/headers";
+import { DATABASE_SCHEMA } from "../config";
 
-export const createClient = () =>
-  createBrowserClient<Database>(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
+export const createClient = () => {
+  return createBrowserClient<Database>(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
     db: {
-      schema: "cc0vote",
+      schema: DATABASE_SCHEMA,
     },
     cookies: {},
   });
+};

@@ -6,7 +6,7 @@ export interface EnsResolverResult {
   avatar: string;
   avatar_url: string;
   contentHash: any;
-  ens: string;
+  ens: string | null;
 }
 
 export function cn(...inputs: ClassValue[]) {
@@ -21,7 +21,7 @@ export async function ensResolver(walletAddress: string): Promise<EnsResolverRes
   const data = (await response.json()) as EnsResolverResult;
 
   if (!data.ens) {
-    data.ens = truncateAddress(data.address);
+    data.ens = truncateAddress(walletAddress);
   }
 
   return data;
@@ -29,11 +29,11 @@ export async function ensResolver(walletAddress: string): Promise<EnsResolverRes
 
 export function truncateAddress(hexString: string) {
   if (!hexString) {
-    return "Invalid input";
+    return null;
   }
 
   if (hexString.length < 8) {
-    return "Invalid input";
+    return null;
   }
 
   const front = hexString.substring(0, 4);

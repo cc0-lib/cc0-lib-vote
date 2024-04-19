@@ -10,7 +10,7 @@ import { previewMode } from "@/lib/prefs";
 import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
-import { useUserDataStore } from "./store-provider";
+import { useUserDataStore } from "../store/store-provider";
 
 export type SubmissionType = {
   id: number;
@@ -40,21 +40,26 @@ type Props = {
   submissions: SubmissionType[];
 };
 
-const Three = ({ submissions }: Props) => {
+const Vote = ({ submissions }: Props) => {
   const { primaryWallet, isAuthenticated, authToken } = useDynamicContext();
   const userStore = useUserDataStore((state) => state);
 
+  // userStore.storeSubmissionsData(submissions);
+
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
-  const [optimisticVote, castOptimisticVote] = useOptimistic(userStore.votesData, (state, { id, newSubmission }) => [
-    ...state,
-    {
-      id: id,
-      submission: {
-        id: newSubmission,
+  const [optimisticVote, castOptimisticVote] = useOptimistic(
+    userStore.votesData,
+    (state, { id, newSubmission }) => [
+      ...state,
+      {
+        id: id,
+        submission: {
+          id: newSubmission,
+        },
       },
-    },
-  ]);
+    ],
+  );
 
   const userAddress = primaryWallet?.address ?? "";
 
@@ -98,7 +103,10 @@ const Three = ({ submissions }: Props) => {
   const userId = userStore?.loginData?.id;
   const fetchVote = async () => {
     if (!userId) return;
-    const { data, error } = (await getUserVotes(userId)) as { data: UserVotes[]; error: null };
+    const { data, error } = (await getUserVotes(userId)) as {
+      data: UserVotes[];
+      error: null;
+    };
 
     if (error) {
       return;
@@ -112,6 +120,10 @@ const Three = ({ submissions }: Props) => {
 
   useEffect(() => {
     setCoverImage(coverData.image);
+    const isVoted = userStore.votesData.some(
+      (item) => item.submission.id === coverData.id,
+    );
+    setVoted(isVoted);
   }, [coverData, coverImage]);
 
   useEffect(() => {
@@ -138,7 +150,11 @@ const Three = ({ submissions }: Props) => {
             )}
           </SubmissionContainer>
 
-          <SubmissionNavigation submissions={submissions} coverData={coverData} setCoverData={setCoverData} />
+          <SubmissionNavigation
+            submissions={submissions}
+            coverData={coverData}
+            setCoverData={setCoverData}
+          />
         </>
       )}
 
@@ -147,4 +163,4 @@ const Three = ({ submissions }: Props) => {
   );
 };
 
-export default Three;
+export default Vote;

@@ -3,7 +3,7 @@ import { Inter_Tight, JetBrains_Mono, Chakra_Petch } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./auth-provider";
 import { env } from "@/env";
-import { UserStoreProvider } from "./store-provider";
+import { UserStoreProvider } from "@/store/store-provider";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -14,6 +14,7 @@ const interTight = Inter_Tight({
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
+  weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-jetbrains",
 });
 const chakraPetch = Chakra_Petch({
