@@ -8,11 +8,7 @@ import Three from "./vote";
 export default async function Home() {
   const supabase = createClient();
 
-  const { data: currentRound } = await supabase
-    .from("round")
-    .select()
-    .eq("is_current", true)
-    .single();
+  const { data: currentRound } = await supabase.from("round").select().eq("is_current", true).single();
 
   const { data: submissions, error } = await supabase
     .from("submission")

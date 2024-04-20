@@ -19,12 +19,12 @@ export default async function Round() {
       <Header />
 
       <div className="mt-5 flex w-full flex-1 flex-col justify-start">
-        <div className="w-full font-chakra text-6xl font-bold">
+        <div className="w-full font-chakra text-4xl font-bold md:text-6xl">
           <SplitLetters text="All Round" />
         </div>
 
-        <div className="flex flex-1 flex-col items-center justify-center space-y-4">
-          <div className="flex justify-center space-x-4">
+        <div className="mt-8 flex flex-1 flex-col items-center justify-center space-y-4 md:mt-0">
+          <div className="space-y-8 md:flex md:justify-center md:space-x-4 md:space-y-0">
             {topSection.map((round) => (
               <Fragment key={round.id}>
                 {round.submission ? (
