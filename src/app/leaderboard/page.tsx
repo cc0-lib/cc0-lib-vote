@@ -20,47 +20,75 @@ export default async function Leaderboard() {
       <Header />
 
       <div className="mt-5 flex w-full flex-1 flex-col justify-start">
-        <span className="font-chakra text-6xl font-bold">
+        <div className="w-full font-chakra text-4xl font-bold md:text-6xl">
           <SplitLetters text="leaderboard" />
-        </span>
+        </div>
 
-        <div className="text-lg font-semibold">
+        <div className="font-semibold">
           Total votes:
           <RealtimeVotes totalVotes={roundTotalVotes} />
         </div>
 
-        <div className="flex flex-1 flex-col items-center justify-center">
+        {/* Mobile */}
+        <div className="my-10 flex w-full flex-col space-y-8 md:hidden">
+          {leaderboards?.map((item) => (
+            <div className="flex justify-between">
+              <Link href={item.url} key={item.id} target="_blank">
+                <Image
+                  className="size-36 rounded-md shadow-md"
+                  src={item.image}
+                  width={500}
+                  height={500}
+                  alt="winner"
+                />
+              </Link>
+
+              <div className="flex h-20 w-3/6 font-chakra">
+                <div className="flex w-full justify-between gap-2">
+                  <div className="text-[3.5rem] font-semibold">{item.percentage}%</div>
+                  <div className="flex h-full flex-col justify-center">
+                    <div className="box-content text-2xl leading-none">{item.totalVotes}</div>
+                    <div className="text-center font-mono tracking-tighter">
+                      {item.totalVotes > 1 ? "Votes" : "Vote"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="hidden md:flex md:flex-1 md:flex-col md:items-center md:justify-center">
           {leaderboards && (
             <>
-              <div className="mb-10">
-                <div className="flex items-center justify-center">
-                  {/* Image */}
-                  <Link href={leaderboards[0].url} target="_blank">
-                    <Image
-                      className="size-48 rounded-md shadow-md"
-                      src={leaderboards[0].image}
-                      width={500}
-                      height={500}
-                      alt="winner"
-                    />
-                  </Link>
+              {/* First place */}
+              <div className="mb-10 flex items-center justify-center">
+                <Link href={leaderboards[0].url} target="_blank">
+                  <Image
+                    className="size-48 rounded-md shadow-md"
+                    src={leaderboards[0].image}
+                    width={500}
+                    height={500}
+                    alt="winner"
+                  />
+                </Link>
 
-                  {/* First place */}
-                  <div className="ml-10 font-chakra">
-                    <div className="flex items-center">
-                      <div>
-                        <h3 className="text-center text-6xl">{leaderboards[0].percentage}%</h3>
-                      </div>
-                      <div className="ml-3">
-                        <div className="text-start text-3xl">{leaderboards[0].totalVotes}</div>
-                        <h4 className="w-full font-mono text-xs tracking-tighter">
-                          {leaderboards[0].totalVotes > 1 ? "Votes" : "Vote"}
-                        </h4>
-                      </div>
+                <div className="ml-10 font-chakra">
+                  <div className="flex items-center">
+                    <div>
+                      <h3 className="text-center text-6xl">{leaderboards[0].percentage}%</h3>
                     </div>
-                    <h4 className="font-bold leading-6 tracking-tight">{leaderboards[0].title}</h4>
-                    <h5 className="font-mono tracking-tight">{leaderboards[0].resolvedEns}</h5>
+                    <div className="ml-3">
+                      <div className="text-start text-3xl">{leaderboards[0].totalVotes}</div>
+                      <h4 className="w-full font-mono text-xs tracking-tighter">
+                        {leaderboards[0].totalVotes > 1 ? "Votes" : "Vote"}
+                      </h4>
+                    </div>
                   </div>
+                  <Link href={leaderboards[0].url} target="_blank">
+                    <h4 className="font-bold leading-6 tracking-tight">{leaderboards[0].title}</h4>
+                  </Link>
+                  <h5 className="font-mono tracking-tight">{leaderboards[0].resolvedEns}</h5>
                 </div>
               </div>
 
@@ -83,7 +111,9 @@ export default async function Leaderboard() {
                           </h4>
                         </div>
                       </div>
-                      <h4 className="truncate text-lg font-bold leading-6 tracking-tight">{title}</h4>
+                      <Link href={url} target="_blank">
+                        <h4 className="truncate text-lg font-bold leading-6 tracking-tight">{title}</h4>
+                      </Link>
                       <h5 className="font-mono tracking-tight">{resolvedEns}</h5>
                     </div>
                   </div>

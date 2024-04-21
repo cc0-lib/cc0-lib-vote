@@ -17,7 +17,7 @@ const Container = ({ children, variant = "between", className }: Props) => {
         className,
       )}
     >
-      <div className="pointer-events-none fixed inset-0 m-3 rounded-lg border-2 border-zinc-300"></div>
+      <div className="pointer-events-none fixed inset-0 rounded-lg border-2 border-zinc-300"></div>
       {children}
     </main>
   );

@@ -1,7 +1,7 @@
 import { env } from "@/env";
 import { createServerClient } from "@supabase/ssr";
 
-const supabase = createServerClient(env.SUPABASE_URL, env.SERVICE_ROLE, {
+const supabase = createServerClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
   cookies: {},
   auth: {
     autoRefreshToken: false,

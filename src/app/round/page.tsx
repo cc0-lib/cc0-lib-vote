@@ -7,6 +7,7 @@ import React, { Fragment } from "react";
 import { getAllRoundWinner } from "./action";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useScreenDetector } from "@/components/section/useScreenDetector";
 
 export default async function Round() {
   const { data } = await getAllRoundWinner();
@@ -23,16 +24,16 @@ export default async function Round() {
           <SplitLetters text="All Round" />
         </div>
 
-        <div className="mt-8 flex flex-1 flex-col items-center justify-center space-y-4 md:mt-0">
+        <div className="mb-8 mt-8 flex flex-1 flex-col items-center justify-center space-y-8 md:mb-0 md:mt-0 md:space-y-4">
           <div className="space-y-8 md:flex md:justify-center md:space-x-4 md:space-y-0">
             {topSection.map((round) => (
               <Fragment key={round.id}>
                 {round.submission ? (
                   <Link
-                    href={round.submission.url || ""}
+                    href={round.url || ""}
                     target="_blank"
                     rel="norefer"
-                    className="col-span-3 flex size-[260px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1"
+                    className="col-span-3 flex size-[320px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1 md:size-[260px]"
                   >
                     <Image
                       height={500}
@@ -46,7 +47,7 @@ export default async function Round() {
                   <Link
                     href={round.status === "ongoing" ? "/" : ""}
                     className={cn(
-                      "col-span-3 flex h-[260px] w-[260px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1",
+                      "col-span-3 flex size-[320px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1 md:size-[260px]",
                       round.status === "pending" && "from-[hsl(0, 0%, 81%)] to-[hsl(0, 0%, 96%)]",
                     )}
                   >
@@ -63,15 +64,15 @@ export default async function Round() {
             ))}
           </div>
 
-          <div className="flex justify-center space-x-4">
+          <div className="space-y-8 md:flex md:justify-center md:space-x-4 md:space-y-0">
             {bottomSection.map((round) => (
               <Fragment key={round.id}>
                 {round.submission ? (
                   <Link
-                    href={round.submission.url || ""}
+                    href={round.url || ""}
                     target="_blank"
                     rel="norefer"
-                    className="col-span-3 flex size-[260px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1"
+                    className="col-span-3 flex size-[320px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1 md:size-[260px]"
                   >
                     <Image
                       height={500}
@@ -85,7 +86,7 @@ export default async function Round() {
                   <Link
                     href={round.status === "ongoing" ? "/" : ""}
                     className={cn(
-                      "col-span-3 flex h-[260px] w-[260px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1",
+                      "flex size-[320px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1 md:size-[260px]",
                       round.status === "pending" && "from-[hsl(0,0%,81%)] to-[hsl(0,0%,96%)]",
                     )}
                   >

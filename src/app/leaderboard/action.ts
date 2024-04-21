@@ -52,7 +52,9 @@ export async function getLeaderboards(currentRound: number) {
     };
   });
 
-  const final = (await Promise.all(leaderboardsPromises)).sort((a, b) => b.totalVotes - a.totalVotes);
+  const final = (await Promise.all(leaderboardsPromises))
+    .sort((a, b) => b.totalVotes - a.totalVotes)
+    .filter((i) => i.totalVotes > 0); // remove no vote submissions
 
   return {
     data: final,
