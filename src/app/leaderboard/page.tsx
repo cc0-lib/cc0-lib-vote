@@ -120,10 +120,7 @@ export default async function Leaderboard() {
                 ))}
               </div>
 
-              <div className="block w-[500px] items-center py-5">
-                <div className="grow border-t border-black"></div>
-                <div className="grow border-t border-black"></div>
-              </div>
+              {leaderboards.length > 3 && <div className="my-5 w-[500px] border-t-[2px] border-black" />}
 
               <div className="grid grid-cols-2 gap-2">
                 {leaderboards.slice(3, 6).map(({ id, resolvedEns, title, totalVotes, url }) => (

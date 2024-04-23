@@ -1,4 +1,6 @@
-import type { SubmissionType, UserVotes } from "@/app/vote";
+import type { SubmissionType } from "@/app/vote";
+import { truncateAddress } from "@/lib/utils";
+import { useUserDataStore } from "@/store/store-provider";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 
@@ -12,7 +14,6 @@ const Submission = ({
   voted: boolean;
   setVoted: (v: boolean) => void;
   handleVote: (action: "vote" | "unvote") => void;
-  userVotes: UserVotes[];
 }) => {
   return (
     <>
@@ -20,7 +21,7 @@ const Submission = ({
       <div className="size-full min-h-12 max-w-xs text-xs font-normal normal-case md:max-w-sm">{coverData.tldr}</div>
       <div className="mt-4 flex w-full flex-1 flex-row items-center justify-between">
         <div className="w-full text-sm font-semibold uppercase">
-          {coverData.artist.match(/\.eth\b/) ? coverData.artist : coverData.ens}
+          {coverData.ens ? coverData.ens : truncateAddress(coverData.artist)}
         </div>
         <div className="flex w-full flex-row items-center justify-around text-sm">
           <Link href={coverData.url} target="_blank" rel="noreferrer noopener">

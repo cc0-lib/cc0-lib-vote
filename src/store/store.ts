@@ -6,12 +6,14 @@ export interface UserDataStore {
   loginData: User | null;
   storeUserData: (data: User) => void;
   clearUserData: () => void;
-  votesData: UserVotes[];
-  storeUserVotes: (data: UserVotes[]) => void;
+  votesData: number[];
+  storeUserVotes: (submissionIds: number[]) => void;
   clearUserVotes: () => void;
   voteCountData: {
     votes: number;
   };
+  removeVote: (id: number) => void;
+  addVote: (data: number) => void;
   storeVotesCount: (votes: number) => void;
   clearVotesCount: () => void;
   currentRound: string;
@@ -23,20 +25,22 @@ export const createUserDataStore = () => {
     persist(
       (set, get) => ({
         loginData: null,
-        storeUserData: (data: User) => set({ loginData: data }),
+        storeUserData: (data) => set({ loginData: data }),
         clearUserData: () => set({ loginData: null }),
         votesData: [],
-        storeUserVotes: (data: UserVotes[]) =>
+        storeUserVotes: (data) =>
           set(() => ({
             votesData: data,
           })),
         clearUserVotes: () => set(() => ({ votesData: [] })),
+        removeVote: (removedId) =>
+          set((state) => ({ votesData: state.votesData.filter((submissionId) => submissionId !== removedId) })),
         voteCountData: {
           votes: 0,
         },
+        addVote: (data) => set((state) => ({ votesData: [...state.votesData, data] })),
         storeVotesCount: (votes: number) => set({ voteCountData: { votes } }),
-        updateVotesCount: () =>
-          set({ voteCountData: { votes: get().voteCountData.votes + 1 } }),
+        updateVotesCount: () => set({ voteCountData: { votes: get().voteCountData.votes + 1 } }),
         clearVotesCount: () => set({ voteCountData: { votes: 0 } }),
         currentRound: "Round 1",
         setCurrenRound: (current) => set({ currentRound: current }),

@@ -11,6 +11,8 @@ import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useUserDataStore } from "../store/store-provider";
+import { createClient } from "@/lib/supabase/client";
+import { ensResolver } from "@/lib/utils";
 
 export type SubmissionType = {
   id: number;
@@ -44,19 +46,8 @@ const Vote = ({ submissions }: Props) => {
   const { primaryWallet, isAuthenticated, authToken } = useDynamicContext();
   const userStore = useUserDataStore((state) => state);
 
-  // userStore.storeSubmissionsData(submissions);
-
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState(submissions[0]);
-  const [optimisticVote, castOptimisticVote] = useOptimistic(userStore.votesData, (state, { id, newSubmission }) => [
-    ...state,
-    {
-      id: id,
-      submission: {
-        id: newSubmission,
-      },
-    },
-  ]);
 
   const userAddress = primaryWallet?.address ?? "";
 
@@ -72,12 +63,14 @@ const Vote = ({ submissions }: Props) => {
     if (action === "vote") {
       if (userStore.voteCountData.votes < MAX_VOTE_PER_USER) {
         await castVote(coverData.id, userAddress);
+        userStore.addVote(coverData.id);
         fetchVote();
       } else {
         alert("You have already voted the maximum number of times");
       }
     } else {
       await revertVote(coverData.id, userId);
+      userStore.removeVote(coverData.id);
       fetchVote();
     }
   };
@@ -106,16 +99,17 @@ const Vote = ({ submissions }: Props) => {
     }
 
     if (data && data?.length > 0) {
-      userStore.storeUserVotes(data);
+      const submissionIds = data.map((i) => i.submission.id);
+      userStore.storeUserVotes(submissionIds);
       userStore.storeVotesCount(data.length);
     }
+
+    const isVoted = userStore.votesData.some((id) => id === coverData.id);
+    setVoted(isVoted);
   };
 
   useEffect(() => {
     setCoverImage(coverData.image);
-
-    const isVoted = userStore.votesData.some((item) => item.submission.id === coverData.id);
-    setVoted(isVoted);
   }, [coverData, coverImage]);
 
   useEffect(() => {
@@ -132,13 +126,7 @@ const Vote = ({ submissions }: Props) => {
         <>
           <SubmissionContainer>
             {coverData && (
-              <Submission
-                coverData={coverData}
-                userVotes={userStore.votesData}
-                voted={voted}
-                setVoted={setVoted}
-                handleVote={handleVote}
-              />
+              <Submission voted={voted} coverData={coverData} setVoted={setVoted} handleVote={handleVote} />
             )}
           </SubmissionContainer>
 
