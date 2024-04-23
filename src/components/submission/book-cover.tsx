@@ -12,11 +12,11 @@ const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
   return (
     <div
       className={cn(
-        "debug pointer-events-none flex h-[80vh] w-full flex-col items-center md:justify-center",
+        "pointer-events-none flex h-[30vh] w-full flex-col items-center md:h-[80vh] md:justify-center",
         !previewMode && "-translate-y-[10vh]",
       )}
     >
-      <Canvas>
+      <Canvas className="debug">
         <Scene bookMaterial={bookMaterial} />
       </Canvas>
     </div>
@@ -26,13 +26,14 @@ const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
 export default BookCover;
 
 const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery("(max-width: 640px)");
 
   const boxRef = useRef<Mesh>(null);
   const [clicked, setClicked] = useState(false);
 
   let scale = isMobile ? new Vector3(11, 11, 0.2) : new Vector3(15, 15, 0.2);
-  let position = isMobile ? new Vector3(0, 1.5, 0) : new Vector3(0, 0, 0);
+  let position = isMobile ? new Vector3(0, 0, 0) : new Vector3(0, 0, 0);
+  let contantShadow = isMobile ? new Vector3(0, -1, 0) : new Vector3(0, -3, 0);
 
   useFrame(({ clock }) => {
     if (!previewMode) {
@@ -53,7 +54,7 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
       <Environment preset="city" background={false} blur={0.8} />
       <ambientLight intensity={2} />
 
-      <group scale={0.3} position={position}>
+      <group scale={isMobile ? 1 : 0.3} position={position}>
         <Box
           onClick={() => setClicked(!clicked)}
           ref={boxRef}
@@ -63,7 +64,7 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
         />
       </group>
 
-      <ContactShadows position={[0, -3, 0]} opacity={1.5} scale={20} blur={2} far={4.5} />
+      <ContactShadows position={contantShadow} opacity={1.5} scale={20} blur={2} far={4.5} />
 
       {previewMode && <CameraControls />}
 
