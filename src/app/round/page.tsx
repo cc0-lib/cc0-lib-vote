@@ -7,7 +7,6 @@ import React, { Fragment } from "react";
 import { getAllRoundWinner } from "./action";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useScreenDetector } from "@/components/section/useScreenDetector";
 
 export default async function Round() {
   const { data } = await getAllRoundWinner();

@@ -10,7 +10,7 @@ const SubmissionNavigation = ({
   setCoverData: (v: SubmissionType) => void;
 }) => {
   return (
-    <div className="pointer-events-none fixed z-10 flex size-full items-center justify-between px-32">
+    <div className="pointer-events-none absolute z-10 flex size-full items-center justify-between px-6 md:fixed md:px-32">
       <button
         onClick={() => {
           const currentIndex = submissions.findIndex((d) => d.title === coverData.title);
@@ -20,7 +20,7 @@ const SubmissionNavigation = ({
           }
           setCoverData(submissions[currentIndex - 1]);
         }}
-        className="pointer-events-auto rounded-md bg-zinc-100 px-8 py-2 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+        className="pointer-events-auto rounded bg-zinc-100 px-4 py-1 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 md:rounded-md md:px-8 md:py-2"
       >
         PREV
       </button>
@@ -33,7 +33,7 @@ const SubmissionNavigation = ({
           }
           setCoverData(submissions[currentIndex + 1]);
         }}
-        className="pointer-events-auto rounded-md bg-zinc-100 px-8 py-2 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+        className="pointer-events-auto rounded bg-zinc-100 px-4 py-1 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100 md:rounded-md md:px-8 md:py-2"
       >
         NEXT
       </button>

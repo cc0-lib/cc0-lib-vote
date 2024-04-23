@@ -4,10 +4,11 @@ import Link from "next/link";
 import CountDown from "../ui/countdown";
 import LoginNav from "./login-nav";
 import { IsBrowser } from "@dynamic-labs/sdk-react-core";
-import { useEffect, useState } from "react";
-import { useScreenDetector } from "./useScreenDetector";
+import { useState } from "react";
 import { XIcon, AlignJustify } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { useMediaQuery } from "usehooks-ts";
 
 const menu = [
   {
@@ -33,8 +34,10 @@ const menu = [
 ];
 
 const Header = () => {
-  const { isMobile } = useScreenDetector();
+  const isMobile = useMediaQuery("(max-width: 640px)");
+
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <>
       {isMobile ? (
@@ -52,12 +55,14 @@ const Header = () => {
             </button>
 
             {isOpen && (
-              <ul
-                className={cn(
-                  "absolute -left-0 -top-0 z-[50] flex h-full w-screen flex-col justify-center gap-10 bg-white pl-10 font-chakra text-5xl font-semibold",
-                  !isOpen && "opacity-0 transition duration-300 ease-in-out",
-                  isOpen && "opacity-100 transition duration-300 ease-in-out",
-                )}
+              <motion.ul
+                transition={{
+                  ease: "easeOut",
+                  duration: 0.3,
+                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="absolute -left-0 -top-0 z-[50] flex h-full w-screen flex-col justify-center gap-10 bg-white pl-10 font-chakra text-5xl font-semibold"
               >
                 {menu.map(({ name, href }) => (
                   <li key={name}>
@@ -69,7 +74,7 @@ const Header = () => {
                     <LoginNav />
                   </IsBrowser>
                 </li>
-              </ul>
+              </motion.ul>
             )}
           </div>
           <div className="mt-2 text-center">

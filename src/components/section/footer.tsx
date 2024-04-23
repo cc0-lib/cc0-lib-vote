@@ -34,8 +34,8 @@ const Footer = () => {
 
   return (
     <IsBrowser>
-      <div className="flex w-full flex-row items-center justify-between">
-        <div>cover art {userDataStore.currentRound} community voting</div>
+      <div className="flex w-full items-center justify-center md:flex-row md:justify-between">
+        <div className="hidden md:block">cover art {userDataStore.currentRound} community voting</div>
         {isAuthenticated && authToken && (
           <div>{`total voted: ${userDataStore.voteCountData.votes}/${MAX_VOTE_PER_USER}`}</div>
         )}

@@ -15,18 +15,12 @@ const Submission = ({
   handleVote: (action: "vote" | "unvote") => void;
   userVotes: UserVotes[];
 }) => {
-  const isVoted = userVotes?.some(
-    (item) => item.submission.id === coverData.id,
-  );
+  const isVoted = userVotes?.some((item) => item.submission.id === coverData.id);
   return (
     <>
-      <h1 className="font-chakra text-2xl font-bold uppercase">
-        {coverData.title}
-      </h1>
-      <div className="size-full min-h-12 max-w-sm text-xs font-normal normal-case">
-        {coverData.tldr}
-      </div>
-      <div className="flex-0 mt-4 flex w-full flex-row items-center justify-between">
+      <h1 className="font-chakra text-lg font-bold uppercase md:text-2xl">{coverData.title}</h1>
+      <div className="size-full min-h-12 max-w-xs text-xs font-normal normal-case md:max-w-sm">{coverData.tldr}</div>
+      <div className="mt-4 flex w-full flex-1 flex-row items-center justify-between">
         <div className="w-full text-sm font-semibold uppercase">
           {coverData.artist.match(/\.eth\b/) ? coverData.artist : coverData.ens}
         </div>

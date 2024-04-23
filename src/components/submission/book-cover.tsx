@@ -6,16 +6,17 @@ import { ContactShadows, Environment, Box, CameraControls } from "@react-three/d
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { Material, MathUtils, Mesh, Vector3 } from "three";
+import { useMediaQuery } from "usehooks-ts";
 
 const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
   return (
     <div
       className={cn(
-        "pointer-events-none flex h-[80vh] w-full flex-col items-center justify-center",
+        "debug pointer-events-none flex h-[80vh] w-full flex-col items-center md:justify-center",
         !previewMode && "-translate-y-[10vh]",
       )}
     >
-      <Canvas className="size-full">
+      <Canvas>
         <Scene bookMaterial={bookMaterial} />
       </Canvas>
     </div>
@@ -25,8 +26,13 @@ const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
 export default BookCover;
 
 const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   const boxRef = useRef<Mesh>(null);
   const [clicked, setClicked] = useState(false);
+
+  let scale = isMobile ? new Vector3(11, 11, 0.2) : new Vector3(15, 15, 0.2);
+  let position = isMobile ? new Vector3(0, 1.5, 0) : new Vector3(0, 0, 0);
 
   useFrame(({ clock }) => {
     if (!previewMode) {
@@ -47,12 +53,12 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
       <Environment preset="city" background={false} blur={0.8} />
       <ambientLight intensity={2} />
 
-      <group scale={0.3} position={[0, 0, 0]}>
+      <group scale={0.3} position={position}>
         <Box
           onClick={() => setClicked(!clicked)}
           ref={boxRef}
           position={[0, 0, 0]}
-          scale={[15, 15, 0.2]}
+          scale={scale}
           material={bookMaterial}
         />
       </group>

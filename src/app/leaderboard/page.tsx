@@ -32,8 +32,8 @@ export default async function Leaderboard() {
         {/* Mobile */}
         <div className="my-10 flex w-full flex-col space-y-8 md:hidden">
           {leaderboards?.map((item) => (
-            <div className="flex justify-between">
-              <Link href={item.url} key={item.id} target="_blank">
+            <div className="flex justify-between" key={item.id}>
+              <Link href={item.url} target="_blank">
                 <Image
                   className="size-36 rounded-md shadow-md"
                   src={item.image}

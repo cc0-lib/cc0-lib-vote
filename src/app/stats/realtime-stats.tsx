@@ -1,4 +1,5 @@
 "use client";
+
 import SplitLetters from "@/components/anim/split-letters";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -57,15 +58,9 @@ export default function RealtimeStats({
   }, [supabase]);
 
   return (
-    <div className="mt-5 flex w-full flex-1 flex-col justify-start">
-      <div className="w-full font-chakra text-6xl font-bold">
-        <SplitLetters text="Stats" />
-      </div>
-
-      <h3>{currentRound?.title}</h3>
-
+    <>
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <div className="flex w-3/4 justify-end gap-10">
+        <div className="flex justify-end gap-10 md:w-3/4">
           <h3>
             Total Votes: <span className="font-bold">{totalVotes}</span>
           </h3>
@@ -73,13 +68,19 @@ export default function RealtimeStats({
             Votes For Round: <b>{currentRound?.assigned_vote}</b>
           </h3>
         </div>
-        <table className="mt-4 w-3/4">
+        <table className="mt-4 md:w-3/4">
           <thead className="w-full">
             <tr className="grid h-10 grid-cols-5 font-extrabold">
               <th className="col-span-2 flex">Title</th>
               <th className="flex justify-end">Votes</th>
-              <th className="flex justify-end">Percent</th>
-              <th className="flex justify-end">Prorated</th>
+              <th className="flex justify-end">
+                <span className="hidden md:block">Percent</span>
+                <span className="md:hidden">%</span>
+              </th>
+              <th className="flex justify-end">
+                <span className="hidden md:block">Prorated</span>
+                <span className="md:hidden">Pro</span>
+              </th>
             </tr>
           </thead>
           <tbody className="w-full">
@@ -87,20 +88,12 @@ export default function RealtimeStats({
               ?.sort((a, b) => b.votes - a.votes)
               .map((item, index) => {
                 return (
-                  <tr
-                    key={index}
-                    className="grid h-10 grid-cols-5 font-semibold"
-                  >
+                  <tr key={index} className=" grid h-10 grid-cols-5 font-semibold">
                     <td className="col-span-2 truncate pr-5">{item.title}</td>
                     <td className="flex justify-end">{item.votes}</td>
+                    <td className="flex justify-end">{item.percent ? item.percent.toFixed(1) : 0}%</td>
                     <td className="flex justify-end">
-                      {item.percent ? item.percent.toFixed() : 0}
-                    </td>
-                    <td className="flex justify-end">
-                      {(
-                        (item.percent / 100) *
-                        currentRound?.assigned_vote
-                      ).toFixed()}
+                      {((item.percent / 100) * currentRound?.assigned_vote).toFixed()}
                     </td>
                   </tr>
                 );
@@ -108,6 +101,6 @@ export default function RealtimeStats({
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 }
