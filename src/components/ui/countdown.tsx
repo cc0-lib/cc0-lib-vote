@@ -38,7 +38,7 @@ const CountDown = ({ date }: CountDownProps) => {
 
   return (
     <Suspense fallback={<div>D:H:M:S</div>}>
-      <div className="inline-flex rounded-sm border border-border bg-prim px-8">
+      <div className="inline-flex justify-center rounded-sm border border-border bg-prim px-8">
         {countDown && countDown.seconds >= 0 ? (
           <SplitLetters text={`${countDown.days}D:${countDown.hours}H:${countDown.minutes}M`} />
         ) : (

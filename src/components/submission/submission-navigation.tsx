@@ -42,7 +42,7 @@ export const SubmissionNavigation = ({ submissions, coverData, setCoverData }: P
           </button>
         </div>
       ) : (
-        <div className="absolute top-[16%] z-10 h-[50%] w-full px-4">
+        <div className="absolute top-[10%] z-10 h-[50%] w-full px-4">
           <div className="relative top-[50%] flex justify-between">
             <button
               onClick={() => handleClick("prev")}

@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import { XIcon, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion as m } from "framer-motion";
-import { useMediaQuery } from "usehooks-ts";
+import { createClient } from "@/lib/supabase/client";
+import { getCurrentRound } from "@/app/stats/action";
 
 const loginAnimate = {
   hidden: { opacity: 0, y: 10 },
@@ -45,18 +46,15 @@ const menu = [
 ];
 
 const Header = () => {
-  const isMobile = useMediaQuery("(max-width: 640px)");
-  const { setShowAuthFlow, getNameService, setShowDynamicUserProfile, isAuthenticated, user } = useDynamicContext();
-  const [ens, setEns] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [currentRound, setCurrentRound] = useState<any>();
 
   useEffect(() => {
     (async () => {
-      const ens = await getNameService();
-
-      setEns(ens?.name || "");
+      const currentRound = await getCurrentRound();
+      setCurrentRound(currentRound);
     })();
-  }, [ens, isAuthenticated]);
+  }, []);
 
   return (
     <div className="z-[50] w-full">
@@ -64,13 +62,14 @@ const Header = () => {
         <Link href="/" className="hidden sm:flex">
           CC0-LIB ZINE - Special Edition 2
         </Link>
+        {/* Mobile */}
         <Link href="/" className="flex flex-col sm:hidden">
           <span>CC0-LIB ZINE</span>
           <span>Special Edition 2</span>
         </Link>
 
         <div className="hidden text-center sm:block">
-          <CountDown date="Feb 19, 2025 00:00:00" />
+          <CountDown date={currentRound?.data?.end_time} />
         </div>
         <ul className="flex items-center justify-between">
           {menu.map(({ name, href }) => (
@@ -79,20 +78,9 @@ const Header = () => {
             </li>
           ))}
           <li className="hidden sm:block">
-            <IsBrowser>
-              {isAuthenticated ? (
-                <button>
-                  <button className="uppercase" onClick={() => setShowDynamicUserProfile(true)}>
-                    {user?.username}
-                  </button>
-                  <DynamicUserProfile />
-                </button>
-              ) : (
-                <button onClick={() => setShowAuthFlow(true)}>LOGIN</button>
-              )}
-            </IsBrowser>
+            <Login />
           </li>
-          <button className={cn("transition duration-300 ease-in-out sm:hidden")} onClick={() => setIsOpen(!isOpen)}>
+          <button className="transition duration-300 ease-in-out sm:hidden" onClick={() => setIsOpen(!isOpen)}>
             <Menu className="size-10" />
           </button>
           {/* Mobile Nav */}
@@ -114,41 +102,47 @@ const Header = () => {
             )}
           >
             <button
-              className={cn(
-                "absolute right-9 top-9 z-50 transition duration-300 ease-in-out sm:hidden",
-                isOpen && "rotate-180",
-              )}
+              className="absolute right-9 top-9 z-50 transition duration-300 ease-in-out sm:hidden"
               onClick={() => setIsOpen(!isOpen)}
             >
               <XIcon className="size-10" />
             </button>
             {menu.map(({ name, href }) => (
-              <m.li variants={loginAnimate} key={name} className="hover:bg-prim">
+              <m.li variants={loginAnimate} key={name}>
                 <Link href={href}>{name}</Link>
               </m.li>
             ))}
-            <m.li variants={loginAnimate} className="hover:bg-prim">
-              <IsBrowser>
-                {isAuthenticated ? (
-                  <button>
-                    <button className="uppercase" onClick={() => setShowDynamicUserProfile(true)}>
-                      {user?.username}
-                    </button>
-                    <DynamicUserProfile />
-                  </button>
-                ) : (
-                  <button onClick={() => setShowAuthFlow(true)}>LOGIN</button>
-                )}
-              </IsBrowser>
+            <m.li variants={loginAnimate}>
+              <Login />
             </m.li>
           </m.div>
         </ul>
       </nav>
-      <div className="mt-2 flex justify-center sm:hidden">
-        <CountDown date="Feb 19, 2025 00:00:00" />
+      {/* Mobile */}
+      <div className="mt-2 flex items-center justify-center sm:hidden">
+        <CountDown date={currentRound?.data?.end_time} />
       </div>
     </div>
   );
 };
 
 export default Header;
+
+const Login = () => {
+  const { setShowAuthFlow, setShowDynamicUserProfile, isAuthenticated, user } = useDynamicContext();
+
+  return (
+    <IsBrowser>
+      {isAuthenticated ? (
+        <button>
+          <button className="uppercase" onClick={() => setShowDynamicUserProfile(true)}>
+            {user?.username}
+          </button>
+          <DynamicUserProfile />
+        </button>
+      ) : (
+        <button onClick={() => setShowAuthFlow(true)}>LOGIN</button>
+      )}
+    </IsBrowser>
+  );
+};
