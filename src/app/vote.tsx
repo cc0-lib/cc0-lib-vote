@@ -11,8 +11,6 @@ import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useUserDataStore } from "../store/store-provider";
-import { createClient } from "@/lib/supabase/client";
-import { ensResolver } from "@/lib/utils";
 
 export type SubmissionType = {
   id: number;
@@ -56,7 +54,7 @@ const Vote = ({ submissions }: Props) => {
   const handleVote = async (action: "vote" | "unvote") => {
     const userId = userStore?.loginData?.id;
     if (!userAddress || !userId) {
-      alert("Please connect wallet or login to vote");
+      alert("Please login to vote");
       return;
     }
 
