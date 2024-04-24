@@ -54,6 +54,7 @@ const Vote = ({ submissions }: Props) => {
   const handleVote = async (action: "vote" | "unvote") => {
     const userId = userStore?.loginData?.id;
     if (!userAddress || !userId) {
+      setVoted(false);
       alert("Please login to vote");
       return;
     }
@@ -62,6 +63,7 @@ const Vote = ({ submissions }: Props) => {
       if (userStore.voteCountData.votes < MAX_VOTE_PER_USER) {
         await castVote(coverData.id, userAddress);
         userStore.addVote(coverData.id);
+        setVoted(true);
         fetchVote();
       } else {
         alert("You have already voted the maximum number of times");
@@ -69,6 +71,7 @@ const Vote = ({ submissions }: Props) => {
     } else {
       await revertVote(coverData.id, userId);
       userStore.removeVote(coverData.id);
+      setVoted(false);
       fetchVote();
     }
   };
@@ -123,16 +126,14 @@ const Vote = ({ submissions }: Props) => {
       {!previewMode && (
         <>
           <SubmissionContainer>
-            {coverData && (
-              <Submission voted={voted} coverData={coverData} setVoted={setVoted} handleVote={handleVote} />
-            )}
+            {coverData && <Submission voted={voted} coverData={coverData} handleVote={handleVote} />}
           </SubmissionContainer>
 
           <SubmissionNavigation submissions={submissions} coverData={coverData} setCoverData={setCoverData} />
         </>
       )}
 
-      {/* <BookCover bookMaterial={bookMaterial!} /> */}
+      <BookCover bookMaterial={bookMaterial!} />
     </>
   );
 };

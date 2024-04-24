@@ -12,11 +12,11 @@ const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
   return (
     <div
       className={cn(
-        "pointer-events-none flex h-[30vh] w-full flex-col items-center md:h-[80vh] md:justify-center",
+        "pointer-events-none absolute top-[30%] h-[30vh] w-full flex-col items-center sm:relative sm:flex  sm:h-[80vh] md:justify-center",
         !previewMode && "-translate-y-[10vh]",
       )}
     >
-      <Canvas className="debug">
+      <Canvas>
         <Scene bookMaterial={bookMaterial} />
       </Canvas>
     </div>
@@ -31,7 +31,7 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
   const boxRef = useRef<Mesh>(null);
   const [clicked, setClicked] = useState(false);
 
-  let scale = isMobile ? new Vector3(11, 11, 0.2) : new Vector3(15, 15, 0.2);
+  let scale = isMobile ? new Vector3(9, 9, 0.2) : new Vector3(15, 15, 0.2);
   let position = isMobile ? new Vector3(0, 0, 0) : new Vector3(0, 0, 0);
   let contantShadow = isMobile ? new Vector3(0, -1, 0) : new Vector3(0, -3, 0);
 

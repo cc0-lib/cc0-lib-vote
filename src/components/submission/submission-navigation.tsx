@@ -42,8 +42,8 @@ export const SubmissionNavigation = ({ submissions, coverData, setCoverData }: P
           </button>
         </div>
       ) : (
-        <div className="absolute z-10 h-screen w-full px-4">
-          <div className="relative top-[30%] flex justify-between">
+        <div className="absolute top-[16%] z-10 h-[50%] w-full px-4">
+          <div className="relative top-[50%] flex justify-between">
             <button
               onClick={() => handleClick("prev")}
               className="pointer-events-auto rounded bg-zinc-100 px-4 py-1 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"

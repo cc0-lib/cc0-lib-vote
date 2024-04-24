@@ -6,13 +6,11 @@ import Link from "next/link";
 
 const Submission = ({
   coverData,
-  setVoted,
   handleVote,
   voted,
 }: {
   coverData: SubmissionType;
   voted: boolean;
-  setVoted: (v: boolean) => void;
   handleVote: (action: "vote" | "unvote") => void;
 }) => {
   return (
@@ -31,7 +29,6 @@ const Submission = ({
             <button
               onClick={() => {
                 handleVote("unvote");
-                setVoted(false);
               }}
               className="w-20 rounded px-4 py-1 text-red-500 ring-1 ring-red-500 hover:bg-red-500 hover:text-zinc-100 hover:ring-red-700 sm:w-28 sm:rounded-md sm:px-8 md:py-2"
             >
@@ -41,7 +38,6 @@ const Submission = ({
             <button
               onClick={() => {
                 handleVote("vote");
-                setVoted(true);
               }}
               className="w-20 rounded bg-prim px-4 py-1 text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-prim hover:ring-zinc-700 sm:w-28 sm:rounded-md sm:px-8 sm:py-2"
             >
