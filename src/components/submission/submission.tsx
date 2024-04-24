@@ -33,7 +33,7 @@ const Submission = ({
                 handleVote("unvote");
                 setVoted(false);
               }}
-              className="w-20 rounded px-4 py-1 text-red-500 ring-1 ring-red-500 hover:bg-red-500 hover:text-zinc-100 hover:ring-red-700 md:w-28 md:rounded-md md:px-8 md:py-2"
+              className="w-20 rounded px-4 py-1 text-red-500 ring-1 ring-red-500 hover:bg-red-500 hover:text-zinc-100 hover:ring-red-700 sm:w-28 sm:rounded-md sm:px-8 md:py-2"
             >
               UNVOTE
             </button>
@@ -43,7 +43,7 @@ const Submission = ({
                 handleVote("vote");
                 setVoted(true);
               }}
-              className="w-20 rounded bg-prim px-4 py-1 text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-prim hover:ring-zinc-700 md:w-28 md:rounded-md md:px-8 md:py-2"
+              className="w-20 rounded bg-prim px-4 py-1 text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-prim hover:ring-zinc-700 sm:w-28 sm:rounded-md sm:px-8 sm:py-2"
             >
               VOTE
             </button>

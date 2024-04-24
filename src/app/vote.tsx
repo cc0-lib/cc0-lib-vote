@@ -132,7 +132,7 @@ const Vote = ({ submissions }: Props) => {
         </>
       )}
 
-      <BookCover bookMaterial={bookMaterial!} />
+      {/* <BookCover bookMaterial={bookMaterial!} /> */}
     </>
   );
 };

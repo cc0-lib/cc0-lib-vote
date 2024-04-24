@@ -4,7 +4,7 @@ import Link from "next/link";
 import CountDown from "../ui/countdown";
 import { DynamicUserProfile, IsBrowser, useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useEffect, useState } from "react";
-import { XIcon, AlignJustify, Menu } from "lucide-react";
+import { XIcon, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion as m } from "framer-motion";
 import { useMediaQuery } from "usehooks-ts";
@@ -57,8 +57,9 @@ const Header = () => {
       setEns(ens?.name || "");
     })();
   }, [ens, isAuthenticated]);
+
   return (
-    <nav className="z-[50] w-full grid-cols-3 items-center justify-between sm:grid">
+    <nav className="z-[50] flex w-full grid-cols-3 items-center justify-between sm:grid">
       <Link href="/" className="hidden sm:flex">
         CC0-LIB ZINE - Special Edition 2
       </Link>
@@ -66,16 +67,17 @@ const Header = () => {
         <span>CC0-LIB ZINE</span>
         <span>Special Edition 2</span>
       </Link>
-      <div className="text-center">
+
+      <div className="hidden text-center sm:block">
         <CountDown date="Feb 19, 2025 00:00:00" />
       </div>
-      <ul className="hidden items-center justify-between sm:flex">
+      <ul className="flex items-center justify-between">
         {menu.map(({ name, href }) => (
-          <li key={name}>
+          <li key={name} className="hidden sm:block">
             <Link href={href}>{name}</Link>
           </li>
         ))}
-        <li>
+        <li className="hidden sm:block">
           <IsBrowser>
             {isAuthenticated ? (
               <button>
@@ -89,11 +91,8 @@ const Header = () => {
             )}
           </IsBrowser>
         </li>
-        <button
-          className={cn("absolute z-[60] transition duration-300 ease-in-out", isOpen && "rotate-180")}
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <XIcon className="size-10" /> : <Menu className="size-10" />}
+        <button className={cn("transition duration-300 ease-in-out sm:hidden")} onClick={() => setIsOpen(!isOpen)}>
+          <Menu className="size-10" />
         </button>
         {/* Mobile Nav */}
         <m.div
@@ -113,6 +112,15 @@ const Header = () => {
             !isOpen && "hidden",
           )}
         >
+          <button
+            className={cn(
+              "absolute right-9 top-9 z-50 transition duration-300 ease-in-out sm:hidden",
+              isOpen && "rotate-180",
+            )}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <XIcon className="size-10" />
+          </button>
           {menu.map(({ name, href }) => (
             <m.li variants={loginAnimate} key={name} className="hover:bg-prim">
               <Link href={href}>{name}</Link>
