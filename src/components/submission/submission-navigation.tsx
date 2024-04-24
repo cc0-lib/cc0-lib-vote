@@ -1,3 +1,5 @@
+"use client";
+
 import type { SubmissionType } from "@/app/vote";
 import { useMediaQuery } from "usehooks-ts";
 

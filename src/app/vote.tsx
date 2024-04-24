@@ -41,7 +41,7 @@ type Props = {
 };
 
 const Vote = ({ submissions }: Props) => {
-  const { primaryWallet, isAuthenticated, authToken } = useDynamicContext();
+  const { primaryWallet, isAuthenticated } = useDynamicContext();
   const userStore = useUserDataStore((state) => state);
 
   const [coverImage, setCoverImage] = useState(submissions[0].image);
@@ -88,8 +88,14 @@ const Vote = ({ submissions }: Props) => {
   }
 
   const userId = userStore?.loginData?.id;
+
   const fetchVote = async () => {
-    if (!userId) return;
+    if (!userId) {
+      userStore.storeUserVotes([]);
+      setVoted(false);
+      return;
+    }
+
     const { data, error } = (await getUserVotes(userId)) as {
       data: UserVotes[];
       error: null;
@@ -103,6 +109,7 @@ const Vote = ({ submissions }: Props) => {
       const submissionIds = data.map((i) => i.submission.id);
       userStore.storeUserVotes(submissionIds);
       userStore.storeVotesCount(data.length);
+      setVoted(submissionIds.some((id) => id === coverData.id));
     }
 
     const isVoted = userStore.votesData.some((id) => id === coverData.id);
@@ -112,10 +119,6 @@ const Vote = ({ submissions }: Props) => {
   useEffect(() => {
     setCoverImage(coverData.image);
   }, [coverData, coverImage]);
-
-  useEffect(() => {
-    fetchVote();
-  }, [isAuthenticated, authToken]);
 
   useEffect(() => {
     fetchVote();

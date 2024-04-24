@@ -23,7 +23,7 @@ export default async function Round() {
           <SplitLetters text="All Round" />
         </div>
 
-        <div className="mb-8 mt-8 flex flex-1 flex-col items-center justify-center space-y-8 md:mb-0 md:mt-0 md:space-y-4">
+        <div className="my-8 flex flex-1 flex-col items-center justify-center space-y-8 md:my-0 md:space-y-4">
           <div className="space-y-8 md:flex md:justify-center md:space-x-4 md:space-y-0">
             {topSection.map((round) => (
               <Fragment key={round.id}>

@@ -87,6 +87,8 @@ export async function castVote(submissionId: number, userAddress: string) {
     }
   }
 
+  revalidatePath("/leaderboard");
+
   return {
     data: "success",
     error: null,
@@ -107,6 +109,8 @@ export async function revertVote(voteId: number, userId: number) {
   if (error) {
     console.error("revertVote error", error);
   }
+
+  revalidatePath("/leaderboard");
 
   return;
 }

@@ -16,7 +16,7 @@ const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
         !previewMode && "-translate-y-[10vh]",
       )}
     >
-      <Canvas>
+      <Canvas className="size-full">
         <Scene bookMaterial={bookMaterial} />
       </Canvas>
     </div>
@@ -54,17 +54,17 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
       <Environment preset="city" background={false} blur={0.8} />
       <ambientLight intensity={2} />
 
-      <group scale={isMobile ? 1 : 0.3} position={position}>
+      <group scale={isMobile ? 1 : 0.3} position={[0, 0, 0]}>
         <Box
           onClick={() => setClicked(!clicked)}
           ref={boxRef}
           position={[0, 0, 0]}
-          scale={scale}
+          scale={isMobile ? [9, 9, 0.2] : [15, 15, 0.2]}
           material={bookMaterial}
         />
       </group>
 
-      <ContactShadows position={contantShadow} opacity={1.5} scale={20} blur={2} far={4.5} />
+      <ContactShadows position={isMobile ? [0, -1, 0] : [0, -3, 0]} opacity={1.5} scale={20} blur={2} far={4.5} />
 
       {previewMode && <CameraControls />}
 

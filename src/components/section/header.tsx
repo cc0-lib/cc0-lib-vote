@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { XIcon, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion as m } from "framer-motion";
-import { createClient } from "@/lib/supabase/client";
 import { getCurrentRound } from "@/app/stats/action";
 
 const loginAnimate = {
@@ -134,12 +133,12 @@ const Login = () => {
   return (
     <IsBrowser>
       {isAuthenticated ? (
-        <button>
+        <div>
           <button className="uppercase" onClick={() => setShowDynamicUserProfile(true)}>
             {user?.username}
           </button>
           <DynamicUserProfile />
-        </button>
+        </div>
       ) : (
         <button onClick={() => setShowAuthFlow(true)}>LOGIN</button>
       )}
