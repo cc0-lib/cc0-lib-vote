@@ -1,13 +1,11 @@
 import type { SubmissionType } from "@/app/vote";
 import { truncateAddress } from "@/lib/utils";
-import { useUserDataStore } from "@/store/store-provider";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 
 const Submission = ({
   coverData,
   handleVote,
-  voted,
   optimisticUserVotes,
 }: {
   coverData: SubmissionType;

@@ -120,6 +120,9 @@ const Vote = ({ submissions }: Props) => {
     if (data && data?.length > 0) {
       userStore.storeUserVotes(data.map((i) => i.submission.id));
       userStore.storeVotesCount(data.length);
+    } else {
+      userStore.storeUserVotes([]);
+      userStore.storeVotesCount(0);
     }
   };
 
