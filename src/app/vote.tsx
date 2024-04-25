@@ -41,13 +41,13 @@ type Props = {
   submissions: SubmissionType[];
 };
 
-function reducer(
+const reducer = (
   state: number[],
   action: {
     type: "vote" | "unvote";
     payload: number;
   },
-) {
+) => {
   switch (action.type) {
     case "vote":
       return [...state, action.payload];
@@ -56,7 +56,7 @@ function reducer(
     default:
       return state;
   }
-}
+};
 
 const Vote = ({ submissions }: Props) => {
   const { primaryWallet } = useDynamicContext();
@@ -71,14 +71,16 @@ const Vote = ({ submissions }: Props) => {
   const userId = userStore?.loginData?.id;
   const userAddress = primaryWallet?.address ?? "";
 
-  const bookMaterial = useMemo(() => {
-    return new MeshStandardMaterial({
+  let bookMaterial;
+
+  if (typeof window !== "undefined") {
+    bookMaterial = new MeshStandardMaterial({
       map: new TextureLoader().load(coverImage),
       metalness: 0.5,
       roughnessMap: new TextureLoader().load(coverImage),
       roughness: 0.6,
     });
-  }, [coverImage]);
+  }
 
   const handleVote = async (action: "vote" | "unvote") => {
     if (!userAddress || !userId) {
@@ -119,9 +121,6 @@ const Vote = ({ submissions }: Props) => {
       userStore.storeUserVotes(data.map((i) => i.submission.id));
       userStore.storeVotesCount(data.length);
     }
-
-    const isVoted = userStore.votesData.some((id) => id === coverData.id);
-    setVoted(isVoted);
   };
 
   useEffect(() => {
