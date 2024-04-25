@@ -2,7 +2,6 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
 
 interface Leaderboard {
   artist: string;

@@ -7,6 +7,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { Material, MathUtils, Mesh, Vector3 } from "three";
 import { useMediaQuery } from "usehooks-ts";
+import SplitLetters from "../anim/split-letters";
 
 const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
   return (
@@ -30,10 +31,6 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
 
   const boxRef = useRef<Mesh>(null);
   const [clicked, setClicked] = useState(false);
-
-  let scale = isMobile ? new Vector3(9, 9, 0.2) : new Vector3(15, 15, 0.2);
-  let position = isMobile ? new Vector3(0, 0, 0) : new Vector3(0, 0, 0);
-  let contantShadow = isMobile ? new Vector3(0, -1, 0) : new Vector3(0, -3, 0);
 
   useFrame(({ clock }) => {
     if (!previewMode) {

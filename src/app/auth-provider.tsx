@@ -1,47 +1,49 @@
 "use client";
 import React from "react";
-import {
-  DynamicContextProvider,
-  EthereumWalletConnectors,
-  UserProfile,
-  Wallet,
-} from "../lib/dynamic";
+import { DynamicContextProvider, EthereumWalletConnectors, UserProfile, Wallet } from "../lib/dynamic";
 import { addUserAction } from "./action";
 import { useUserDataStore } from "../store/store-provider";
 
-export default function AuthProvider({
+export default function AuthProviderComponent({
   children,
-  environmentId,
+  environmentId: providerEnvironmentId,
 }: {
   children: React.ReactNode;
   environmentId: string;
 }) {
   const userStore = useUserDataStore((state) => state);
 
-  const addUser = async (
-    user: UserProfile,
-    primaryWallet: Wallet | null,
-    isAuthenticated: boolean,
-  ) => {
-    if (!isAuthenticated || !user) {
-      return;
-    }
+  const onAuthSuccess = async ({
+    user: authenticatedUser,
+    primaryWallet,
+    isAuthenticated,
+  }: {
+    user: UserProfile;
+    primaryWallet: Wallet | null;
+    isAuthenticated: boolean;
+  }) => {
+    if (isAuthenticated && authenticatedUser) {
+      const userResponse = await addUserAction(
+        {
+          email: authenticatedUser.email,
+          username: authenticatedUser.username,
+          userId: authenticatedUser.userId,
+        },
+        {
+          address: primaryWallet?.address || "",
+        },
+      );
 
-    // structuredClone failed because there is function on wallet object
-    const userResponse = await addUserAction(
-      { email: user.email, username: user.username, userId: user.userId },
-      { address: primaryWallet ? primaryWallet?.address : "" },
-    );
-
-    if (userResponse) {
-      userStore.storeUserData({
-        id: userResponse.id,
-        email: userResponse.email,
-      });
+      if (userResponse) {
+        userStore.storeUserData({
+          id: userResponse.id,
+          email: userResponse.email,
+        });
+      }
     }
   };
 
-  const clearPersistence = () => {
+  const onLogout = () => {
     userStore.clearUserData();
     userStore.clearUserVotes();
     userStore.clearVotesCount();
@@ -50,12 +52,11 @@ export default function AuthProvider({
   return (
     <DynamicContextProvider
       settings={{
-        environmentId,
+        environmentId: providerEnvironmentId,
         walletConnectors: [EthereumWalletConnectors],
         eventsCallbacks: {
-          onAuthSuccess: ({ user, primaryWallet, isAuthenticated }) =>
-            addUser(user, primaryWallet, isAuthenticated),
-          onLogout: () => clearPersistence(),
+          onAuthSuccess,
+          onLogout,
         },
       }}
     >

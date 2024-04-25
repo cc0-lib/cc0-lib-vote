@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <Container>
       <Header />
-      <Three submissions={submissions as any} />
+      <Three submissions={submissions!} />
       <Footer />
     </Container>
   );

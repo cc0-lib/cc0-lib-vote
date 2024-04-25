@@ -1,9 +1,9 @@
 "use server";
 import { adminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath, unstable_cache } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { getCurrentRound } from "./stats/action";
-import { ensResolver, truncateAddress } from "@/lib/utils";
+import { SubmissionType, UserVotes } from "./vote";
 
 interface User {
   email: string | undefined;
@@ -52,42 +52,26 @@ export async function addUserAction(user: User, wallet: WalletCB) {
   }
 }
 
-export async function castVote(submissionId: number, userAddress: string) {
+export async function castVote(submissionId: number, userId: number) {
   const { data: currentRound } = await getCurrentRound();
-  const { data: userResponse, error: userError } = await adminClient
-    .from("user")
-    .select("id")
-    .eq("address", userAddress)
+
+  const { error } = await adminClient
+    .from("vote")
+    .insert({
+      user: userId,
+      submission_id: submissionId,
+      round: currentRound?.id,
+    })
+    .select()
     .single();
 
-  if (userError) {
+  if (error) {
+    console.error("castVote", error);
     return {
       data: null,
-      error: userError,
+      error,
     };
   }
-
-  if (userResponse) {
-    const { error } = await adminClient
-      .from("vote")
-      .insert({
-        user: userResponse.id,
-        submission_id: submissionId,
-        round: currentRound?.id,
-      })
-      .select()
-      .single();
-
-    if (error) {
-      console.error("castVote", error);
-      return {
-        data: null,
-        error,
-      };
-    }
-  }
-
-  revalidatePath("/leaderboard");
 
   return {
     data: "success",
@@ -96,21 +80,11 @@ export async function castVote(submissionId: number, userAddress: string) {
 }
 
 export async function revertVote(voteId: number, userId: number) {
-  const { error, data, status } = await adminClient
-    .from("vote")
-    .delete()
-    .eq("submission_id", voteId)
-    .eq("user", userId);
-
-  console.log("revertVote data", data);
-  console.log("revertVote status", status);
-  console.log("revertVote error", error);
+  const { error } = await adminClient.from("vote").delete().eq("submission_id", voteId).eq("user", userId);
 
   if (error) {
     console.error("revertVote error", error);
   }
-
-  revalidatePath("/leaderboard");
 
   return;
 }
@@ -125,7 +99,8 @@ export async function getUserVotes(userId: number) {
       submission(id)
       `,
     )
-    .eq("user", userId);
+    .eq("user", userId)
+    .returns<UserVotes[]>();
 
   if (error) {
     console.error("getUserVotes", error);
@@ -145,7 +120,8 @@ export async function getSubmissions() {
   const { data: submissions, error } = await supabase
     .from("submission")
     .select()
-    .eq("round", currentRound?.id || 1);
+    .eq("round", currentRound?.id || 1)
+    .returns<SubmissionType[]>();
 
   if (error) {
     return {

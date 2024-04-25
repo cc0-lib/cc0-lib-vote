@@ -8,10 +8,12 @@ const Submission = ({
   coverData,
   handleVote,
   voted,
+  optimisticUserVotes,
 }: {
   coverData: SubmissionType;
   voted: boolean;
   handleVote: (action: "vote" | "unvote") => void;
+  optimisticUserVotes: number[];
 }) => {
   return (
     <>
@@ -25,7 +27,7 @@ const Submission = ({
           <Link href={coverData.url} target="_blank" rel="noreferrer noopener">
             <Link2 className="size-4" />
           </Link>
-          {voted ? (
+          {optimisticUserVotes.includes(coverData.id) ? (
             <button
               onClick={() => {
                 handleVote("unvote");
