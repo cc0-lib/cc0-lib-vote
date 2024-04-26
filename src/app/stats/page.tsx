@@ -6,6 +6,7 @@ import { getCurrentRound, getStats } from "./action";
 import { getVotes } from "../leaderboard/action";
 import RealtimeStats from "./realtime-stats";
 import SplitLetters from "@/components/anim/split-letters";
+import Refresh from "../leaderboard/refresh";
 
 export default async function Stats() {
   const { data } = await getStats();
@@ -15,12 +16,17 @@ export default async function Stats() {
   return (
     <Container>
       <Header />
-      <div className="mt-5 flex w-full flex-1 flex-col justify-start">
-        <div className="w-full font-chakra text-4xl font-bold md:text-6xl">
-          <SplitLetters text="Stats" />
-        </div>
+      <div className="mt-5 flex w-full flex-1 flex-col justify-start sm:mt-10">
+        <div className="flex w-full items-center justify-between">
+          <div>
+            <div className="w-full font-chakra text-4xl font-bold md:text-6xl">
+              <SplitLetters text="Stats" />
+            </div>
 
-        <h3>{currentRound?.title}</h3>
+            <h3 className="pl-1">{currentRound?.title}</h3>
+          </div>
+          <Refresh />
+        </div>
 
         <RealtimeStats currentRound={currentRound} votesData={data} totalVotes={totalVotes} />
       </div>

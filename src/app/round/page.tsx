@@ -18,7 +18,7 @@ export default async function Round() {
     <Container>
       <Header />
 
-      <div className="mt-5 flex w-full flex-1 flex-col justify-start">
+      <div className="mt-10 flex w-full flex-1 flex-col justify-start">
         <div className="w-full font-chakra text-4xl font-bold md:text-6xl">
           <SplitLetters text="All Round" />
         </div>

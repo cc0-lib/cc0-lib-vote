@@ -1,6 +1,6 @@
 "use client";
 
-import { createUserDataStore, UserDataStore } from "@/store/store";
+import { createUserDataStore, UserDataStore } from "@/store/user-store";
 import { createContext, useContext, useRef } from "react";
 import { StoreApi, useStore } from "zustand";
 

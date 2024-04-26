@@ -2,19 +2,24 @@ import type { SubmissionType } from "@/app/vote";
 import { truncateAddress } from "@/lib/utils";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
+import { Fragment } from "react";
 
 const Submission = ({
   coverData,
   handleVote,
-  optimisticUserVotes,
+  userVotes,
 }: {
   coverData: SubmissionType;
-  voted: boolean;
   handleVote: (action: "vote" | "unvote") => void;
-  optimisticUserVotes: number[];
+  userVotes: number[];
 }) => {
   return (
     <>
+      {/* Mobile */}
+      <div className="flex">
+        <h1>test</h1>
+      </div>
+
       <h1 className="font-chakra text-lg font-bold uppercase md:text-2xl">{coverData.title}</h1>
       <div className="size-full min-h-12 max-w-xs text-xs font-normal normal-case md:max-w-sm">{coverData.tldr}</div>
       <div className="mt-4 flex w-full flex-1 flex-row items-center justify-between">
@@ -25,7 +30,7 @@ const Submission = ({
           <Link href={coverData.url} target="_blank" rel="noreferrer noopener">
             <Link2 className="size-4" />
           </Link>
-          {optimisticUserVotes.includes(coverData.id) ? (
+          {userVotes.includes(coverData.id) ? (
             <button
               onClick={() => {
                 handleVote("unvote");

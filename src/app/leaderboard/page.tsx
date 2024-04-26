@@ -10,7 +10,6 @@ import RealtimeVotes from "./realtime-votes";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Refresh from "./refresh";
-import { revalidatePath } from "next/cache";
 
 export default async function Leaderboard() {
   const { data: currentRound } = await getCurrentRound();
@@ -22,23 +21,27 @@ export default async function Leaderboard() {
     <Container>
       <Header />
 
-      <div className="mt-5 flex w-full flex-1 flex-col justify-start">
-        <div className="w-full font-chakra text-4xl font-bold md:text-6xl">
-          <SplitLetters text="leaderboard" />
-        </div>
+      <div className="mt-5 flex w-full flex-1 flex-col justify-start sm:mt-10">
+        <div className="flex w-full items-center justify-between">
+          <div>
+            <div className="w-full font-chakra text-4xl font-bold sm:text-6xl">
+              <SplitLetters text="leaderboard" />
+            </div>
 
-        <div className="flex w-full justify-between font-semibold">
-          Total votes:
-          <RealtimeVotes totalVotes={roundTotalVotes} />
+            <div className="pl-1 font-semibold">
+              Total votes:
+              <RealtimeVotes totalVotes={roundTotalVotes} />
+            </div>
+          </div>
           <Refresh />
         </div>
 
         {/* Mobile */}
         {leaderboards && leaderboards.length > 0 && (
           <>
-            <div className="my-10 flex w-full flex-col space-y-8 md:hidden">
+            <div className="my-10 flex w-full flex-col space-y-8 sm:hidden">
               {leaderboards?.map((item) => (
-                <div className="flex justify-between" key={item.id}>
+                <div className="flex flex-1 justify-between" key={item.id}>
                   <Link href={item.url} target="_blank">
                     <Image
                       className="size-36 rounded-md shadow-md"
@@ -49,12 +52,12 @@ export default async function Leaderboard() {
                     />
                   </Link>
 
-                  <div className="flex h-20 w-3/6 font-chakra">
+                  <div className="flex h-20 max-w-[50%] justify-between font-chakra">
                     <div className="flex w-full justify-between gap-2">
                       <div className="text-[3.5rem] font-semibold">{item.percentage}%</div>
-                      <div className="flex h-full flex-col justify-center">
-                        <div className="box-content text-2xl leading-none">{item.totalVotes}</div>
-                        <div className="text-center font-mono tracking-tighter">
+                      <div className="mt-3 flex h-full flex-col items-end justify-start">
+                        <div className="inset-0 p-0 text-2xl">{item.totalVotes}</div>
+                        <div className="inset-0 text-center font-mono font-bold tracking-tighter">
                           {item.totalVotes > 1 ? "Votes" : "Vote"}
                         </div>
                       </div>

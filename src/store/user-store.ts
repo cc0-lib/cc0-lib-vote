@@ -12,8 +12,8 @@ export interface UserDataStore {
   voteCountData: {
     votes: number;
   };
-  removeVote: (id: number) => void;
-  addVote: (data: number) => void;
+  unvote: (id: number) => void;
+  vote: (data: number) => void;
   storeVotesCount: (votes: number) => void;
   clearVotesCount: () => void;
   currentRound: string;
@@ -33,12 +33,12 @@ export const createUserDataStore = () => {
             votesData: data,
           })),
         clearUserVotes: () => set(() => ({ votesData: [] })),
-        removeVote: (removedId) =>
+        unvote: (removedId) =>
           set((state) => ({ votesData: state.votesData.filter((submissionId) => submissionId !== removedId) })),
         voteCountData: {
           votes: 0,
         },
-        addVote: (data) => set((state) => ({ votesData: [...state.votesData, data] })),
+        vote: (data) => set((state) => ({ votesData: [...state.votesData, data] })),
         storeVotesCount: (votes: number) => set({ voteCountData: { votes } }),
         updateVotesCount: () => set({ voteCountData: { votes: get().voteCountData.votes + 1 } }),
         clearVotesCount: () => set({ voteCountData: { votes: 0 } }),

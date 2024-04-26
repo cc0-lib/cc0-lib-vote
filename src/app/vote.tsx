@@ -11,6 +11,7 @@ import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useUserDataStore } from "../store/store-provider";
+import { useShallow } from "zustand/react/shallow";
 
 export type SubmissionType = {
   id: number;
@@ -41,23 +42,6 @@ type Props = {
   submissions: SubmissionType[];
 };
 
-const reducer = (
-  state: number[],
-  action: {
-    type: "vote" | "unvote";
-    payload: number;
-  },
-) => {
-  switch (action.type) {
-    case "vote":
-      return [...state, action.payload];
-    case "unvote":
-      return state.filter((submissionId) => submissionId !== action.payload);
-    default:
-      return state;
-  }
-};
-
 const Vote = ({ submissions }: Props) => {
   const { primaryWallet } = useDynamicContext();
   const userStore = useUserDataStore((state) => state);
@@ -65,8 +49,6 @@ const Vote = ({ submissions }: Props) => {
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState<SubmissionType>(submissions[0]);
   const [voted, setVoted] = useState(false);
-
-  const [optimisticUserVotes, dispatch] = useOptimistic(userStore.votesData, reducer);
 
   const userId = userStore?.loginData?.id;
   const userAddress = primaryWallet?.address ?? "";
@@ -91,14 +73,14 @@ const Vote = ({ submissions }: Props) => {
 
     if (action === "vote") {
       if (userStore.voteCountData.votes < MAX_VOTE_PER_USER) {
-        dispatch({ type: "vote", payload: coverData.id });
+        userStore.vote(coverData.id);
         await castVote(coverData.id, userId);
         fetchVote();
       } else {
         alert("You have already voted the maximum number of times");
       }
     } else {
-      dispatch({ type: "unvote", payload: coverData.id });
+      userStore.unvote(coverData.id);
       await revertVote(coverData.id, userId);
       fetchVote();
     }
@@ -139,14 +121,7 @@ const Vote = ({ submissions }: Props) => {
       {!previewMode && (
         <>
           <SubmissionContainer>
-            {coverData && (
-              <Submission
-                voted={voted}
-                optimisticUserVotes={optimisticUserVotes}
-                coverData={coverData}
-                handleVote={handleVote}
-              />
-            )}
+            {coverData && <Submission handleVote={handleVote} userVotes={userStore.votesData} coverData={coverData} />}
           </SubmissionContainer>
 
           <SubmissionNavigation submissions={submissions} coverData={coverData} setCoverData={setCoverData} />

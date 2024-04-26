@@ -1,10 +1,11 @@
 "use client";
+
 import { getUserVotes } from "@/app/action";
 import { getCurrentRound } from "@/app/stats/action";
 import { useUserDataStore } from "@/store/store-provider";
-import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useDynamicContext, IsBrowser } from "@dynamic-labs/sdk-react-core";
 import { useEffect } from "react";
+import TotalVoted from "./total-voted";
 
 const Footer = () => {
   const { isAuthenticated, authToken } = useDynamicContext();
@@ -36,9 +37,7 @@ const Footer = () => {
     <IsBrowser>
       <div className="flex w-full items-center justify-center md:flex-row md:justify-between">
         <div className="hidden md:block">cover art {userDataStore.currentRound} community voting</div>
-        {isAuthenticated && authToken && (
-          <div>{`total voted: ${userDataStore.voteCountData.votes}/${MAX_VOTE_PER_USER}`}</div>
-        )}
+        {isAuthenticated && authToken && <TotalVoted />}
       </div>
     </IsBrowser>
   );

@@ -1,7 +1,6 @@
 "use server";
-import { adminClient } from "@/lib/supabase/admin";
+import { createClient as createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
 import { getCurrentRound } from "./stats/action";
 import { SubmissionType, UserVotes } from "./vote";
 
@@ -17,6 +16,7 @@ interface WalletCB {
 
 export async function addUserAction(user: User, wallet: WalletCB) {
   const supabase = createClient();
+  const adminClient = createAdminClient();
   if (!user.email) {
     return;
   }
@@ -53,6 +53,8 @@ export async function addUserAction(user: User, wallet: WalletCB) {
 }
 
 export async function castVote(submissionId: number, userId: number) {
+  const adminClient = createAdminClient();
+
   const { data: currentRound } = await getCurrentRound();
 
   const { error } = await adminClient
@@ -80,6 +82,8 @@ export async function castVote(submissionId: number, userId: number) {
 }
 
 export async function revertVote(voteId: number, userId: number) {
+  const adminClient = createAdminClient();
+
   const { error } = await adminClient.from("vote").delete().eq("submission_id", voteId).eq("user", userId);
 
   if (error) {

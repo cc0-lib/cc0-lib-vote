@@ -29,14 +29,14 @@ export async function getLeaderboards(currentRound: number) {
       ascending: true,
     });
 
-  const roundTotalVotes = await getVotes(currentRound);
-
   if (error) {
     return {
       data: null,
       error,
     };
   }
+
+  const roundTotalVotes = await getVotes(currentRound);
 
   const leaderboardsPromises: Promise<Leaderboard>[] = data.map(async (item: any) => {
     const { vote, artist } = item;
@@ -53,7 +53,7 @@ export async function getLeaderboards(currentRound: number) {
 
   const final = (await Promise.all(leaderboardsPromises))
     .sort((a, b) => b.totalVotes - a.totalVotes)
-    .filter((i) => i.totalVotes > 0); // remove no vote submissions
+    .filter((i) => i.totalVotes > 0);
 
   return {
     data: final,

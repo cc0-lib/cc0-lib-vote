@@ -1,6 +1,5 @@
 "use client";
 
-import SplitLetters from "@/components/anim/split-letters";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -53,21 +52,15 @@ export default function RealtimeStats({
       .subscribe();
 
     return () => {
-      supabase.removeChannel(votes);
+      supabase.removeChannel(votes).then((r) => {
+        console.log("Listening done");
+      });
     };
   }, [supabase]);
 
   return (
     <>
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <div className="flex justify-end gap-10 md:w-3/4">
-          <h3>
-            Total Votes: <span className="font-bold">{totalVotes}</span>
-          </h3>
-          <h3>
-            Votes For Round: <b>{currentRound?.assigned_vote}</b>
-          </h3>
-        </div>
         <table className="mt-4 md:w-3/4">
           <thead className="w-full">
             <tr className="grid h-10 grid-cols-5 font-extrabold">
