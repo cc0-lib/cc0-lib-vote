@@ -1,4 +1,4 @@
-import { SubmissionType, User, UserVotes } from "@/app/vote";
+import { User } from "@/app/vote";
 import { createStore } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -34,7 +34,9 @@ export const createUserDataStore = () => {
           })),
         clearUserVotes: () => set(() => ({ votesData: [] })),
         unvote: (removedId) =>
-          set((state) => ({ votesData: state.votesData.filter((submissionId) => submissionId !== removedId) })),
+          set((state) => ({
+            votesData: state.votesData.filter((submissionId) => submissionId !== removedId),
+          })),
         voteCountData: {
           votes: 0,
         },

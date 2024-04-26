@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useOptimistic, useState } from "react";
+import { useEffect, useState } from "react";
 import { MeshStandardMaterial, TextureLoader } from "three";
 import SubmissionContainer from "@/components/submission/submission-container";
 import BookCover from "@/components/submission/book-cover";
@@ -11,7 +11,6 @@ import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useUserDataStore } from "../store/store-provider";
-import { useShallow } from "zustand/react/shallow";
 
 export type SubmissionType = {
   id: number;
@@ -48,7 +47,6 @@ const Vote = ({ submissions }: Props) => {
 
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState<SubmissionType>(submissions[0]);
-  const [voted, setVoted] = useState(false);
 
   const userId = userStore?.loginData?.id;
   const userAddress = primaryWallet?.address ?? "";
@@ -66,7 +64,6 @@ const Vote = ({ submissions }: Props) => {
 
   const handleVote = async (action: "vote" | "unvote") => {
     if (!userAddress || !userId) {
-      setVoted(false);
       alert("Please login to vote");
       return;
     }
@@ -89,7 +86,6 @@ const Vote = ({ submissions }: Props) => {
   const fetchVote = async () => {
     if (!userId) {
       userStore.storeUserVotes([]);
-      setVoted(false);
       return;
     }
 

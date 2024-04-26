@@ -7,7 +7,6 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import { Material, MathUtils, Mesh, Vector3 } from "three";
 import { useMediaQuery } from "usehooks-ts";
-import SplitLetters from "../anim/split-letters";
 
 const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
   return (
