@@ -23,7 +23,7 @@ export default async function Leaderboard() {
 
       <div className="mt-5 flex w-full flex-1 flex-col justify-start sm:mt-10">
         <div className="flex w-full items-center justify-between">
-          <div>
+          <div className="sm:px-2">
             <div className="w-full font-chakra text-4xl font-bold sm:text-6xl">
               <SplitLetters text="leaderboard" />
             </div>
@@ -36,9 +36,9 @@ export default async function Leaderboard() {
           <Refresh />
         </div>
 
-        {/* Mobile */}
         {leaderboards && leaderboards.length > 0 && (
           <>
+            {/* Mobile */}
             <div className="my-10 flex w-full flex-col space-y-8 sm:hidden">
               {leaderboards?.map((item) => (
                 <div className="flex flex-1 justify-between" key={item.id}>
@@ -52,7 +52,7 @@ export default async function Leaderboard() {
                     />
                   </Link>
 
-                  <div className="flexh-20 min-w-[55%] max-w-[55%] flex-col justify-between pl-2">
+                  <div className="flex h-20 min-w-[55%] max-w-[55%] flex-col justify-between pl-2">
                     <div className="flex w-full justify-between gap-2 font-chakra">
                       <div className="text-[3.5rem] font-semibold">{item.percentage}%</div>
                       <div className="mt-3 flex h-full flex-col items-end justify-start">
@@ -108,10 +108,13 @@ export default async function Leaderboard() {
                   </div>
 
                   <div
-                    className={cn("flex w-1/2 items-center justify-center gap-5", leaderboards.length === 3 && "w-2/3")}
+                    className={cn(
+                      "flex max-w-[90%] items-center justify-center gap-5",
+                      leaderboards.length === 3 && "w-2/3",
+                    )}
                   >
                     {leaderboards.slice(1, 3).map(({ id, percentage, image, resolvedEns, title, totalVotes, url }) => (
-                      <div className="flex w-[400px] items-center font-chakra" key={id}>
+                      <div className="flex min-w-[400px] max-w-[600px] items-center font-chakra" key={id}>
                         <div className="flex size-36 items-center">
                           <Link href={url} target="_blank">
                             <Image className="rounded-md shadow-md" src={image} width={800} height={800} alt="winner" />

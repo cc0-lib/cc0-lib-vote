@@ -57,7 +57,7 @@ const Header = () => {
 
   return (
     <div className="z-[50] w-full">
-      <nav className="flex w-full grid-cols-3 items-center justify-between sm:grid">
+      <nav className="flex w-full items-center justify-between sm:grid sm:grid-cols-3">
         <Link href="/" className="hidden sm:flex">
           CC0-LIB ZINE - Special Edition 2
         </Link>
@@ -67,7 +67,7 @@ const Header = () => {
           <span className="leading-tight">Special Edition 2</span>
         </Link>
 
-        <div className="hidden text-center sm:block">
+        <div className="hidden w-full justify-center text-center sm:inline-flex">
           <CountDown date={currentRound?.data?.end_time} />
         </div>
         <ul className="flex items-center justify-between">
@@ -96,11 +96,11 @@ const Header = () => {
             initial="hidden"
             whileInView="visible"
             className={cn(
-              "fixed inset-0 z-50 flex min-h-screen w-full flex-col items-start justify-center gap-8 bg-white pl-8 font-chakra text-4xl [@media(min-width:390px)]:text-5xl font-semibold sm:hidden",
+              "fixed inset-0 z-50 flex min-h-screen w-full flex-col items-start justify-center gap-8 bg-white pl-8 font-chakra text-4xl font-semibold sm:hidden [@media(min-width:390px)]:text-5xl",
               !isOpen && "hidden",
             )}
           >
-            <div className="absolute right-0 top-0 px-8 py-8 z-50 transition duration-300 ease-in-out">
+            <div className="absolute right-0 top-0 z-50 px-8 py-8 transition duration-300 ease-in-out">
               <button className="relative  sm:hidden" onClick={() => setIsOpen(!isOpen)}>
                 <XIcon size={48} />
               </button>

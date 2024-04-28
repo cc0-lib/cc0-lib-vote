@@ -35,12 +35,14 @@ const Footer = () => {
 
   return (
     <IsBrowser>
-      <div className="flex w-full flex-row items-center justify-center sm:justify-between sm:hidden">
-        {!isAuthenticated && <div>cover art {userDataStore.currentRound} community voting</div>}
+      <div className="flex w-full items-center justify-center sm:hidden sm:justify-between">
+        {!isAuthenticated && (
+          <div className="text-center text-sm">cover art {userDataStore.currentRound} community voting</div>
+        )}
         {isAuthenticated && authToken && <TotalVoted />}
       </div>
 
-      <div className="sm:flex w-full flex-row items-center justify-center sm:justify-between hidden">
+      <div className="hidden w-full items-center justify-center sm:flex sm:justify-between">
         <div>cover art {userDataStore.currentRound} community voting</div>
         {isAuthenticated && authToken && <TotalVoted />}
       </div>
