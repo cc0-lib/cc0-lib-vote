@@ -5,11 +5,11 @@ import Header from "@/components/section/header";
 import Image from "next/image";
 import React from "react";
 import { getLeaderboards, getVotes } from "./action";
-import { getCurrentRound } from "../stats/action";
+import { getCurrentRound } from "@/app/stats/action";
 import RealtimeVotes from "./realtime-votes";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import Refresh from "./refresh";
+import Refresh from "@/components/refresh";
 
 export default async function Leaderboard() {
   const { data: currentRound } = await getCurrentRound();
@@ -44,7 +44,7 @@ export default async function Leaderboard() {
                 <div className="flex flex-1 justify-between" key={item.id}>
                   <Link href={item.url} target="_blank">
                     <Image
-                      className="size-36 rounded-md shadow-md"
+                      className="size-32 rounded-md shadow-md"
                       src={item.image}
                       width={500}
                       height={500}
@@ -52,15 +52,21 @@ export default async function Leaderboard() {
                     />
                   </Link>
 
-                  <div className="flex h-20 max-w-[50%] justify-between font-chakra">
-                    <div className="flex w-full justify-between gap-2">
+                  <div className="flexh-20 min-w-[55%] max-w-[55%] flex-col justify-between pl-2">
+                    <div className="flex w-full justify-between gap-2 font-chakra">
                       <div className="text-[3.5rem] font-semibold">{item.percentage}%</div>
                       <div className="mt-3 flex h-full flex-col items-end justify-start">
-                        <div className="inset-0 p-0 text-2xl">{item.totalVotes}</div>
+                        <div className="relative inset-0 p-0 text-xl font-semibold">{item.totalVotes}</div>
                         <div className="inset-0 text-center font-mono font-bold tracking-tighter">
                           {item.totalVotes > 1 ? "Votes" : "Vote"}
                         </div>
                       </div>
+                    </div>
+                    <div className="flex w-full flex-col">
+                      <Link href={item.url} target="_blank" rel="noreferrer noopener">
+                        <h4 className="max-w-full truncate text-sm">{item.title}</h4>
+                      </Link>
+                      <h6 className="mt-1 max-w-full truncate text-xs">{item.resolvedEns}</h6>
                     </div>
                   </div>
                 </div>

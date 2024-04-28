@@ -2,7 +2,7 @@
 
 import { RotateCcw } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 
 export default function Refresh() {
   const router = useRouter();

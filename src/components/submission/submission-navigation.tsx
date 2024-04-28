@@ -13,7 +13,7 @@ export const SubmissionNavigation = ({ submissions, coverData, setCoverData }: P
   const isMobile = useMediaQuery("(max-width: 640px)");
 
   const handleClick = (direction: "prev" | "next") => {
-    const currentIndex = submissions.findIndex((submission) => submission.title === coverData.title);
+    const currentIndex = submissions.findIndex((submission) => submission.id === coverData.id);
     const nextIndex =
       direction === "next"
         ? currentIndex === submissions.length - 1

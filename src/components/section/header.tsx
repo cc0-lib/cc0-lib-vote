@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import CountDown from "../ui/countdown";
+import CountDown from "@/components/ui/countdown";
 import { DynamicUserProfile, IsBrowser, useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useEffect, useState } from "react";
 import { XIcon, Menu } from "lucide-react";

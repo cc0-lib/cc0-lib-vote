@@ -10,7 +10,7 @@ import { previewMode } from "@/lib/prefs";
 import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
-import { useUserDataStore } from "../store/store-provider";
+import { useUserDataStore } from "@/store/store-provider";
 
 export type SubmissionType = {
   id: number;
