@@ -1,6 +1,5 @@
-"use client";
-
 import type { SubmissionType } from "@/app/vote";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMediaQuery } from "usehooks-ts";
 
 type Props = {
@@ -32,13 +31,13 @@ export const SubmissionNavigation = ({ submissions, coverData, setCoverData }: P
         <div className="pointer-events-none absolute z-10 flex size-full items-center justify-between px-6 sm:fixed sm:px-32">
           <button
             onClick={() => handleClick("prev")}
-            className="pointer-events-auto rounded-md bg-zinc-100 px-8 py-2 text-sm text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+            className="pointer-events-auto rounded-md bg-zinc-300 px-8 py-2 text-sm text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
           >
             PREV
           </button>
           <button
             onClick={() => handleClick("next")}
-            className="pointer-events-auto rounded-md bg-zinc-100 px-8 py-2 text-sm text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+            className="pointer-events-auto rounded-md bg-zinc-300 px-8 py-2 text-sm text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
           >
             NEXT
           </button>
@@ -48,15 +47,15 @@ export const SubmissionNavigation = ({ submissions, coverData, setCoverData }: P
           <div className="relative top-[40%] flex justify-between">
             <button
               onClick={() => handleClick("prev")}
-              className="pointer-events-auto rounded bg-zinc-100 px-4 py-1 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+              className="pointer-events-auto rounded bg-zinc-300 p-1 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
             >
-              PREV
+              <ChevronLeft />
             </button>
             <button
               onClick={() => handleClick("next")}
-              className="pointer-events-auto rounded bg-zinc-100 px-4 py-1 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
+              className="pointer-events-auto rounded bg-zinc-300 p-1 text-xs text-zinc-800 ring-1 ring-zinc-400 hover:bg-zinc-800 hover:text-zinc-100"
             >
-              NEXT
+              <ChevronRight />
             </button>
           </div>
         </div>

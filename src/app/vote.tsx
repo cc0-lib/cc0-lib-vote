@@ -12,6 +12,7 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useUserDataStore } from "@/store/store-provider";
 import { getCurrentRound } from "./stats/action";
+import Image from "next/image";
 
 export type SubmissionType = {
   id: number;
@@ -129,6 +130,8 @@ const Vote = ({ submissions }: Props) => {
     fetchVote();
   }, [userId]);
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
   return (
     <>
       {submissions.length === 0 && <div>No submissions</div>}
@@ -142,7 +145,19 @@ const Vote = ({ submissions }: Props) => {
         </>
       )}
 
-      <BookCover bookMaterial={bookMaterial!} />
+      {isMobile ? (
+        <div className="absolute top-0 flex h-[70vh]">
+          <Image
+            src={coverData.image}
+            alt="cover-image"
+            width={400}
+            height={400}
+            className="relative top-[38%] size-72"
+          />
+        </div>
+      ) : (
+        <BookCover bookMaterial={bookMaterial!} />
+      )}
     </>
   );
 };

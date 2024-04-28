@@ -27,7 +27,6 @@ export default async function Stats() {
           </div>
           <Refresh />
         </div>
-
         <RealtimeStats currentRound={currentRound} votesData={data} totalVotes={totalVotes} />
       </div>
 

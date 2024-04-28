@@ -51,9 +51,9 @@ export default async function Round() {
                     )}
                   >
                     {round.status === "ongoing" ? (
-                      <h2 className="text-center font-chakra text-4xl font-semibold text-[#D9D9D9]">
-                        Voting In Progress
-                      </h2>
+                      <h2 className="text-center font-chakra text-4xl font-semibold text-prim">Voting In Progress</h2>
+                    ) : round.status === "submission" ? (
+                      <h2 className="text-center font-chakra text-4xl font-semibold text-prim">Open for submission</h2>
                     ) : (
                       <h2 className="text-center font-chakra text-9xl font-bold text-[#474747]">?</h2>
                     )}
