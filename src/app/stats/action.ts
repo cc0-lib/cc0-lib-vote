@@ -2,10 +2,13 @@
 
 import { createClient } from "@/lib/supabase/server";
 
-export async function getStats() {
+export async function getStats(currentRound: number) {
   const supabase = createClient();
   const { data: votes, error: votesError } = await supabase.from("vote").select();
-  const { data: submission, error: submissionError } = await supabase.from("submission").select();
+  const { data: submission, error: submissionError } = await supabase
+    .from("submission")
+    .select()
+    .eq("round", currentRound);
 
   if (submissionError) {
     return {

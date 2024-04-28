@@ -93,7 +93,7 @@ export async function revertVote(voteId: number, userId: number) {
   return;
 }
 
-export async function getUserVotes(userId: number) {
+export async function getUserVotes(userId: number, currentRound: number) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("vote")
@@ -104,6 +104,7 @@ export async function getUserVotes(userId: number) {
       `,
     )
     .eq("user", userId)
+    .eq("round", currentRound)
     .returns<UserVotes[]>();
 
   if (error) {

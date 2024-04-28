@@ -9,8 +9,8 @@ import SplitLetters from "@/components/anim/split-letters";
 import Refresh from "@/components/refresh";
 
 export default async function Stats() {
-  const { data } = await getStats();
   const { data: currentRound } = await getCurrentRound();
+  const { data } = await getStats(currentRound?.id || 1);
   const totalVotes = await getVotes(currentRound?.id || 1);
 
   return (

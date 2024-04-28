@@ -17,8 +17,8 @@ const Footer = () => {
     if (!isAuthenticated || !id) {
       return;
     }
-    const res = await getUserVotes(id);
     const currentRound = await getCurrentRound();
+    const res = await getUserVotes(id, currentRound.data?.id || 1);
 
     if (res && res.data !== null) {
       userDataStore.storeVotesCount(res.data.length);

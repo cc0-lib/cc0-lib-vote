@@ -11,6 +11,7 @@ import { castVote, getUserVotes, revertVote } from "./action";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useUserDataStore } from "@/store/store-provider";
+import { getCurrentRound } from "./stats/action";
 
 export type SubmissionType = {
   id: number;
@@ -44,6 +45,20 @@ type Props = {
 const Vote = ({ submissions }: Props) => {
   const { primaryWallet } = useDynamicContext();
   const userStore = useUserDataStore((state) => state);
+  if (submissions.length === 0) {
+    submissions = [
+      {
+        id: 0,
+        title: "No submissions",
+        artist: "No artist",
+        image: "asset/img/cc0-logo.png",
+        tldr: "No submissions yet",
+        url: "",
+        round: 0,
+        votes: 0,
+      },
+    ];
+  }
 
   const [coverImage, setCoverImage] = useState(submissions[0].image);
   const [coverData, setCoverData] = useState<SubmissionType>(submissions[0]);
@@ -89,7 +104,9 @@ const Vote = ({ submissions }: Props) => {
       return;
     }
 
-    const { data, error } = await getUserVotes(userId);
+    const currentRound = await getCurrentRound();
+
+    const { data, error } = await getUserVotes(userId, currentRound.data?.id || 1);
 
     if (error) {
       return;
@@ -114,6 +131,7 @@ const Vote = ({ submissions }: Props) => {
 
   return (
     <>
+      {submissions.length === 0 && <div>No submissions</div>}
       {!previewMode && (
         <>
           <SubmissionContainer>
