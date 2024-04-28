@@ -19,7 +19,7 @@ export default async function Stats() {
       <div className="mt-5 flex w-full flex-1 flex-col justify-start sm:mt-10">
         <div className="flex w-full items-center justify-between">
           <div>
-            <div className="w-full font-chakra text-4xl font-bold md:text-6xl">
+            <div className="w-full font-chakra text-4xl font-bold sm:text-6xl">
               <SplitLetters text="Stats" />
             </div>
 

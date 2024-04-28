@@ -13,7 +13,7 @@ const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
   return (
     <div
       className={cn(
-        "pointer-events-none relative h-[30vh] w-full flex-col items-center sm:flex  sm:h-[80vh] md:justify-center",
+        "pointer-events-none relative h-[30vh] w-full flex-col items-center sm:flex  sm:h-[80vh] sm:justify-center",
         !previewMode && "debug -translate-y-[10vh]",
       )}
     >

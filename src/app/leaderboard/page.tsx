@@ -73,7 +73,7 @@ export default async function Leaderboard() {
               ))}
             </div>
 
-            <div className="hidden md:flex md:flex-1 md:flex-col md:items-center md:justify-center">
+            <div className="hidden sm:flex sm:flex-1 sm:flex-col sm:items-center sm:justify-center">
               {leaderboards && (
                 <>
                   {/* First place */}

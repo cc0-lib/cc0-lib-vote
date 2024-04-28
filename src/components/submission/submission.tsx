@@ -19,7 +19,7 @@ const Submission = ({
       {isMobile ? (
         <>
           <h1 className="font-chakra text-lg font-bold uppercase">{coverData.title}</h1>
-          <div className="size-full min-h-8 max-w-xs text-xs font-normal normal-case md:max-w-sm">{coverData.tldr}</div>
+          <div className="size-full min-h-8 max-w-xs text-xs font-normal normal-case sm:max-w-sm">{coverData.tldr}</div>
           <div className="mt-2 flex w-full flex-1 flex-row items-center justify-between">
             <div className="w-full text-sm font-semibold uppercase">
               {coverData.ens ? coverData.ens : truncateAddress(coverData.artist)}
@@ -33,7 +33,7 @@ const Submission = ({
                   onClick={() => {
                     handleVote("unvote");
                   }}
-                  className="w-20 rounded px-4 py-1 text-red-500 ring-1 ring-red-500 hover:bg-red-500 hover:text-zinc-100 hover:ring-red-700 sm:w-28 sm:rounded-md sm:px-8 md:py-2"
+                  className="w-20 rounded px-4 py-1 text-red-500 ring-1 ring-red-500 hover:bg-red-500 hover:text-zinc-100 hover:ring-red-700 sm:w-28 sm:rounded-md sm:px-8 sm:py-2"
                 >
                   UNVOTE
                 </button>
@@ -53,7 +53,7 @@ const Submission = ({
       ) : (
         <>
           <h1 className="font-chakra text-2xl font-bold uppercase">{coverData.title}</h1>
-          <div className="size-full min-h-12 max-w-xs text-xs font-normal normal-case md:max-w-sm">
+          <div className="size-full min-h-12 max-w-xs text-xs font-normal normal-case sm:max-w-sm">
             {coverData.tldr}
           </div>
           <div className="mt-4 flex w-full flex-1 flex-row items-center justify-between">
@@ -69,7 +69,7 @@ const Submission = ({
                   onClick={() => {
                     handleVote("unvote");
                   }}
-                  className="w-20 rounded px-4 py-1 text-red-500 ring-1 ring-red-500 hover:bg-red-500 hover:text-zinc-100 hover:ring-red-700 sm:w-28 sm:rounded-md sm:px-8 md:py-2"
+                  className="w-20 rounded px-4 py-1 text-red-500 ring-1 ring-red-500 hover:bg-red-500 hover:text-zinc-100 hover:ring-red-700 sm:w-28 sm:rounded-md sm:px-8 sm:py-2"
                 >
                   UNVOTE
                 </button>

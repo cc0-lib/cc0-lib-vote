@@ -63,8 +63,8 @@ const Header = () => {
         </Link>
         {/* Mobile */}
         <Link href="/" className="flex flex-col sm:hidden">
-          <span>CC0-LIB ZINE</span>
-          <span>Special Edition 2</span>
+          <span className="leading-none">CC0-LIB ZINE</span>
+          <span className="leading-tight">Special Edition 2</span>
         </Link>
 
         <div className="hidden text-center sm:block">
@@ -80,7 +80,7 @@ const Header = () => {
             <Login />
           </li>
           <button className="transition duration-300 ease-in-out sm:hidden" onClick={() => setIsOpen(!isOpen)}>
-            <Menu className="size-10" />
+            {isOpen ? <XIcon size={48} /> : <Menu size={48} />}
           </button>
           {/* Mobile Nav */}
           <m.div
@@ -96,16 +96,15 @@ const Header = () => {
             initial="hidden"
             whileInView="visible"
             className={cn(
-              "fixed inset-0 z-50 flex min-h-screen w-full flex-col items-start justify-center gap-8 bg-white pl-8 font-chakra text-5xl font-semibold sm:hidden",
+              "fixed inset-0 z-50 flex min-h-screen w-full flex-col items-start justify-center gap-8 bg-white pl-8 font-chakra text-4xl [@media(min-width:390px)]:text-5xl font-semibold sm:hidden",
               !isOpen && "hidden",
             )}
           >
-            <button
-              className="absolute right-9 top-9 z-50 transition duration-300 ease-in-out sm:hidden"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              <XIcon className="size-10" />
-            </button>
+            <div className="absolute right-0 top-0 px-8 py-8 z-50 transition duration-300 ease-in-out">
+              <button className="relative  sm:hidden" onClick={() => setIsOpen(!isOpen)}>
+                <XIcon size={48} />
+              </button>
+            </div>
             {menu.map(({ name, href }) => (
               <m.li variants={loginAnimate} key={name}>
                 <Link href={href}>{name}</Link>
@@ -118,7 +117,7 @@ const Header = () => {
         </ul>
       </nav>
       {/* Mobile */}
-      <div className="mt-2 flex items-center justify-center sm:hidden">
+      <div className="mt-5 flex items-center justify-center sm:hidden">
         <CountDown date={currentRound?.data?.end_time} />
       </div>
     </div>
