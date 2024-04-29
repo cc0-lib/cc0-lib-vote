@@ -1,16 +1,13 @@
 "use client";
 
-import { createUserDataStore, UserDataStore } from "@/store/user-store";
+import { createUserDataStore } from "@/store/user-store";
+import { UserDataStore } from "@/types";
 import { createContext, useContext, useRef } from "react";
 import { StoreApi, useStore } from "zustand";
 
 export const UserStoreContext = createContext<StoreApi<UserDataStore> | null>(null);
 
-export interface UserStoreProviderProps {
-  children: React.ReactNode;
-}
-
-export const UserStoreProvider = ({ children }: UserStoreProviderProps) => {
+export const UserStoreProvider = ({ children }: { children: React.ReactNode }) => {
   const storeRef = useRef<StoreApi<UserDataStore>>();
   if (!storeRef.current) {
     storeRef.current = createUserDataStore();

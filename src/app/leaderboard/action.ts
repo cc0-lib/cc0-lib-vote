@@ -2,22 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
-
-interface Leaderboard {
-  artist: string;
-  created_at: string;
-  id: number;
-  image: string;
-  is_winner: boolean;
-  prop_id: number;
-  round: number;
-  title: string;
-  tldr: string;
-  url: string;
-  resolvedEns: string;
-  totalVotes: number;
-  percentage: number;
-}
+import { Leaderboard } from "@/types";
 
 export async function getLeaderboards(currentRound: number) {
   const supabase = createClient();

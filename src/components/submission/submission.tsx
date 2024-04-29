@@ -1,4 +1,4 @@
-import type { SubmissionType } from "@/app/vote";
+import { SubmissionType } from "@/types";
 import { truncateAddress } from "@/lib/utils";
 import { Link2 } from "lucide-react";
 import Link from "next/link";

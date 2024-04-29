@@ -22,6 +22,7 @@ export default function AuthProviderComponent({
     primaryWallet: Wallet | null;
     isAuthenticated: boolean;
   }) => {
+    console.log("onAuthSuccess", { authenticatedUser, primaryWallet, isAuthenticated });
     if (isAuthenticated && authenticatedUser) {
       const userResponse = await addUserAction(
         {
@@ -58,10 +59,16 @@ export default function AuthProviderComponent({
           onAuthSuccess,
           onLogout,
           onEmbeddedWalletCreated: (data) => {
+            console.log("onEmbeddedWalletCreated");
             console.log(data);
           },
           onUserProfileUpdate: (userData: UserProfile) => {
+            console.log("onUserProfileUpdate");
             console.log(userData);
+          },
+          onEmailVerificationSuccess: (data) => {
+            console.log("onEmailVerificationSuccess");
+            console.log(data);
           },
         },
       }}

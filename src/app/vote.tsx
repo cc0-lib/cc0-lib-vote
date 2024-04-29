@@ -13,37 +13,9 @@ import { MAX_VOTE_PER_USER } from "@/lib/config";
 import { useUserDataStore } from "@/store/store-provider";
 import { getCurrentRound } from "./stats/action";
 import Image from "next/image";
+import { SubmissionType } from "@/types";
 
-export type SubmissionType = {
-  id: number;
-  title: string;
-  artist: string;
-  image: string;
-  tldr: string;
-  url: string;
-  round: number;
-  votes: number;
-  ens?: string;
-  voted?: boolean;
-};
-
-export type UserVotes = {
-  id: number;
-  submission: {
-    id: number;
-  };
-};
-
-export type User = {
-  id: number;
-  email: string;
-} | null;
-
-type Props = {
-  submissions: SubmissionType[];
-};
-
-const Vote = ({ submissions }: Props) => {
+const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
   const { primaryWallet } = useDynamicContext();
   const userStore = useUserDataStore((state) => state);
   if (submissions.length === 0) {

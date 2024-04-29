@@ -1,20 +1,11 @@
 "use server";
+
 import { createClient as createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentRound } from "./stats/action";
-import { SubmissionType, UserVotes } from "./vote";
+import { DynamicUser, SubmissionType, UserVotes, WalletCB } from "@/types";
 
-interface User {
-  email: string | undefined;
-  username: string | undefined | null;
-  userId?: string;
-}
-
-interface WalletCB {
-  address: string;
-}
-
-export async function addUserAction(user: User, wallet: WalletCB) {
+export async function addUserAction(user: DynamicUser, wallet: WalletCB) {
   const supabase = createClient();
   const adminClient = createAdminClient();
   if (!user.email) {

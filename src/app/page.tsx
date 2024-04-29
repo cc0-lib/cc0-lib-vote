@@ -1,7 +1,7 @@
 import Container from "@/components/container";
 import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
-import Three from "./vote";
+import Vote from "./vote";
 import { getSubmissions } from "./action";
 
 export default async function Home() {
@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <Container>
       <Header />
-      <Three submissions={submissions!} />
+      <Vote submissions={submissions!} />
       <Footer />
     </Container>
   );
