@@ -1,7 +1,8 @@
 "use client";
+
 import React from "react";
 import { DynamicContextProvider, EthereumWalletConnectors, UserProfile, Wallet } from "../lib/dynamic";
-import { addUserAction } from "./action";
+import { addUserAction, updateUserWallet } from "./action";
 import { useUserDataStore } from "@/store/store-provider";
 
 export default function AuthProviderComponent({
@@ -22,7 +23,6 @@ export default function AuthProviderComponent({
     primaryWallet: Wallet | null;
     isAuthenticated: boolean;
   }) => {
-    console.log("onAuthSuccess", { authenticatedUser, primaryWallet, isAuthenticated });
     if (isAuthenticated && authenticatedUser) {
       const userResponse = await addUserAction(
         {
@@ -50,6 +50,13 @@ export default function AuthProviderComponent({
     userStore.clearVotesCount();
   };
 
+  const onEmbeddedWalletCreated = async (address: string) => {
+    if (!userStore.loginData?.email) {
+      return;
+    }
+    await updateUserWallet(userStore.loginData?.email, address);
+  };
+
   return (
     <DynamicContextProvider
       settings={{
@@ -58,17 +65,8 @@ export default function AuthProviderComponent({
         eventsCallbacks: {
           onAuthSuccess,
           onLogout,
-          onEmbeddedWalletCreated: (data) => {
-            console.log("onEmbeddedWalletCreated");
-            console.log(data);
-          },
-          onUserProfileUpdate: (userData: UserProfile) => {
-            console.log("onUserProfileUpdate");
-            console.log(userData);
-          },
-          onEmailVerificationSuccess: (data) => {
-            console.log("onEmailVerificationSuccess");
-            console.log(data);
+          onEmbeddedWalletCreated: async (data) => {
+            if (data?.address) await onEmbeddedWalletCreated(data?.address);
           },
         },
       }}

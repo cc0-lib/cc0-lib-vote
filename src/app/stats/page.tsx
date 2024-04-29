@@ -7,11 +7,11 @@ import { getVotes } from "@/app/leaderboard/action";
 import RealtimeStats from "./realtime-stats";
 import SplitLetters from "@/components/anim/split-letters";
 import Refresh from "@/components/refresh";
+import { CURRENT_ROUND } from "@/lib/config";
 
 export default async function Stats() {
   const { data: currentRound } = await getCurrentRound();
-  const { data } = await getStats(currentRound?.id || 1);
-  const totalVotes = await getVotes(currentRound?.id || 1);
+  const { data } = await getStats(currentRound?.id || CURRENT_ROUND);
 
   return (
     <Container>

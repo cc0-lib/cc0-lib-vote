@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { motion as m } from "framer-motion";
 import { getCurrentRound } from "@/app/stats/action";
 import { CURRENT_ROUND } from "@/lib/config";
+import { useUserDataStore } from "@/store/store-provider";
 
 const loginAnimate = {
   hidden: { opacity: 0, y: 10 },
@@ -47,14 +48,7 @@ const menu = [
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentRound, setCurrentRound] = useState<any>();
-
-  useEffect(() => {
-    (async () => {
-      const currentRound = await getCurrentRound();
-      setCurrentRound(currentRound);
-    })();
-  }, []);
+  const roundData = useUserDataStore((state) => state.roundData);
 
   return (
     <div className="z-[50] w-full">
@@ -69,7 +63,7 @@ const Header = () => {
         </Link>
 
         <div className="hidden w-full justify-center text-center sm:inline-flex">
-          <CountDown date={currentRound?.data?.end_time} />
+          <CountDown date={roundData.end_time || ""} />
         </div>
         <ul className="flex items-center justify-between">
           {menu.map(({ name, href }) => (
@@ -119,7 +113,7 @@ const Header = () => {
       </nav>
       {/* Mobile */}
       <div className="mt-5 flex items-center justify-center sm:hidden">
-        <CountDown date={currentRound?.data?.end_time} />
+        <CountDown date={roundData.end_time || ""} />
       </div>
     </div>
   );

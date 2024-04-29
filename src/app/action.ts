@@ -2,7 +2,7 @@
 
 import { createClient as createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { getCurrentRound } from "./stats/action";
+import { getCurrentRound } from "@/app/stats/action";
 import { DynamicUser, SubmissionType, UserVotes, WalletCB } from "@/types";
 
 export async function addUserAction(user: DynamicUser, wallet: WalletCB) {
@@ -43,6 +43,23 @@ export async function addUserAction(user: DynamicUser, wallet: WalletCB) {
   if (newUser.data) {
     return newUser.data;
   }
+}
+
+export async function updateUserWallet(email: string, address: string) {
+  const adminClient = createAdminClient();
+
+  const { data, error } = await adminClient
+    .from("user")
+    .update({
+      address,
+    })
+    .eq("email", email);
+
+  if (error) {
+    console.log("Error updating user embedded wallet", error);
+  }
+
+  return data;
 }
 
 export async function castVote(submissionId: number, userId: number) {

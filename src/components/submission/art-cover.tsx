@@ -5,24 +5,33 @@ import { cn } from "@/lib/utils";
 import { ContactShadows, Environment, Box, CameraControls, Text } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { memo, useRef, useState } from "react";
-import { Material, MathUtils, Mesh, Vector3 } from "three";
+import { Material, MathUtils, Mesh, MeshStandardMaterial, TextureLoader, Vector3 } from "three";
 
-const BookCover = ({ bookMaterial }: { bookMaterial: Material }) => {
+const ArtCover = ({ coverImage }: { coverImage: string }) => {
+  let bookMaterial;
+
+  if (typeof window !== "undefined") {
+    bookMaterial = new MeshStandardMaterial({
+      map: new TextureLoader().load(coverImage),
+      metalness: 0.5,
+      roughnessMap: new TextureLoader().load(coverImage),
+      roughness: 0.6,
+    });
+  }
+
   return (
     <div
       className={cn(
-        "pointer-events-none absolute -top-[10vh] flex h-full w-full flex-col items-center sm:relative sm:-top-0 sm:h-[80vh] sm:justify-center",
+        "pointer-events-none absolute flex h-screen w-full flex-col items-center justify-center",
         !previewMode && "sm:-translate-y-[10vh]",
       )}
     >
-      <Canvas className="size-full">
-        <Scene bookMaterial={bookMaterial} />{" "}
-      </Canvas>
+      <Canvas className="size-full">{bookMaterial && <Scene bookMaterial={bookMaterial} />}</Canvas>
     </div>
   );
 };
 
-export default memo(BookCover);
+export default memo(ArtCover);
 
 const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
   const boxRef = useRef<Mesh>(null);
@@ -56,8 +65,6 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
           material={bookMaterial}
         />
       </group>
-
-      <Text>Test</Text>
 
       <ContactShadows position={[0, -3, 0]} opacity={1.5} scale={20} blur={2} far={4.5} />
 

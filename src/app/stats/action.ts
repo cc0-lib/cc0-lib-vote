@@ -46,8 +46,15 @@ export async function getCurrentRound() {
   const supabase = createClient();
   const { data, error } = await supabase.from("round").select("*").eq("is_current", true).single();
 
+  if (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+
   return {
     data,
-    error,
+    error: null,
   };
 }

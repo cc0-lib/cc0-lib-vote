@@ -14,10 +14,16 @@ export interface UserDataStore {
   clearVotesCount: () => void;
   roundData: Round;
   setRoundData: (current: Round) => void;
+  storeSubmissions: (data: SubmissionType[]) => void;
+  submissionData: SubmissionType[];
 }
 
 export interface Round {
+  assigned_vote: number | null;
+  created_at: string;
+  end_time: string | null;
   id: number;
+  is_current: boolean | null;
   status: string | null;
   title: string | null;
   url: string | null;

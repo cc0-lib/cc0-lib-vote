@@ -10,12 +10,13 @@ import RealtimeVotes from "./realtime-votes";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Refresh from "@/components/refresh";
+import { CURRENT_ROUND } from "@/lib/config";
 
 export default async function Leaderboard() {
   const { data: currentRound } = await getCurrentRound();
   const { data: leaderboards } = await getLeaderboards(currentRound?.id || 0);
 
-  const roundTotalVotes = await getVotes(currentRound?.id || 0);
+  const roundTotalVotes = await getVotes(currentRound?.id || CURRENT_ROUND);
 
   return (
     <Container>

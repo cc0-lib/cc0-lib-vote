@@ -18,15 +18,10 @@ const Footer = () => {
     if (!isAuthenticated || !id) {
       return;
     }
-    const currentRound = await getCurrentRound();
-    const res = await getUserVotes(id, currentRound.data?.id || 1);
+    const res = await getUserVotes(id, userDataStore.roundData.id);
 
     if (res && res.data !== null) {
       userDataStore.storeVotesCount(res.data.length);
-    }
-
-    if (currentRound && currentRound.data) {
-      userDataStore.setCurrenRound(currentRound.data.title || "");
     }
   };
 
