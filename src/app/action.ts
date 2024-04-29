@@ -21,7 +21,7 @@ export async function addUserAction(user: User, wallet: WalletCB) {
     return;
   }
 
-  const { count, data } = await supabase
+  const { count, data, error } = await supabase
     .from("user")
     .select("id, email", {
       count: "exact",
@@ -34,6 +34,8 @@ export async function addUserAction(user: User, wallet: WalletCB) {
     }
 
     return data[0];
+  } else {
+    console.log(error);
   }
 
   const newUser = await adminClient

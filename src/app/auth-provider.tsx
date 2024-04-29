@@ -57,6 +57,12 @@ export default function AuthProviderComponent({
         eventsCallbacks: {
           onAuthSuccess,
           onLogout,
+          onEmbeddedWalletCreated: (data) => {
+            console.log(data);
+          },
+          onUserProfileUpdate: (userData: UserProfile) => {
+            console.log(userData);
+          },
         },
       }}
     >
