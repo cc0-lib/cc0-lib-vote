@@ -63,7 +63,7 @@ const Header = () => {
         </Link>
 
         <div className="hidden w-full justify-center text-center sm:inline-flex">
-          <CountDown date={roundData.end_time || ""} />
+          <CountDown date={roundData.end_time || ""} roundStatus={roundData.status} />
         </div>
         <ul className="flex items-center justify-between">
           {menu.map(({ name, href }) => (
