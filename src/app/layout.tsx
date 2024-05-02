@@ -25,8 +25,22 @@ const chakraPetch = Chakra_Petch({
 });
 
 export const metadata: Metadata = {
-  title: "CC0-Lib Vote",
-  description: "CC0-LIB Prophouse Vote Site",
+  title: "CC0-LIB Community Voting",
+  description: "Vote for your favorite CC0-LIB Zine Cover Art entries",
+  openGraph: {
+    type: "website",
+    url: "https://vote.cc0-lib.wtf",
+    title: "CC0-LIB Community Voting",
+    description: "Vote for your favorite CC0-LIB Zine Cover Art entries",
+    images: [
+      {
+        url: "https://vote.cc0-lib.wtf/vote-og.png",
+        width: 800,
+        height: 400,
+        alt: "CC0-LIB Community Voting",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
