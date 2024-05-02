@@ -5,17 +5,25 @@ import { cn } from "@/lib/utils";
 import { ContactShadows, Environment, Box, CameraControls, Text } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { memo, useRef, useState } from "react";
-import { Material, MathUtils, Mesh, MeshStandardMaterial, TextureLoader, Vector3 } from "three";
+import {
+  Material,
+  MathUtils,
+  Mesh,
+  MeshPhysicalMaterial,
+  MeshStandardMaterial,
+  MeshBasicMaterial,
+  TextureLoader,
+  Vector3,
+} from "three";
 
 const ArtCover = ({ coverImage }: { coverImage: string }) => {
   let bookMaterial;
 
   if (typeof window !== "undefined") {
-    bookMaterial = new MeshStandardMaterial({
+    bookMaterial = new MeshBasicMaterial({
       map: new TextureLoader().load(coverImage),
-      metalness: 0.5,
-      roughnessMap: new TextureLoader().load(coverImage),
-      roughness: 0.6,
+      lightMap: new TextureLoader().load(coverImage),
+      lightMapIntensity: 3,
     });
   }
 
@@ -51,11 +59,6 @@ const Scene = ({ bookMaterial }: { bookMaterial: Material }) => {
 
   return (
     <>
-      <fog attach="fog" args={["#000", 0, 80]} />
-
-      <Environment preset="city" background={false} blur={0.8} />
-      <ambientLight intensity={2} />
-
       <group scale={0.3} position={[0, 0, 0]}>
         <Box
           onClick={() => setClicked(!clicked)}
