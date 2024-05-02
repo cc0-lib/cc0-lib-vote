@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthProvider from "./auth-provider";
 import { env } from "@/env";
 import { UserStoreProvider } from "@/store/store-provider";
+import { Analytics } from "@vercel/analytics/react";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -37,7 +38,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${interTight.variable} ${jetBrainsMono.variable} ${chakraPetch.variable}`}>
         <UserStoreProvider>
-          <AuthProvider environmentId={env.DYNAMIC_XYZ_ENVIRONMENT_ID}>{children}</AuthProvider>
+          <AuthProvider environmentId={env.DYNAMIC_XYZ_ENVIRONMENT_ID}>
+            {children}
+            <Analytics />
+          </AuthProvider>
         </UserStoreProvider>
       </body>
     </html>
