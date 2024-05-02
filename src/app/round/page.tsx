@@ -31,7 +31,7 @@ export default async function Round() {
                   <Link
                     href={round.url || ""}
                     target="_blank"
-                    rel="norefer"
+                    rel="noreferer noopener"
                     className="col-span-3 flex size-[320px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md sm:col-span-1 sm:size-[260px]"
                   >
                     <Image
@@ -44,7 +44,9 @@ export default async function Round() {
                   </Link>
                 ) : (
                   <Link
-                    href={round.status === "ongoing" ? "/" : ""}
+                    href={round.status === "ongoing" ? "/" : (round.url as string)}
+                    target={round.url ? "_blank" : ""}
+                    rel="noreferer noopener"
                     className={cn(
                       "col-span-3 flex size-[320px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md sm:col-span-1 sm:size-[260px]",
                       round.status === "pending" && "from-[hsl(0, 0%, 81%)] to-[hsl(0, 0%, 96%)]",
