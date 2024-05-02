@@ -1,26 +1,18 @@
 "use server";
-import { adminClient } from "@/lib/supabase/admin";
+
+import { createClient as createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
-import { getCurrentRound } from "./stats/action";
+import { getCurrentRound } from "@/app/stats/action";
+import { DynamicUser, SubmissionType, UserVotes, WalletCB } from "@/types";
 
-interface User {
-  email: string | undefined;
-  username: string | undefined | null;
-  userId?: string;
-}
-
-interface WalletCB {
-  address: string;
-}
-
-export async function addUserAction(user: User, wallet: WalletCB) {
+export async function addUserAction(user: DynamicUser, wallet: WalletCB) {
   const supabase = createClient();
+  const adminClient = createAdminClient();
   if (!user.email) {
     return;
   }
 
-  const { count, data } = await supabase
+  const { count, data, error } = await supabase
     .from("user")
     .select("id, email", {
       count: "exact",
@@ -33,6 +25,8 @@ export async function addUserAction(user: User, wallet: WalletCB) {
     }
 
     return data[0];
+  } else {
+    console.log(error);
   }
 
   const newUser = await adminClient
@@ -51,39 +45,44 @@ export async function addUserAction(user: User, wallet: WalletCB) {
   }
 }
 
-export async function castVote(submissionId: number, userAddress: string) {
-  const { data: currentRound } = await getCurrentRound();
-  const { data: userResponse, error: userError } = await adminClient
-    .from("user")
-    .select("id")
-    .eq("address", userAddress)
-    .single();
+export async function updateUserWallet(email: string, address: string) {
+  const adminClient = createAdminClient();
 
-  if (userError) {
-    return {
-      data: null,
-      error: userError,
-    };
+  const { data, error } = await adminClient
+    .from("user")
+    .update({
+      address,
+    })
+    .eq("email", email);
+
+  if (error) {
+    console.log("Error updating user embedded wallet", error);
   }
 
-  if (userResponse) {
-    const { error } = await adminClient
-      .from("vote")
-      .insert({
-        user: userResponse.id,
-        submission_id: submissionId,
-        round: currentRound?.id,
-      })
-      .select()
-      .single();
+  return data;
+}
 
-    if (error) {
-      console.error("castVote", error);
-      return {
-        data: null,
-        error,
-      };
-    }
+export async function castVote(submissionId: number, userId: number) {
+  const adminClient = createAdminClient();
+
+  const { data: currentRound } = await getCurrentRound();
+
+  const { error } = await adminClient
+    .from("vote")
+    .insert({
+      user: userId,
+      submission_id: submissionId,
+      round: currentRound?.id,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("castVote", error);
+    return {
+      data: null,
+      error,
+    };
   }
 
   return {
@@ -93,16 +92,18 @@ export async function castVote(submissionId: number, userAddress: string) {
 }
 
 export async function revertVote(voteId: number, userId: number) {
+  const adminClient = createAdminClient();
+
   const { error } = await adminClient.from("vote").delete().eq("submission_id", voteId).eq("user", userId);
 
   if (error) {
-    console.error("revertVote", error);
+    console.error("revertVote error", error);
   }
 
   return;
 }
 
-export async function getUserVotes(userId: number) {
+export async function getUserVotes(userId: number, currentRound: number) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("vote")
@@ -112,7 +113,9 @@ export async function getUserVotes(userId: number) {
       submission(id)
       `,
     )
-    .eq("user", userId);
+    .eq("user", userId)
+    .eq("round", currentRound)
+    .returns<UserVotes[]>();
 
   if (error) {
     console.error("getUserVotes", error);
@@ -120,6 +123,30 @@ export async function getUserVotes(userId: number) {
 
   return {
     data,
+    error: null,
+  };
+}
+
+export async function getSubmissions() {
+  const supabase = createClient();
+
+  const { data: currentRound } = await supabase.from("round").select().eq("is_current", true).single();
+
+  const { data: submissions, error } = await supabase
+    .from("submission")
+    .select()
+    .eq("round", currentRound?.id || 1)
+    .returns<SubmissionType[]>();
+
+  if (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+
+  return {
+    data: submissions,
     error: null,
   };
 }

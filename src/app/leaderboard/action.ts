@@ -2,23 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { ensResolver } from "@/lib/utils";
-import { revalidatePath } from "next/cache";
-
-interface Leaderboard {
-  artist: string;
-  created_at: string;
-  id: number;
-  image: string;
-  is_winner: boolean;
-  prop_id: number;
-  round: number;
-  title: string;
-  tldr: string;
-  url: string;
-  resolvedEns: string;
-  totalVotes: number;
-  percentage: number;
-}
+import { Leaderboard } from "@/types";
 
 export async function getLeaderboards(currentRound: number) {
   const supabase = createClient();
@@ -30,14 +14,14 @@ export async function getLeaderboards(currentRound: number) {
       ascending: true,
     });
 
-  const roundTotalVotes = await getVotes(currentRound);
-
   if (error) {
     return {
       data: null,
       error,
     };
   }
+
+  const roundTotalVotes = await getVotes(currentRound);
 
   const leaderboardsPromises: Promise<Leaderboard>[] = data.map(async (item: any) => {
     const { vote, artist } = item;
@@ -52,7 +36,9 @@ export async function getLeaderboards(currentRound: number) {
     };
   });
 
-  const final = (await Promise.all(leaderboardsPromises)).sort((a, b) => b.totalVotes - a.totalVotes);
+  const final = (await Promise.all(leaderboardsPromises))
+    .sort((a, b) => b.totalVotes - a.totalVotes)
+    .filter((i) => i.totalVotes > 0);
 
   return {
     data: final,

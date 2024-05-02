@@ -38,9 +38,9 @@ const CountDown = ({ date }: CountDownProps) => {
 
   return (
     <Suspense fallback={<div>D:H:M:S</div>}>
-      <div>
+      <div className="h-6 rounded-sm border border-border bg-prim px-8">
         {countDown && countDown.seconds >= 0 ? (
-          <SplitLetters text={`${countDown.days}D:${countDown.hours}H:${countDown.minutes}M:${countDown.seconds}S`} />
+          <SplitLetters text={`${countDown.days}D:${countDown.hours}H:${countDown.minutes}M`} />
         ) : (
           <div>Round voting ends</div>
         )}

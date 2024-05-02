@@ -1,43 +1,16 @@
 import Container from "@/components/container";
 import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
-import { createClient } from "@/lib/supabase/server";
-import { ensResolver } from "@/lib/utils";
-import Three from "./vote";
+import Vote from "./vote";
+import { getSubmissions } from "./action";
 
 export default async function Home() {
-  const supabase = createClient();
-
-  const { data: currentRound } = await supabase
-    .from("round")
-    .select()
-    .eq("is_current", true)
-    .single();
-
-  const { data: submissions, error } = await supabase
-    .from("submission")
-    .select()
-    .eq("round", currentRound?.id || 1);
-
-  if (error) {
-    console.log("Error fetching submissions");
-  }
-
-  if (submissions) {
-    await Promise.all(
-      submissions.map(async (submission) => {
-        if (submission.artist) {
-          const ens = await ensResolver(submission.artist);
-          submission.ens = ens.ens;
-        }
-      }),
-    );
-  }
+  const { data: submissions } = await getSubmissions();
 
   return (
     <Container>
       <Header />
-      <Three submissions={submissions as any} />
+      <Vote submissions={submissions!} />
       <Footer />
     </Container>
   );

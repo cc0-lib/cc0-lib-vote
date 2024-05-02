@@ -18,21 +18,21 @@ export default async function Round() {
     <Container>
       <Header />
 
-      <div className="mt-5 flex w-full flex-1 flex-col justify-start">
-        <div className="w-full font-chakra text-6xl font-bold">
+      <div className="mt-10 flex w-full flex-1 flex-col justify-start">
+        <div className="w-full font-chakra text-4xl font-bold sm:px-2 sm:text-6xl">
           <SplitLetters text="All Round" />
         </div>
 
-        <div className="flex flex-1 flex-col items-center justify-center space-y-4">
-          <div className="flex justify-center space-x-4">
+        <div className="my-8 flex flex-1 flex-col items-center justify-center space-y-8 sm:my-0 sm:space-y-4">
+          <div className="space-y-8 sm:flex sm:justify-center sm:space-x-4 sm:space-y-0">
             {topSection.map((round) => (
               <Fragment key={round.id}>
                 {round.submission ? (
                   <Link
-                    href={round.submission.url || ""}
+                    href={round.url || ""}
                     target="_blank"
                     rel="norefer"
-                    className="col-span-3 flex size-[260px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1"
+                    className="col-span-3 flex size-[320px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md sm:col-span-1 sm:size-[260px]"
                   >
                     <Image
                       height={500}
@@ -46,14 +46,14 @@ export default async function Round() {
                   <Link
                     href={round.status === "ongoing" ? "/" : ""}
                     className={cn(
-                      "col-span-3 flex h-[260px] w-[260px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1",
+                      "col-span-3 flex size-[320px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md sm:col-span-1 sm:size-[260px]",
                       round.status === "pending" && "from-[hsl(0, 0%, 81%)] to-[hsl(0, 0%, 96%)]",
                     )}
                   >
                     {round.status === "ongoing" ? (
-                      <h2 className="text-center font-chakra text-4xl font-semibold text-[#D9D9D9]">
-                        Voting In Progress
-                      </h2>
+                      <h2 className="text-center font-chakra text-4xl font-semibold text-prim">Voting In Progress</h2>
+                    ) : round.status === "submission" ? (
+                      <h2 className="text-center font-chakra text-4xl font-semibold text-prim">Open for submission</h2>
                     ) : (
                       <h2 className="text-center font-chakra text-9xl font-bold text-[#474747]">?</h2>
                     )}
@@ -63,15 +63,15 @@ export default async function Round() {
             ))}
           </div>
 
-          <div className="flex justify-center space-x-4">
+          <div className="space-y-8 sm:flex sm:justify-center sm:space-x-4 sm:space-y-0">
             {bottomSection.map((round) => (
               <Fragment key={round.id}>
                 {round.submission ? (
                   <Link
-                    href={round.submission.url || ""}
+                    href={round.url || ""}
                     target="_blank"
                     rel="norefer"
-                    className="col-span-3 flex size-[260px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1"
+                    className="col-span-3 flex size-[320px] items-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md sm:col-span-1 sm:size-[260px]"
                   >
                     <Image
                       height={500}
@@ -85,7 +85,7 @@ export default async function Round() {
                   <Link
                     href={round.status === "ongoing" ? "/" : ""}
                     className={cn(
-                      "col-span-3 flex h-[260px] w-[260px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md md:col-span-1",
+                      "flex size-[320px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md sm:col-span-1 sm:size-[260px]",
                       round.status === "pending" && "from-[hsl(0,0%,81%)] to-[hsl(0,0%,96%)]",
                     )}
                   >

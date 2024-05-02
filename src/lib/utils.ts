@@ -1,13 +1,6 @@
+import { EnsResolverResult } from "@/types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-
-export interface EnsResolverResult {
-  address: string;
-  avatar: string;
-  avatar_url: string;
-  contentHash: any;
-  ens: string | null;
-}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
