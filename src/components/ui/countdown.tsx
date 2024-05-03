@@ -10,6 +10,7 @@ type CountDownProps = {
 
 /**
  * @param date - Date string in the format of "Month Day, Year Hour:Minute:Second"
+ * @param status - Status for showing text if no date specified or countdown is over
  * e.g. "Nov 27, 2024 00:00:00"
  */
 const CountDown = ({ date, status }: CountDownProps) => {
@@ -41,9 +42,9 @@ const CountDown = ({ date, status }: CountDownProps) => {
     <Suspense fallback={<div>D:H:M:S</div>}>
       <div className="h-6 rounded-sm border border-border bg-prim px-8">
         {countDown && countDown.seconds >= 0 ? (
-          <SplitLetters text={`${countDown.days}D:${countDown.hours}H:${countDown.minutes}M`} />
-        ) : status && status === "submission" ? (
           <SplitLetters text="Open for submission" />
+        ) : status && status === "submission" ? (
+          <SplitLetters text={`${countDown.days}D:${countDown.hours}H:${countDown.minutes}M`} />
         ) : (
           <SplitLetters text="Round voting ends" />
         )}

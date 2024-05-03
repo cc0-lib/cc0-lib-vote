@@ -13,7 +13,7 @@ export interface UserDataStore {
   storeVotesCount: (votes: number) => void;
   clearVotesCount: () => void;
   roundData: Round;
-  setRoundData: (current: Round) => void;
+  setRoundData: (data: Round) => void;
   storeSubmissions: (data: SubmissionType[]) => void;
   submissionData: SubmissionType[];
 }

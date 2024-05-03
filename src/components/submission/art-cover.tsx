@@ -2,15 +2,13 @@
 
 import { previewMode } from "@/lib/prefs";
 import { cn } from "@/lib/utils";
-import { ContactShadows, Environment, Box, CameraControls, Text } from "@react-three/drei";
+import { ContactShadows, Box, CameraControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { memo, useRef, useState } from "react";
 import {
   Material,
   MathUtils,
   Mesh,
-  MeshPhysicalMaterial,
-  MeshStandardMaterial,
   MeshBasicMaterial,
   TextureLoader,
   Vector3,

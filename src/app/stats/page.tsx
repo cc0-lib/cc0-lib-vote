@@ -3,7 +3,6 @@ import Footer from "@/components/section/footer";
 import Header from "@/components/section/header";
 import React from "react";
 import { getCurrentRound, getStats } from "./action";
-import { getVotes } from "@/app/leaderboard/action";
 import RealtimeStats from "./realtime-stats";
 import SplitLetters from "@/components/anim/split-letters";
 import Refresh from "@/components/refresh";
