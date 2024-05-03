@@ -29,10 +29,12 @@ export default async function Leaderboard() {
               <SplitLetters text="leaderboard" />
             </div>
 
-            <div className="pl-1 font-semibold">
-              Total votes:
-              <RealtimeVotes totalVotes={roundTotalVotes} />
-            </div>
+            {roundTotalVotes > 0 && (
+              <div className="pl-1 font-semibold">
+                Total votes:
+                <RealtimeVotes totalVotes={roundTotalVotes} />
+              </div>
+            )}
           </div>
           <Refresh />
         </div>

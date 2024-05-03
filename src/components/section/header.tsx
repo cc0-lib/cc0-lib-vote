@@ -7,9 +7,9 @@ import { useEffect, useState } from "react";
 import { XIcon, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion as m } from "framer-motion";
-import { getCurrentRound } from "@/app/stats/action";
 import { CURRENT_ROUND } from "@/lib/config";
 import { useUserDataStore } from "@/store/store-provider";
+import { getCurrentRound } from "@/app/stats/action";
 
 const loginAnimate = {
   hidden: { opacity: 0, y: 10 },
@@ -48,7 +48,17 @@ const menu = [
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const roundData = useUserDataStore((state) => state.roundData);
+  const userStore = useUserDataStore((state) => state);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await getCurrentRound();
+
+      if (data) {
+        userStore.setRoundData(data);
+      }
+    })();
+  }, []);
 
   return (
     <div className="z-[50] w-full">
@@ -63,7 +73,7 @@ const Header = () => {
         </Link>
 
         <div className="hidden w-full justify-center text-center sm:inline-flex">
-          <CountDown date={roundData.end_time || ""} />
+          <CountDown date={userStore.roundData.end_time || ""} status={userStore.roundData.status} />
         </div>
         <ul className="flex items-center justify-between">
           {menu.map(({ name, href }) => (
@@ -113,7 +123,7 @@ const Header = () => {
       </nav>
       {/* Mobile */}
       <div className="mt-5 flex items-center justify-center sm:hidden">
-        <CountDown date={roundData.end_time || ""} />
+        <CountDown date={userStore.roundData.end_time || ""} />
       </div>
     </div>
   );

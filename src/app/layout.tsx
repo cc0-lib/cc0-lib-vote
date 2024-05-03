@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthProvider from "./auth-provider";
 import { env } from "@/env";
 import { UserStoreProvider } from "@/store/store-provider";
+import { Analytics } from "@vercel/analytics/react";
 
 const interTight = Inter_Tight({
   subsets: ["latin"],
@@ -24,8 +25,22 @@ const chakraPetch = Chakra_Petch({
 });
 
 export const metadata: Metadata = {
-  title: "CC0-Lib Vote",
-  description: "CC0-LIB Prophouse Vote Site",
+  title: "CC0-LIB Community Voting",
+  description: "Vote for your favorite CC0-LIB Zine Cover Art entries",
+  openGraph: {
+    type: "website",
+    url: "https://vote.cc0-lib.wtf",
+    title: "CC0-LIB Community Voting",
+    description: "Vote for your favorite CC0-LIB Zine Cover Art entries",
+    images: [
+      {
+        url: "https://vote.cc0-lib.wtf/vote-og.png",
+        width: 800,
+        height: 400,
+        alt: "CC0-LIB Community Voting",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -37,7 +52,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${interTight.variable} ${jetBrainsMono.variable} ${chakraPetch.variable}`}>
         <UserStoreProvider>
-          <AuthProvider environmentId={env.DYNAMIC_XYZ_ENVIRONMENT_ID}>{children}</AuthProvider>
+          <AuthProvider environmentId={env.DYNAMIC_XYZ_ENVIRONMENT_ID}>
+            {children}
+            <Analytics />
+          </AuthProvider>
         </UserStoreProvider>
       </body>
     </html>

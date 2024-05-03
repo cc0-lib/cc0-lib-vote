@@ -24,7 +24,7 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
         id: 0,
         title: "No submissions",
         artist: "No artist",
-        image: "asset/img/cc0-logo.png",
+        image: "/asset/img/cc0-logo.png",
         tldr: "No submissions yet",
         url: "",
         round: 0,
@@ -49,14 +49,14 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
       if (userStore.voteCountData.votes < MAX_VOTE_PER_USER) {
         userStore.vote(coverData.id);
         await castVote(coverData.id, userId);
-        fetchVote();
+        await fetchVote();
       } else {
         alert("You have already voted the maximum number of times");
       }
     } else {
       userStore.unvote(coverData.id);
       await revertVote(coverData.id, userId);
-      fetchVote();
+      await fetchVote();
     }
   };
 

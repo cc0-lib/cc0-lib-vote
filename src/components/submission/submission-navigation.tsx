@@ -1,6 +1,4 @@
 import { SubmissionType } from "@/types";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useMediaQuery } from "usehooks-ts";
 
 type Props = {
   submissions: SubmissionType[];

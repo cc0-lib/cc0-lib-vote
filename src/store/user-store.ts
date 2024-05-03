@@ -39,10 +39,11 @@ export const createUserDataStore = () => {
             end_time: null,
             is_current: null,
           },
-          setRoundData: (current) => set({ roundData: current }),
-          storeSubmissions: (data) => set({
-            submissionData: data
-          }),
+          setRoundData: (data) => set({ roundData: data }),
+          storeSubmissions: (data) =>
+            set({
+              submissionData: data,
+            }),
           submissionData: [],
         }),
         { name: "userData" },
