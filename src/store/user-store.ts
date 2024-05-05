@@ -45,6 +45,8 @@ export const createUserDataStore = () => {
               submissionData: data,
             }),
           submissionData: [],
+          isSigned: false,
+          setIsSigned: (isSigned) => set({ isSigned }),
         }),
         { name: "userData" },
       ),

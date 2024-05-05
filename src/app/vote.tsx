@@ -45,8 +45,18 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
       return;
     }
 
+    if (!primaryWallet) return;
+
+    const signer = await primaryWallet.connector.getSigner();
+
+    if (!signer) return;
+
     if (action === "vote") {
       if (userStore.voteCountData.votes < MAX_VOTE_PER_USER) {
+        if (!userStore.isSigned) {
+          await primaryWallet.connector.signMessage("Vote for CC0");
+          userStore.setIsSigned(true);
+        }
         userStore.vote(coverData.id);
         await castVote(coverData.id, userId);
         await fetchVote();
@@ -107,7 +117,13 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
       )}
 
       {isMobile ? (
-        <MobileArtCover submissions={submissions} coverData={coverData} setCoverData={setCoverData} />
+        <MobileArtCover
+          submissions={submissions}
+          coverData={coverData}
+          setCoverData={setCoverData}
+          userVotes={userStore.votesData}
+          handleVote={handleVote}
+        />
       ) : (
         <ArtCover coverImage={coverImage} />
       )}

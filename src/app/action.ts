@@ -8,16 +8,16 @@ import { DynamicUser, SubmissionType, UserVotes, WalletCB } from "@/types";
 export async function addUserAction(user: DynamicUser, wallet: WalletCB) {
   const supabase = createClient();
   const adminClient = createAdminClient();
-  if (!user.email) {
+  if (!user.username) {
     return;
   }
 
   const { count, data, error } = await supabase
     .from("user")
-    .select("id, email", {
+    .select("id, email, username", {
       count: "exact",
     })
-    .eq("email", user.email);
+    .eq("username", user.username);
 
   if (count === 1) {
     if (!data) {
@@ -33,7 +33,7 @@ export async function addUserAction(user: DynamicUser, wallet: WalletCB) {
     .from("user")
     .insert({
       address: wallet ? wallet.address : "",
-      name: user.username || "",
+      username: user.username || "",
       email: user.email || "",
       vote_count: 10,
     })
@@ -45,7 +45,7 @@ export async function addUserAction(user: DynamicUser, wallet: WalletCB) {
   }
 }
 
-export async function updateUserWallet(email: string, address: string) {
+export async function updateUserWallet(username: string, address: string) {
   const adminClient = createAdminClient();
 
   const { data, error } = await adminClient
@@ -53,7 +53,7 @@ export async function updateUserWallet(email: string, address: string) {
     .update({
       address,
     })
-    .eq("email", email);
+    .eq("username", username);
 
   if (error) {
     console.log("Error updating user embedded wallet", error);
