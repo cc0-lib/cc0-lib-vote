@@ -11,8 +11,8 @@
     "format:check": "prettier --check \"**/*.{ts,tsx}\" --cache"
   },
   "dependencies": {
-    "@dynamic-labs/ethereum": "^1.0.8",
-    "@dynamic-labs/sdk-react-core": "^1.0.8",
+    "@dynamic-labs/ethereum": "^2.0.6",
+    "@dynamic-labs/sdk-react-core": "^2.0.6",
     "@dynamic-labs/wagmi-connector": "^1.0.8",
     "@react-three/drei": "^9.96.1",
     "@react-three/fiber": "^8.15.14",
@@ -35,7 +35,7 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.160.0",
     "usehooks-ts": "^3.1.0",
-    "viem": "^2.5.0",
+    "viem": "^2.9.31",
     "zod": "^3.22.4",
     "zustand": "^4.5.2"
   },
