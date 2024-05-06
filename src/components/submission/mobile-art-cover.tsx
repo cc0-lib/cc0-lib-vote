@@ -10,12 +10,14 @@ const MobileArtCover = ({
   setCoverData,
   userVotes,
   handleVote,
+  disableVote,
 }: {
   submissions: SubmissionType[];
   coverData: SubmissionType;
   setCoverData: (v: SubmissionType) => void;
   userVotes: number[];
   handleVote: (action: "vote" | "unvote") => void;
+  disableVote: boolean;
 }) => {
   const handleClick = (direction: "prev" | "next") => {
     const currentIndex = submissions.findIndex((submission) => submission.id === coverData.id);
@@ -64,6 +66,7 @@ const MobileArtCover = ({
             </Link>
             {userVotes.includes(coverData.id) ? (
               <button
+                disabled={disableVote}
                 onClick={() => {
                   handleVote("unvote");
                 }}
@@ -73,6 +76,7 @@ const MobileArtCover = ({
               </button>
             ) : (
               <button
+                disabled={disableVote}
                 onClick={() => {
                   handleVote("vote");
                 }}

@@ -111,7 +111,14 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
       {!previewMode && (
         <>
           <SubmissionContainer>
-            {coverData && <Submission handleVote={handleVote} userVotes={userStore.votesData} coverData={coverData} />}
+            {coverData && (
+              <Submission
+                handleVote={handleVote}
+                userVotes={userStore.votesData}
+                coverData={coverData}
+                disableVote={userStore.roundData.status === "submission"}
+              />
+            )}
           </SubmissionContainer>
 
           <SubmissionNavigation submissions={submissions} coverData={coverData} setCoverData={setCoverData} />
@@ -125,6 +132,7 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
           setCoverData={setCoverData}
           userVotes={userStore.votesData}
           handleVote={handleVote}
+          disableVote={userStore.roundData.status === "submission"}
         />
       ) : (
         <ArtCover coverImage={coverImage} />
