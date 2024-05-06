@@ -116,7 +116,7 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
                 handleVote={handleVote}
                 userVotes={userStore.votesData}
                 coverData={coverData}
-                disableVote={userStore.roundData.status === "submission"}
+                disableVote={userStore.roundData.status !== "ongoing"}
               />
             )}
           </SubmissionContainer>
@@ -132,7 +132,7 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
           setCoverData={setCoverData}
           userVotes={userStore.votesData}
           handleVote={handleVote}
-          disableVote={userStore.roundData.status === "submission"}
+          disableVote={userStore.roundData.status !== "ongoing"}
         />
       ) : (
         <ArtCover coverImage={coverImage} />
