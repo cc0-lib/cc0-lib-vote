@@ -39,6 +39,7 @@ export default function AuthProviderComponent({
         userStore.storeUserData({
           id: userResponse.id,
           email: userResponse.email,
+          username: userResponse.username,
         });
       }
     }
@@ -48,13 +49,14 @@ export default function AuthProviderComponent({
     userStore.clearUserData();
     userStore.clearUserVotes();
     userStore.clearVotesCount();
+    userStore.setIsSigned(false);
   };
 
   const onEmbeddedWalletCreated = async (address: string) => {
-    if (!userStore.loginData?.email) {
+    if (!userStore.loginData?.username) {
       return;
     }
-    await updateUserWallet(userStore.loginData?.email, address);
+    await updateUserWallet(userStore.loginData?.username, address);
   };
 
   return (

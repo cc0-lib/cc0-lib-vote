@@ -45,8 +45,20 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
       return;
     }
 
+    if (!primaryWallet) return;
+
+    const signer = await primaryWallet.connector.getSigner();
+
+    if (!signer) return;
+
     if (action === "vote") {
       if (userStore.voteCountData.votes < MAX_VOTE_PER_USER) {
+        if (!userStore.isSigned) {
+          await primaryWallet.connector.signMessage(
+            "By signing this message, I authorize my participation in voting for the CC0-LIB Zine Cover Art Round 3 hosted by CC0-LIB. I understand that my vote will be part of the community-based voting process, and I am not voting on behalf of any other participant. This single signature will allow me to cast votes for artworks throughout the duration of the round.",
+          );
+          userStore.setIsSigned(true);
+        }
         userStore.vote(coverData.id);
         await castVote(coverData.id, userId);
         await fetchVote();
@@ -107,7 +119,13 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
       )}
 
       {isMobile ? (
-        <MobileArtCover submissions={submissions} coverData={coverData} setCoverData={setCoverData} />
+        <MobileArtCover
+          submissions={submissions}
+          coverData={coverData}
+          setCoverData={setCoverData}
+          userVotes={userStore.votesData}
+          handleVote={handleVote}
+        />
       ) : (
         <ArtCover coverImage={coverImage} />
       )}

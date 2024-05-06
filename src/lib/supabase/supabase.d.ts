@@ -104,7 +104,7 @@ export type Database = {
           created_at: string;
           email: string | null;
           id: number;
-          name: string;
+          username: string;
           vote_count: number;
         };
         Insert: {
@@ -113,7 +113,7 @@ export type Database = {
           created_at?: string;
           email?: string | null;
           id?: number;
-          name: string;
+          username: string;
           vote_count?: number;
         };
         Update: {
@@ -122,7 +122,7 @@ export type Database = {
           created_at?: string;
           email?: string | null;
           id?: number;
-          name?: string;
+          username?: string;
           vote_count?: number;
         };
         Relationships: [
@@ -197,7 +197,7 @@ export type Database = {
   };
 };
 
-type PublicSchema = Database[Extract<keyof Database, "cc0vote">];
+type PublicSchema = Database[Extract<keyof Database, "public">];
 
 export type Tables<
   PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] & PublicSchema["Views"]) | { schema: keyof Database },

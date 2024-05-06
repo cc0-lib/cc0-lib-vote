@@ -16,6 +16,8 @@ export interface UserDataStore {
   setRoundData: (data: Round) => void;
   storeSubmissions: (data: SubmissionType[]) => void;
   submissionData: SubmissionType[];
+  isSigned: boolean;
+  setIsSigned: (data: boolean) => void;
 }
 
 export interface Round {
@@ -63,6 +65,7 @@ export interface UserVotes {
 export type User = {
   id: number;
   email: string | null;
+  username: string | null;
 } | null;
 
 export interface Leaderboard {
