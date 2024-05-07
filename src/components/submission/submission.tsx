@@ -8,10 +8,12 @@ const Submission = ({
   coverData,
   handleVote,
   userVotes,
+  disableVote,
 }: {
   coverData: SubmissionType;
   handleVote: (action: "vote" | "unvote") => void;
   userVotes: number[];
+  disableVote: boolean;
 }) => {
   return (
     <>
@@ -27,6 +29,7 @@ const Submission = ({
           </Link>
           {userVotes.includes(coverData.id) ? (
             <button
+              disabled={disableVote}
               onClick={() => {
                 handleVote("unvote");
               }}
@@ -36,6 +39,7 @@ const Submission = ({
             </button>
           ) : (
             <button
+              disabled={disableVote}
               onClick={() => {
                 handleVote("vote");
               }}
