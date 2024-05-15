@@ -123,7 +123,7 @@ export default function RealtimeStats({
                       <td className="flex justify-center">{item.votes}</td>
                       <td className="flex justify-center">{item.percent ? item.percent.toFixed(1) : 0}%</td>
                       <td className="flex justify-end">
-                        {((item.percent / 100) * currentRound?.assigned_vote).toFixed()}
+                        {(item.percent ? (item.percent / 100) * currentRound?.assigned_vote : 0).toFixed()}
                       </td>
                     </tr>
                   );
