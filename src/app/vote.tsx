@@ -16,8 +16,17 @@ import { useMediaQuery } from "usehooks-ts";
 import MobileArtCover from "@/components/submission/mobile-art-cover";
 
 const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
+  const shuffledSubmissions = submissions.slice();
+  for (let i = shuffledSubmissions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = shuffledSubmissions[i];
+    shuffledSubmissions[i] = shuffledSubmissions[j];
+    shuffledSubmissions[j] = temp;
+  }
+
   const { primaryWallet } = useDynamicContext();
   const userStore = useUserDataStore((state) => state);
+
   if (submissions.length === 0) {
     submissions = [
       {
@@ -33,8 +42,8 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
     ];
   }
 
-  const [coverImage, setCoverImage] = useState(submissions[0].image);
-  const [coverData, setCoverData] = useState<SubmissionType>(submissions[0]);
+  const [coverImage, setCoverImage] = useState(shuffledSubmissions[0].image);
+  const [coverData, setCoverData] = useState<SubmissionType>(shuffledSubmissions[0]);
 
   const userId = userStore?.loginData?.id;
   const userAddress = primaryWallet?.address ?? "";
@@ -107,7 +116,7 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
 
   return (
     <>
-      {submissions.length === 0 && <div>No submissions</div>}
+      {shuffledSubmissions.length === 0 && <div>No submissions</div>}
       {!previewMode && (
         <>
           <SubmissionContainer>
@@ -121,13 +130,13 @@ const Vote = ({ submissions }: { submissions: SubmissionType[] }) => {
             )}
           </SubmissionContainer>
 
-          <SubmissionNavigation submissions={submissions} coverData={coverData} setCoverData={setCoverData} />
+          <SubmissionNavigation submissions={shuffledSubmissions} coverData={coverData} setCoverData={setCoverData} />
         </>
       )}
 
       {isMobile ? (
         <MobileArtCover
-          submissions={submissions}
+          submissions={shuffledSubmissions}
           coverData={coverData}
           setCoverData={setCoverData}
           userVotes={userStore.votesData}
