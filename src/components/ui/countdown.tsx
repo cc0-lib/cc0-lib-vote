@@ -41,13 +41,17 @@ const CountDown = ({ date, status }: CountDownProps) => {
   return (
     <Suspense fallback={<div>D:H:M:S</div>}>
       <div className="h-6 rounded-sm border border-border bg-prim px-8">
-        {countDown && countDown.seconds >= 0 ? (
-          <SplitLetters text="Open for submission" />
-        ) : status && status === "submission" ? (
-          <SplitLetters text={`${countDown.days}D:${countDown.hours}H:${countDown.minutes}M`} />
-        ) : (
-          <SplitLetters text="Round voting ends" />
-        )}
+        <SplitLetters
+          text={
+            status
+              ? status === "ongoing"
+                ? `${countDown.days}D:${countDown.hours}H:${countDown.minutes}M`
+                : status === "submission"
+                  ? "Open for submission"
+                  : "Round voting ends"
+              : "Round voting ends"
+          }
+        />
       </div>
     </Suspense>
   );
