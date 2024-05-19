@@ -123,7 +123,7 @@ const Header = () => {
       </nav>
       {/* Mobile */}
       <div className="mt-5 flex items-center justify-center sm:hidden">
-        <CountDown date={userStore.roundData.end_time || ""} />
+        <CountDown date={userStore.roundData.end_time || ""} status={userStore.roundData.status} />
       </div>
     </div>
   );
