@@ -45,7 +45,7 @@ export default async function Round() {
                 ) : (
                   <Link
                     href={round.status === "ongoing" ? "/" : (round.url as string)}
-                    target={round.url ? "_blank" : ""}
+                    target={round.url && round.status !== "ongoing" ? "_blank" : ""}
                     rel="noreferer noopener"
                     className={cn(
                       "col-span-3 flex size-[320px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md sm:col-span-1 sm:size-[260px]",
@@ -86,6 +86,7 @@ export default async function Round() {
                 ) : (
                   <Link
                     href={round.status === "ongoing" ? "/" : ""}
+                    target={round.url && round.status !== "ongoing" ? "_blank" : ""}
                     className={cn(
                       "flex size-[320px] items-center justify-center rounded-md bg-gradient-to-b from-[#474747] to-[#6F6F6F] shadow-md sm:col-span-1 sm:size-[260px]",
                       round.status === "pending" && "from-[hsl(0,0%,81%)] to-[hsl(0,0%,96%)]",
@@ -94,6 +95,10 @@ export default async function Round() {
                     {round.status === "ongoing" ? (
                       <h2 className="text-center font-chakra text-4xl font-semibold text-[#D9D9D9]">
                         Voting In Progress
+                      </h2>
+                    ) : round.status === "submission" ? (
+                      <h2 className="text-center font-chakra text-4xl font-semibold text-[#D9D9D9]">
+                        Open for submission
                       </h2>
                     ) : (
                       <h2 className="text-center font-chakra text-9xl font-bold text-[#474747]">?</h2>

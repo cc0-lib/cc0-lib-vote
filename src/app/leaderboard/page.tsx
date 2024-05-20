@@ -43,7 +43,7 @@ export default async function Leaderboard() {
           <>
             {/* Mobile */}
             <div className="my-10 flex w-full flex-col space-y-8 sm:hidden">
-              {leaderboards?.map((item) => (
+              {leaderboards?.slice(0, 7).map((item) => (
                 <div className="flex flex-1 justify-between" key={item.id}>
                   <Link href={item.url} target="_blank">
                     <Image
@@ -146,7 +146,7 @@ export default async function Leaderboard() {
                   {leaderboards.length > 3 && <div className="my-5 w-[500px] border-t-[2px] border-black" />}
 
                   <div className="grid grid-cols-2 gap-2">
-                    {leaderboards.slice(3, 6).map(({ id, resolvedEns, title, totalVotes, url }) => (
+                    {leaderboards.slice(3, 7).map(({ id, resolvedEns, title, totalVotes, url }) => (
                       <div className="flex h-10 w-80 gap-4" key={id}>
                         <div className="flex flex-col items-end justify-end">
                           <h6 className="font-semibold">{totalVotes}</h6>
