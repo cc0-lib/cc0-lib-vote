@@ -22,7 +22,7 @@ export default async function Leaderboard() {
     <Container>
       <Header />
 
-      <div className="mt-5 flex w-full flex-1 flex-col justify-start sm:mt-10">
+      <div className="mb-6 mt-5 flex w-full flex-1 flex-col justify-start sm:mt-10">
         <div className="flex w-full items-center justify-between">
           <div className="sm:px-2">
             <div className="w-full font-chakra text-4xl font-bold sm:text-6xl">
@@ -43,7 +43,7 @@ export default async function Leaderboard() {
           <>
             {/* Mobile */}
             <div className="my-10 flex w-full flex-col space-y-8 sm:hidden">
-              {leaderboards?.slice(0, 7).map((item) => (
+              {leaderboards?.map((item) => (
                 <div className="flex flex-1 justify-between" key={item.id}>
                   <Link href={item.url} target="_blank">
                     <Image
@@ -146,18 +146,18 @@ export default async function Leaderboard() {
                   {leaderboards.length > 3 && <div className="my-5 w-[500px] border-t-[2px] border-black" />}
 
                   <div className="grid grid-cols-2 gap-2">
-                    {leaderboards.slice(3, 7).map(({ id, resolvedEns, title, totalVotes, url }) => (
-                      <div className="flex h-10 w-80 gap-4" key={id}>
-                        <div className="flex flex-col items-end justify-end">
+                    {leaderboards.slice(3).map(({ id, resolvedEns, title, totalVotes, url }) => (
+                      <div className="flex h-12 w-80 gap-4" key={id}>
+                        <div className="flex w-14 flex-col items-end justify-between">
                           <h6 className="font-semibold">{totalVotes}</h6>
-                          <h6 className="text-sm font-semibold">{totalVotes > 1 ? "Votes" : "Vote"}</h6>
+                          <h6 className="relative -top-1 text-sm font-semibold">{totalVotes > 1 ? "Votes" : "Vote"}</h6>
                         </div>
-                        <div className="flex flex-col justify-between">
+                        <div className="flex w-full max-w-64 flex-col justify-between">
                           <Link href={url} target="_blank">
                             <h6 className="truncate font-chakra text-base font-bold tracking-tight">{title}</h6>
                           </Link>
 
-                          <h6 className="text-[10px]">{resolvedEns}</h6>
+                          <h6 className="relative -top-[6px] text-[10px]">{resolvedEns}</h6>
                         </div>
                       </div>
                     ))}
