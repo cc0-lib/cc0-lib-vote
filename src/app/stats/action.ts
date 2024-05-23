@@ -1,14 +1,18 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { getVotes } from "../leaderboard/action";
 
 export async function getStats(currentRound: number) {
   const supabase = createClient();
-  const { data: votes, error: votesError } = await supabase.from("vote").select();
+  const roundTotalVotes = await getVotes(currentRound);
   const { data: submission, error: submissionError } = await supabase
     .from("submission")
-    .select()
-    .eq("round", currentRound);
+    .select("*, vote(count)")
+    .eq("round", currentRound)
+    .order("created_at", {
+      ascending: true,
+    });
 
   if (submissionError) {
     return {
@@ -17,22 +21,13 @@ export async function getStats(currentRound: number) {
     };
   }
 
-  if (votesError) {
-    return {
-      data: null,
-      error: votesError,
-    };
-  }
-
   return {
-    data: submission.map((item) => {
-      const allVotes = votes.length;
-      const totalVotes = votes.filter((vote) => vote.submission_id === item.id).length;
-      const percentage = (totalVotes / allVotes) * 100;
+    data: submission.map((item: any) => {
+      const percentage = (item.vote[0]?.count / roundTotalVotes) * 100;
 
       return {
         ...item,
-        votes: totalVotes,
+        votes: item.vote[0].count,
         percent: percentage,
         prorated: 100,
         status: "Done",
